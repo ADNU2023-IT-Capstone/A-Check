@@ -1,5 +1,6 @@
-
 import 'package:hive_flutter/hive_flutter.dart';
+
+part 'attendance_record.g.dart';
 
 @HiveType(typeId: 5)
 class AttendanceRecord extends HiveObject {
@@ -12,9 +13,8 @@ class AttendanceRecord extends HiveObject {
   @HiveField(2)
   bool isPresent;
 
-  AttendanceRecord({
-    required this.studentId,
-    required this.dateTime,
-    required this.isPresent
-  });
+  AttendanceRecord(
+      {required this.studentId,
+      required this.dateTime,
+      required this.isPresent});
 }
