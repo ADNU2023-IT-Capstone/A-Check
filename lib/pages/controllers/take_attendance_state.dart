@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:a_check/models/attendance_record.dart';
 import 'package:a_check/models/student.dart';
 import 'package:a_check/pages/take_attendance_page.dart';
+import 'package:a_check/utils/localdb.dart';
 import 'package:a_check/utils/mlservice.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -53,10 +55,9 @@ class TakeAttendanceState extends State<TakeAttendancePage> {
     final faceImages = await _mlService.getFaceImages(faces, photoFile);
 
     List<Student> classStudents = widget.mClass.getStudents();
-    List<Student> recognizedStudents = [];
+    Set<Student> recognizedStudents = {};
     for (imglib.Image image in faceImages) {
       List predictedArray = await _mlService.predict(image);
-      print("Predicted Arrays: ${predictedArray.cast().toString()}");
       final student = classStudents.cast().firstWhere((e) {
         final Student s = e;
         if (s.faceArray == null) return false;
@@ -67,7 +68,6 @@ class TakeAttendanceState extends State<TakeAttendancePage> {
             _mlService.euclideanDistance(predictedArray, s.faceArray!);
 
         if (distance <= threshold && distance < minDistance) {
-          print("Student Face Arrays: ${s.faceArray!.cast().toString()}");
           return true;
         } else {
           return false;
@@ -77,7 +77,14 @@ class TakeAttendanceState extends State<TakeAttendancePage> {
       if (student != null) recognizedStudents.add(student);
     }
 
-    showSuccessDialog(recognizedStudents);
+    final currentDateTime = DateTime.now();
+    for (Student student in recognizedStudents) {
+      final record = AttendanceRecord(studentId: student.id, classCode: widget.mClass.code, dateTime: currentDateTime, isPresent: true);
+      
+      HiveBoxes.attendancesBox().add(record);
+    }
+
+    showSuccessDialog(recognizedStudents.toList());
   }
 
   @override

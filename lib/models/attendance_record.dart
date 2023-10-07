@@ -8,13 +8,17 @@ class AttendanceRecord extends HiveObject {
   String studentId;
 
   @HiveField(1)
-  DateTime dateTime;
+  String classCode;
 
   @HiveField(2)
+  DateTime dateTime;
+
+  @HiveField(3)
   bool isPresent;
 
   AttendanceRecord(
       {required this.studentId,
+      required this.classCode,
       required this.dateTime,
       required this.isPresent});
 }

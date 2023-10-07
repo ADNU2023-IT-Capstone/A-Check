@@ -34,6 +34,12 @@ class SettingsView extends WidgetView<SettingsPage, SettingsState> {
                     onTap: state.clearAllStudents,
                   ),
                 ),
+                Card(
+                  child: ListTile(
+                    title: const Text("Clear all attendance records"),
+                    onTap: state.clearAllAttendanceRecords,
+                  ),
+                ),
               ],
             ),
           )),

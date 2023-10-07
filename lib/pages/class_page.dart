@@ -35,7 +35,10 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
     return ListView(
       shrinkWrap: true,
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      children: const [AttendanceRecordCard(), AttendanceRecordCard()],
+      children: state.attendanceRecords.entries
+          .map((e) =>
+              AttendanceRecordCard(dateTime: e.key, attendanceRecords: e.value))
+          .toList(),
     );
   }
 

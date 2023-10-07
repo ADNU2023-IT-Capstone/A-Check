@@ -4,28 +4,32 @@ import 'package:a_check/utils/localdb.dart';
 import 'package:flutter/material.dart';
 
 class SettingsState extends State<SettingsPage> {
-  void clearAllClasses() {
-    Widget createDialog() {
-      return AlertDialog(
-        title: const Text("Clear All Classes"),
-        content: const Text(
-            "Are you sure you want to delete ALL classes? This is not recoverable!"),
-        actions: [
-          ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context, true);
-              },
-              child: const Text("Yes")),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context, false);
-              },
-              child: const Text("Cancel"))
-        ],
-      );
-    }
+  Widget _createConfirmDialog(Widget title, Widget content) {
+    return AlertDialog(
+      title: title,
+      content: content,
+      actions: [
+        ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context, true);
+            },
+            child: const Text("Yes")),
+        ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context, false);
+            },
+            child: const Text("Cancel"))
+      ],
+    );
+  }
 
-    showDialog(context: context, builder: (context) => createDialog())
+  void clearAllClasses() {
+    showDialog(
+            context: context,
+            builder: (context) => _createConfirmDialog(
+                const Text("Clear All Classes"),
+                const Text(
+                    "Are you sure you want to delete ALL CLASSES? This is not recoverable!")))
         .then((value) {
       if (value == true) {
         HiveBoxes.classesBox().clear().then((value) {
@@ -36,28 +40,30 @@ class SettingsState extends State<SettingsPage> {
     });
   }
 
-  void clearAllStudents() {
-    Widget createDialog() {
-      return AlertDialog(
-        title: const Text("Clear All Students"),
-        content: const Text(
-            "Are you sure you want to delete ALL students? This is not recoverable!"),
-        actions: [
-          ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context, true);
-              },
-              child: const Text("Yes")),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context, false);
-              },
-              child: const Text("Cancel"))
-        ],
-      );
-    }
+  void clearAllAttendanceRecords() {
+    showDialog(
+            context: context,
+            builder: (context) => _createConfirmDialog(
+                const Text("Clear All Students"),
+                const Text(
+                    "Are you sure you want to delete ALL ATTENDANCE RECORDS? This is not recoverable!")))
+        .then((value) {
+      if (value == true) {
+        HiveBoxes.attendancesBox().clear().then((value) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Cleared all attendance records.")));
+        });
+      }
+    });
+  }
 
-    showDialog(context: context, builder: (context) => createDialog())
+  void clearAllStudents() {
+    showDialog(
+            context: context,
+            builder: (context) => _createConfirmDialog(
+                const Text("Clear All Students"),
+                const Text(
+                    "Are you sure you want to delete ALL STUDENTS? This is not recoverable!")))
         .then((value) {
       if (value == true) {
         HiveBoxes.studentsBox().clear().then((value) {
@@ -65,7 +71,7 @@ class SettingsState extends State<SettingsPage> {
             final c = element as Class;
             c.students.clear();
           });
-          
+
           ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text("Cleared all students.")));
         });

@@ -1,3 +1,4 @@
+import 'package:a_check/models/attendance_record.dart';
 import 'package:a_check/models/student.dart';
 import 'package:a_check/utils/localdb.dart';
 import 'package:flutter/material.dart';
@@ -87,14 +88,34 @@ class Class extends HiveObject {
 
   List<Student> getStudents() {
     final studentsList = students.map((id) {
-      final castedBox = HiveBoxes.studentsBox().values.cast();
-      return castedBox.firstWhere((student) => student.id == id) as Student;
+      final castedBox = HiveBoxes.studentsBox().values.cast<Student>();
+      return castedBox.firstWhere((student) => student.id == id);
     }).toList();
     studentsList.sort(
       (a, b) =>
           a.firstName[0].toLowerCase().compareTo(b.firstName[0].toLowerCase()),
     );
     return studentsList;
+  }
+
+  Map<DateTime, List<AttendanceRecord>> getAttendanceRecords() {
+    final castedBox = HiveBoxes.attendancesBox().values.cast<AttendanceRecord>();
+
+    final list = castedBox
+        .where((element) => element.classCode == code)
+        .toList();
+    list.sort((a, b) => a.dateTime.compareTo(b.dateTime));
+
+    final Map<DateTime, List<AttendanceRecord>> map = {};
+    for (var record in list) {
+      if (!map.containsKey(record.dateTime)) {
+        map[record.dateTime] = [];
+      }
+
+      map[record.dateTime]!.add(record);
+    }
+
+    return map;
   }
 }
 
