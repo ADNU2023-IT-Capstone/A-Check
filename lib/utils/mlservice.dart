@@ -1,11 +1,15 @@
+import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:image/image.dart' as imglib;
 
 class MLService {
   late Interpreter _interpreter;
+  final FaceDetector _faceDetector = FaceDetector(
+      options: FaceDetectorOptions(performanceMode: FaceDetectorMode.accurate));
 
   _initializeInterpreter() async {
     Delegate? delegate;
@@ -56,11 +60,46 @@ class MLService {
     List input = _preProcess(image).reshape([1, 112, 112, 3]);
     List output = List.generate(1, (index) => List.filled(192, 0));
 
-    await _initializeInterpreter(); 
+    await _initializeInterpreter();
 
     _interpreter.run(input, output);
     output = output.reshape([192]);
 
     return List.from(output);
+  }
+
+  Future<List<Face>> getFaces(InputImage inputImage) async {
+    return await _faceDetector.processImage(inputImage);
+  }
+
+  Future<List<imglib.Image>> getFaceImages(
+      List<Face> faces, File imageFile) async {
+    if (faces.isEmpty) return List.empty();
+
+    List<Map<String, int>> faceMaps = [];
+    for (Face face in faces) {
+      int x = face.boundingBox.left.toInt() - 10;
+      int y = face.boundingBox.top.toInt() - 10;
+      int w = face.boundingBox.width.toInt() + 10;
+      int h = face.boundingBox.height.toInt() + 10;
+
+      Map<String, int> thisMap = {'x': x, 'y': y, 'w': w, 'h': h};
+      faceMaps.add(thisMap);
+    }
+
+    List<imglib.Image> faceImages = [];
+    final bytes = await imageFile.readAsBytes();
+    final decodedImage = imglib.decodeImage(bytes);
+    for (Map<String, int> faceMap in faceMaps) {
+      final faceCropImage = imglib.copyCrop(decodedImage!,
+          x: faceMap['x']!,
+          y: faceMap['y']!,
+          width: faceMap['w']!,
+          height: faceMap['h']!);
+
+      faceImages.add(faceCropImage);
+    }
+
+    return faceImages;
   }
 }

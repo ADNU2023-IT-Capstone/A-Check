@@ -54,13 +54,13 @@ class RegisterFaceState extends State<RegisterFacePage> {
         Text("Recognizing faces...")
       ],
     ));
-    final faces = await _getFaces(inputImage);
+    final faces = await _mlService.getFaces(inputImage);
     if (faces.isEmpty) {
       showSnackBar(const Text("Heyo, we got no faces!"));
       return;
     }
 
-    final faceImages = await _getFaceImages(faces, photoFile);
+    final faceImages = await _mlService.getFaceImages(faces, photoFile);
     if (await showConfirmDialog(faceImages[0])) {
       widget.student.faceArray = await _mlService.predict(faceImages[0]);
       widget.student.save();
@@ -68,45 +68,6 @@ class RegisterFaceState extends State<RegisterFacePage> {
     } else {
       popNavigator(false);
     }
-  }
-
-  Future<List<Face>> _getFaces(InputImage inputImage) async {
-    final FaceDetector faceDetector = FaceDetector(
-        options:
-            FaceDetectorOptions(performanceMode: FaceDetectorMode.accurate));
-
-    return await faceDetector.processImage(inputImage);
-  }
-
-  Future<List<imglib.Image>> _getFaceImages(
-      List<Face> faces, File imageFile) async {
-    if (faces.isEmpty) return List.empty();
-
-    List<Map<String, int>> faceMaps = [];
-    for (Face face in faces) {
-      int x = face.boundingBox.left.toInt() - 10;
-      int y = face.boundingBox.top.toInt() - 10;
-      int w = face.boundingBox.width.toInt() + 10;
-      int h = face.boundingBox.height.toInt() + 10;
-
-      Map<String, int> thisMap = {'x': x, 'y': y, 'w': w, 'h': h};
-      faceMaps.add(thisMap);
-    }
-
-    List<imglib.Image> faceImages = [];
-    final bytes = await imageFile.readAsBytes();
-    final decodedImage = imglib.decodeImage(bytes);
-    for (Map<String, int> faceMap in faceMaps) {
-      final faceCropImage = imglib.copyCrop(decodedImage!,
-          x: faceMap['x']!,
-          y: faceMap['y']!,
-          width: faceMap['w']!,
-          height: faceMap['h']!);
-
-      faceImages.add(faceCropImage);
-    }
-
-    return faceImages;
   }
 
   @override
