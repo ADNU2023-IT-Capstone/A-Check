@@ -69,7 +69,8 @@ class SettingsState extends State<SettingsPage> {
         HiveBoxes.studentsBox().clear().then((value) {
           HiveBoxes.classesBox().values.forEach((element) {
             final c = element as Class;
-            c.students.clear();
+            c.studentIds.clear();
+            c.save();
           });
 
           ScaffoldMessenger.of(context).showSnackBar(

@@ -30,15 +30,15 @@ class PersonAdapter extends TypeAdapter<Person> {
     writer
       ..writeByte(5)
       ..writeByte(0)
-      ..write(obj.firstName)
+      ..write(obj._firstName)
       ..writeByte(1)
-      ..write(obj.middleName)
+      ..write(obj._middleName)
       ..writeByte(2)
-      ..write(obj.lastName)
+      ..write(obj._lastName)
       ..writeByte(3)
-      ..write(obj.email)
+      ..write(obj._email)
       ..writeByte(4)
-      ..write(obj.phone);
+      ..write(obj._phone);
   }
 
   @override
@@ -63,14 +63,14 @@ class StudentAdapter extends TypeAdapter<Student> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Student(
-      firstName: fields[0] as dynamic,
-      middleName: fields[1] as dynamic,
-      lastName: fields[2] as dynamic,
       id: fields[5] as String,
-      email: fields[3] as dynamic,
-      phone: fields[4] as dynamic,
-      guardians: (fields[6] as List?)?.cast<Person>(),
+      guardian: fields[6] as Person?,
       faceArray: (fields[7] as List?)?.cast<dynamic>(),
+      firstName: fields[0] as String,
+      middleName: fields[1] as String,
+      lastName: fields[2] as String,
+      email: fields[3] as String?,
+      phone: fields[4] as String?,
     );
   }
 
@@ -79,21 +79,21 @@ class StudentAdapter extends TypeAdapter<Student> {
     writer
       ..writeByte(8)
       ..writeByte(5)
-      ..write(obj.id)
+      ..write(obj._id)
       ..writeByte(6)
-      ..write(obj.guardians)
+      ..write(obj._guardian)
       ..writeByte(7)
-      ..write(obj.faceArray)
+      ..write(obj._faceArray)
       ..writeByte(0)
-      ..write(obj.firstName)
+      ..write(obj._firstName)
       ..writeByte(1)
-      ..write(obj.middleName)
+      ..write(obj._middleName)
       ..writeByte(2)
-      ..write(obj.lastName)
+      ..write(obj._lastName)
       ..writeByte(3)
-      ..write(obj.email)
+      ..write(obj._email)
       ..writeByte(4)
-      ..write(obj.phone);
+      ..write(obj._phone);
   }
 
   @override

@@ -34,7 +34,7 @@ class ClassState extends State<ClassPage> {
     if (result == null || result.isEmpty) return;
 
     setState(() {
-      mClass.students.addAll(result);
+      mClass.studentIds.addAll(result);
       mClass.save();
     });
   }

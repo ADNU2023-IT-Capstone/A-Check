@@ -21,7 +21,6 @@ class ClassAdapter extends TypeAdapter<Class> {
       name: fields[1] as String,
       section: fields[2] as String,
       schedule: (fields[3] as List).cast<ClassSchedule>(),
-      students: (fields[4] as List?)?.cast<String>(),
     );
   }
 
@@ -30,15 +29,15 @@ class ClassAdapter extends TypeAdapter<Class> {
     writer
       ..writeByte(5)
       ..writeByte(0)
-      ..write(obj.code)
+      ..write(obj._code)
       ..writeByte(1)
-      ..write(obj.name)
+      ..write(obj._name)
       ..writeByte(2)
-      ..write(obj.section)
+      ..write(obj._section)
       ..writeByte(3)
-      ..write(obj.schedule)
+      ..write(obj._schedule)
       ..writeByte(4)
-      ..write(obj.students.toList());
+      ..write(obj._studentIds.toList());
   }
 
   @override

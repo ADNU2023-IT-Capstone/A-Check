@@ -17,7 +17,7 @@ class StudentCard extends StatelessWidget {
           context,
           MaterialPageRoute(
               builder: (context) => StudentPage(
-                    student: student,
+                    studentKey: student.key,
                     studentClass: studentClass,
                   )));
     }

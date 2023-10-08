@@ -47,41 +47,50 @@ enum DaysOfTheWeek {
 }
 
 @HiveType(typeId: 0)
-class Class extends HiveObject {
+class Class extends HiveObject{
   @HiveField(0)
-  String code;
+  late String _code;
 
   @HiveField(1)
-  String name;
+  late String _name;
 
   @HiveField(2)
-  String section;
+  late String _section;
 
   @HiveField(3)
-  List<ClassSchedule> schedule;
+  late List<ClassSchedule> _schedule;
 
   @HiveField(4)
-  Set<String> students = {};
+  final Set<String> _studentIds = {};
 
-  Class(
-      {required this.code,
-      required this.name,
-      required this.section,
-      required this.schedule,
-      List<String>? students}) {
-    if (students != null) {
-      this.students = students.toSet();
-    }
+  Class({required code, required name, required section, required schedule}) {
+    _code = code;
+    _name = name;
+    _section = section;
+    _schedule = schedule;
   }
 
   @override
-  String get key => code;
+  String get key => "$_code-$_section";
+  String get code => _code;
+  String get name => _name;
+  String get section => _section;
+  List<ClassSchedule> get schedule => _schedule;
+  Set<String> get studentIds => _studentIds;
+
+  set name(String name) {
+    _name = name;
+  }
+
+  set schedule(List<ClassSchedule> schedule) {
+    _schedule = schedule;
+  }
 
   @override
   String toString() {
     String classInfo = "$code: $name [$section]\n";
     var classSchedBuf = StringBuffer();
-    for (var s in schedule) {
+    for (var s in _schedule) {
       classSchedBuf.write(
           "${s.day} ${s.startTimeHour.toString().padLeft(2, '0')}:${s.startTimeMinute.toString().padLeft(2, '0')} - ${s.endTimeHour.toString().padLeft(2, '0')}:${s.endTimeMinute.toString().padLeft(2, '0')}\n");
     }
@@ -90,7 +99,7 @@ class Class extends HiveObject {
   }
 
   List<Student> getStudents() {
-    final studentsList = students.map((id) {
+    final studentsList = _studentIds.map((id) {
       return HiveBoxes.studentsBox().get(id) as Student;
     }).toList();
     studentsList.sort(
@@ -101,11 +110,10 @@ class Class extends HiveObject {
   }
 
   Map<DateTime, List<AttendanceRecord>> getAttendanceRecords() {
-    final castedBox = HiveBoxes.attendancesBox().values.cast<AttendanceRecord>();
+    final castedBox =
+        HiveBoxes.attendancesBox().values.cast<AttendanceRecord>();
 
-    final list = castedBox
-        .where((element) => element.classCode == code)
-        .toList();
+    final list = castedBox.where((element) => element.classKey == key).toList();
     list.sort((a, b) => a.dateTime.compareTo(b.dateTime));
 
     final Map<DateTime, List<AttendanceRecord>> map = {};
@@ -162,4 +170,8 @@ class ClassSchedule {
   TimeOfDay getEndTime() {
     return TimeOfDay(hour: endTimeHour, minute: endTimeMinute);
   }
+}
+
+class ClassValueNotifier extends ValueNotifier<Class> {
+  ClassValueNotifier(Class mClass) : super(mClass);
 }

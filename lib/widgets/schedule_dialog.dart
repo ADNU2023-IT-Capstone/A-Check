@@ -4,7 +4,9 @@ import 'package:a_check/models/class.dart';
 import 'package:flutter/material.dart';
 
 class ScheduleDialog extends StatefulWidget {
-  const ScheduleDialog({Key? key}) : super(key: key);
+  const ScheduleDialog({Key? key, this.schedule}) : super(key: key);
+
+  final ClassSchedule? schedule;
 
   @override
   State<ScheduleDialog> createState() => ScheduleDialogState();

@@ -18,7 +18,7 @@ class AttendanceRecordAdapter extends TypeAdapter<AttendanceRecord> {
     };
     return AttendanceRecord(
       studentId: fields[0] as String,
-      classCode: fields[1] as String,
+      classKey: fields[1] as String,
       dateTime: fields[2] as DateTime,
       status: fields[3] as AttendanceStatus,
     );
@@ -31,7 +31,7 @@ class AttendanceRecordAdapter extends TypeAdapter<AttendanceRecord> {
       ..writeByte(0)
       ..write(obj.studentId)
       ..writeByte(1)
-      ..write(obj.classCode)
+      ..write(obj.classKey)
       ..writeByte(2)
       ..write(obj.dateTime)
       ..writeByte(3)

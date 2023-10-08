@@ -83,9 +83,9 @@ class TakeAttendanceState extends State<TakeAttendancePage> {
     for (Student student in classStudents) {
       AttendanceRecord record;
       if (recognizedStudents.contains(student)) {
-        record = AttendanceRecord(studentId: student.id, classCode: widget.mClass.code, dateTime: currentDateTime, status: AttendanceStatus.present);
+        record = AttendanceRecord(studentId: student.id, classKey: widget.mClass.key, dateTime: currentDateTime, status: AttendanceStatus.present);
       } else {
-        record = AttendanceRecord(studentId: student.id, classCode: widget.mClass.code, dateTime: currentDateTime, status: AttendanceStatus.absent);
+        record = AttendanceRecord(studentId: student.id, classKey: widget.mClass.key, dateTime: currentDateTime, status: AttendanceStatus.absent);
       }
 
       HiveBoxes.attendancesBox().add(record);

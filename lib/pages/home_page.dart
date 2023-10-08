@@ -1,3 +1,4 @@
+import 'package:a_check/main.dart';
 import 'package:a_check/models/class.dart';
 import 'package:a_check/pages/controllers/home_state.dart';
 import 'package:a_check/utils/abstracts.dart';
@@ -6,6 +7,7 @@ import 'package:a_check/widgets/class_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -16,16 +18,36 @@ class HomePage extends StatefulWidget {
 
 class HomeView extends WidgetView<HomePage, HomeState> {
   const HomeView(state, {Key? key}) : super(state, key: key);
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
           child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text("A-Check"),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(right: 16.0),
+                      child: Image(
+                          image: AssetImage("assets/images/LOGO.png"), height: 56),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("A-Check", style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold
+                        ),),
+                        Text(packageInfo.version)
+                      ],
+                    )
+                  ],
+                ),
               ),
               Expanded(
                 child: ValueListenableBuilder<Box>(

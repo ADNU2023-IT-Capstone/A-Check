@@ -3,13 +3,16 @@ import 'package:a_check/utils/localdb.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 late List<CameraDescription> cameras;
+late PackageInfo packageInfo;
 
 void main() async {
   await Hive.initFlutter();
   await HiveBoxes.initialize();
   cameras = await availableCameras();
+  packageInfo = await PackageInfo.fromPlatform();
 
   runApp(const MainApp());
 }

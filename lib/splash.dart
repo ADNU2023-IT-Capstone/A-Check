@@ -1,4 +1,6 @@
 import 'package:a_check/home_screen.dart';
+import 'package:a_check/utils/localdb.dart';
+import 'package:a_check/widgets/dialogs.dart';
 import 'package:flutter/material.dart';
 
 class SplashWidget extends StatefulWidget {
@@ -35,10 +37,7 @@ class SplashWidgetState extends State<SplashWidget> {
                 height: 100,
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [
-                      Color(0x00FFFFFF),
-                      Color(0xFFFFFFFF)
-                    ],
+                    colors: [Color(0x00FFFFFF), Color(0xFFFFFFFF)],
                     stops: [0, 1],
                     begin: AlignmentDirectional(0, -1),
                     end: AlignmentDirectional(0, 1),
@@ -55,9 +54,9 @@ class SplashWidgetState extends State<SplashWidget> {
                         shape: BoxShape.circle,
                       ),
                       child: const Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
-                        child: Image(image: AssetImage("assets/images/LOGO.png"))
-                      ),
+                          padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
+                          child: Image(
+                              image: AssetImage("assets/images/LOGO.png"))),
                     ),
                     const Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 44, 0, 0),
@@ -98,14 +97,45 @@ class SplashWidgetState extends State<SplashWidget> {
                 Expanded(
                   child: Align(
                     alignment: Alignment.center,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
-                      },
-                      child: const Text('Get Started'),
-                      ),
+                    child: Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () async {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const HomeScreen()));
+                          },
+                          child: const Text('Get Started'),
+                        ),
+                        ElevatedButton(
+                          style: const ButtonStyle(
+                            backgroundColor: MaterialStatePropertyAll(Colors.red),
+                          ),
+                          onPressed: () async {
+                            if (await Dialogs.showConfirmDialog(
+                                context,
+                                const Text("ya goofed up huh"),
+                                const Text("confirm to delete all data"))) {
+                              HiveBoxes.clearAllData();
+                            } else {
+                              return;
+                            }
+
+                            if (context.mounted) {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const HomeScreen()));
+                            }
+                          },
+                          child: const Text('CLEAR EVERYTHING'),
+                        ),
+                      ],
                     ),
                   ),
+                ),
               ],
             ),
           ),
