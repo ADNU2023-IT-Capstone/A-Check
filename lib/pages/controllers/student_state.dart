@@ -3,12 +3,14 @@ import 'package:a_check/pages/student_page.dart';
 import 'package:flutter/material.dart';
 
 class StudentState extends State<StudentPage> {
-  Future<bool> showConfirmDialog() async {
+  Future<bool> showConfirmDialog(Widget title, Widget content) async {
     return await showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              title: const Text("Warning"),
-              content: Text("${widget.student.firstName} already has a face registered. Continue?"),
+              // title: const Text("Warning"),
+              // content: Text("${widget.student.firstName} already has a face registered. Continue?"),
+              title: title,
+              content: content,
               actions: [
                 ElevatedButton(
                     onPressed: () {
@@ -36,9 +38,18 @@ class StudentState extends State<StudentPage> {
             "Something went wrong with saving ${widget.student.firstName}'s face...")));
   }
 
+  void editStudent() {
+    
+  }
+
   void registerFace() async {
     if (widget.student.hasRegisteredFace()) {
-      if (!await showConfirmDialog()) return;
+      if (!await showConfirmDialog(
+          const Text("Warning"),
+          Text(
+              "${widget.student.firstName} already has a face registered. Continue?"))) {
+        return;
+      }
     }
 
     if (!context.mounted) return;
@@ -53,6 +64,20 @@ class StudentState extends State<StudentPage> {
     } else if (result == false) {
       showFailedSnackBar();
     }
+  }
+
+  void removeFromClass() async {
+    if (!await showConfirmDialog(
+        const Text("Warning"),
+        Text(
+            "${widget.student.firstName} will be removed to class ${widget.studentClass!.code}. Continue?"))) {
+      return;
+    }
+
+    widget.studentClass!.students.remove(widget.student.id);
+    widget.studentClass!.save();
+
+    if (context.mounted) Navigator.pop(context);
   }
 
   @override

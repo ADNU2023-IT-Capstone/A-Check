@@ -26,6 +26,7 @@ class HiveBoxes {
     Hive.registerAdapter(ClassScheduleAdapter());
     Hive.registerAdapter(PersonAdapter());
     Hive.registerAdapter(StudentAdapter());
+    Hive.registerAdapter(AttendanceStatusAdapter());
     Hive.registerAdapter(AttendanceRecordAdapter());
   }
 }

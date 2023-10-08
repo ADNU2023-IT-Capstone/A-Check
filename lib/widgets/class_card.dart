@@ -9,7 +9,13 @@ class ClassCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void onTap() {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => ClassPage(classKey: mClass.key)));
+    }
+
     return GestureDetector(
+      onTap: onTap,
       child: Card(
         clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 4,
@@ -30,14 +36,11 @@ class ClassCard extends StatelessWidget {
                 children: [
                   const Icon(Icons.class_rounded, size: 24),
                   Text("${mClass.name} [${mClass.section}]"),
+                  Text(mClass.code),
                 ],
               ),
             )),
       ),
-      onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => ClassPage(mClass: mClass)));
-      },
     );
   }
 }

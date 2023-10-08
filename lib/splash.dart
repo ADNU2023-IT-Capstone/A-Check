@@ -63,6 +63,9 @@ class SplashWidgetState extends State<SplashWidget> {
                       padding: EdgeInsetsDirectional.fromSTEB(0, 44, 0, 0),
                       child: Text(
                         'Welcome to A-Check!',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     const Padding(
@@ -70,6 +73,16 @@ class SplashWidgetState extends State<SplashWidget> {
                       child: Text(
                         'Embrace the future of efficient attendance management with face recognition technology.',
                         textAlign: TextAlign.center,
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(44, 8, 44, 0),
+                      child: Text(
+                        'App still in development. Bugs may occur.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                        ),
                       ),
                     ),
                   ],

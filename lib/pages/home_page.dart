@@ -1,3 +1,4 @@
+import 'package:a_check/models/class.dart';
 import 'package:a_check/pages/controllers/home_state.dart';
 import 'package:a_check/utils/abstracts.dart';
 import 'package:a_check/utils/localdb.dart';
@@ -30,7 +31,7 @@ class HomeView extends WidgetView<HomePage, HomeState> {
                 child: ValueListenableBuilder<Box>(
                   valueListenable: HiveBoxes.classesBox().listenable(),
                   builder: (context, box, _) {
-                    final castedBox = box.values.cast();
+                    final castedBox = box.values.cast<Class>();
 
                     return GridView.count(
                       crossAxisCount: 2,

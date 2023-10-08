@@ -13,8 +13,8 @@ import 'package:image/image.dart' as imglib;
 class TakeAttendanceState extends State<TakeAttendancePage> {
   final MLService _mlService = MLService();
 
-  void showSuccessDialog(List<Student> student) {
-    showDialog(
+  Future<void> showSuccessDialog(List<Student> student) async {
+    await showDialog(
         context: context,
         builder: (context) => AlertDialog(
               title: const Text("Recognized someone!"),
@@ -48,6 +48,8 @@ class TakeAttendanceState extends State<TakeAttendancePage> {
     ));
     final faces = await _mlService.getFaces(inputImage);
     if (faces.isEmpty) {
+      if (!context.mounted) return; 
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
       showSnackBar(const Text("Heyo, we got no faces!"));
       return;
     }
@@ -78,13 +80,22 @@ class TakeAttendanceState extends State<TakeAttendancePage> {
     }
 
     final currentDateTime = DateTime.now();
-    for (Student student in recognizedStudents) {
-      final record = AttendanceRecord(studentId: student.id, classCode: widget.mClass.code, dateTime: currentDateTime, isPresent: true);
-      
+    for (Student student in classStudents) {
+      AttendanceRecord record;
+      if (recognizedStudents.contains(student)) {
+        record = AttendanceRecord(studentId: student.id, classCode: widget.mClass.code, dateTime: currentDateTime, status: AttendanceStatus.present);
+      } else {
+        record = AttendanceRecord(studentId: student.id, classCode: widget.mClass.code, dateTime: currentDateTime, status: AttendanceStatus.absent);
+      }
+
       HiveBoxes.attendancesBox().add(record);
     }
 
-    showSuccessDialog(recognizedStudents.toList());
+    await showSuccessDialog(recognizedStudents.toList());
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      Navigator.pop(context);
+    }
   }
 
   @override

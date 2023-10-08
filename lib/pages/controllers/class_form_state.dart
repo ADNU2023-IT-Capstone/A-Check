@@ -26,7 +26,7 @@ class ClassFormState extends State<ClassFormPage> {
         section: sectionTedCon.text,
         schedule: schedules);
 
-    HiveBoxes.classesBox().add(mClass).then((value) {
+    HiveBoxes.classesBox().put(mClass.code, mClass).then((value) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Added ${mClass.code}!")));
       Navigator.pop(context);

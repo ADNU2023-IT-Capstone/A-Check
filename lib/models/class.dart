@@ -75,6 +75,9 @@ class Class extends HiveObject {
   }
 
   @override
+  String get key => code;
+
+  @override
   String toString() {
     String classInfo = "$code: $name [$section]\n";
     var classSchedBuf = StringBuffer();
@@ -88,8 +91,7 @@ class Class extends HiveObject {
 
   List<Student> getStudents() {
     final studentsList = students.map((id) {
-      final castedBox = HiveBoxes.studentsBox().values.cast<Student>();
-      return castedBox.firstWhere((student) => student.id == id);
+      return HiveBoxes.studentsBox().get(id) as Student;
     }).toList();
     studentsList.sort(
       (a, b) =>

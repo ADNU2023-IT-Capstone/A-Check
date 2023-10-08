@@ -1,14 +1,15 @@
 import 'package:a_check/pages/controllers/class_state.dart';
-import 'package:a_check/models/class.dart';
 import 'package:a_check/utils/abstracts.dart';
+import 'package:a_check/utils/localdb.dart';
 import 'package:a_check/widgets/attendance_record_card.dart';
 import 'package:a_check/widgets/student_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class ClassPage extends StatefulWidget {
-  const ClassPage({Key? key, required this.mClass}) : super(key: key);
-  final Class mClass;
+  const ClassPage({Key? key, required this.classKey}) : super(key: key);
+  final dynamic classKey;
 
   @override
   State<ClassPage> createState() => ClassState();
@@ -24,21 +25,41 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
   }
 
   Widget buildStudentsListView() {
-    return ListView(
-      shrinkWrap: true,
-      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      children: state.students.map((e) => StudentCard(student: e)).toList(),
+    return ValueListenableBuilder(
+      valueListenable:
+          HiveBoxes.classesBox().listenable(keys: [widget.classKey]),
+      builder: (context, box, _) {
+        final students = state.mClass.getStudents();
+
+        return ListView(
+          shrinkWrap: true,
+          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+          children: students
+              .map((e) => StudentCard(
+                    student: e,
+                    studentClass: state.mClass,
+                  ))
+              .toList(),
+        );
+      },
     );
   }
 
   Widget buildReportsListView() {
-    return ListView(
-      shrinkWrap: true,
-      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      children: state.attendanceRecords.entries
-          .map((e) =>
-              AttendanceRecordCard(dateTime: e.key, attendanceRecords: e.value))
-          .toList(),
+    return ValueListenableBuilder(
+      valueListenable: HiveBoxes.attendancesBox().listenable(),
+      builder: (context, box, __) {
+        final records = state.mClass.getAttendanceRecords();
+
+        return ListView(
+          shrinkWrap: true,
+          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+          children: records.entries
+              .map((e) => AttendanceRecordCard(
+                  dateTime: e.key, attendanceRecords: e.value))
+              .toList(),
+        );
+      },
     );
   }
 
@@ -47,46 +68,46 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        appBar: AppBar(
+          title: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("${state.mClass.name} [${state.mClass.section}]"),
+                        Text(
+                          state.mClass.code,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          bottom: const TabBar(
+            tabs: [
+              Tab(icon: Icon(Icons.group), text: "Student List"),
+              Tab(icon: Icon(Icons.assignment), text: "Attendance Records")
+            ],
+          ),
+        ),
         body: SafeArea(
           child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton(
-                          onPressed: state.backButtonPressed,
-                          child: const Icon(Icons.arrow_back)),
-                      Expanded(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Column(
-                              children: [
-                                Text(widget.mClass.name),
-                                Text(widget.mClass.section),
-                                Text(widget.mClass.code)
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const TabBar(
-                  tabs: [
-                    Tab(icon: Icon(Icons.group)),
-                    Tab(icon: Icon(Icons.assignment))
-                  ],
-                  labelColor: Colors.black,
-                ),
                 Expanded(
                   child: buildTabBarView(),
                 )

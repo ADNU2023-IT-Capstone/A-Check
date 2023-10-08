@@ -37,10 +37,6 @@ class RegisterFaceState extends State<RegisterFacePage> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: widget));
   }
 
-  void popNavigator(bool isSuccess) {
-    Navigator.pop(context, isSuccess);
-  }
-
   void processCapturedImage(XFile photoXFile) async {
     final photoFile = File(photoXFile.path);
     final inputImage = InputImage.fromFile(photoFile);
@@ -56,17 +52,24 @@ class RegisterFaceState extends State<RegisterFacePage> {
     ));
     final faces = await _mlService.getFaces(inputImage);
     if (faces.isEmpty) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
       showSnackBar(const Text("Heyo, we got no faces!"));
       return;
     }
 
     final faceImages = await _mlService.getFaceImages(faces, photoFile);
+    bool isConfirmed = false;
     if (await showConfirmDialog(faceImages[0])) {
       widget.student.faceArray = await _mlService.predict(faceImages[0]);
       widget.student.save();
-      popNavigator(true);
-    } else {
-      popNavigator(false);
+      
+      isConfirmed = true;
+    }
+
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      Navigator.pop(context, isConfirmed);
     }
   }
 

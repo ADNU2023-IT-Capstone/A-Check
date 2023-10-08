@@ -55,6 +55,9 @@ class Student extends Person with HiveObjectMixin {
             phone: phone);
 
   @override
+  String get key => id;
+
+  @override
   String toString() {
     return "$firstName ${middleName[0]}. $lastName";
   }

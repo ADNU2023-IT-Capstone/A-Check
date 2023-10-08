@@ -71,7 +71,7 @@ class ScheduleDialogView
             const SizedBox(height: 16),
             Row(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   children: [
@@ -82,7 +82,7 @@ class ScheduleDialogView
                         child: const Text("Set Start Time"))
                   ],
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 4),
                 Column(
                   children: [
                     const Text("End Time"),

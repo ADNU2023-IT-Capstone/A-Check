@@ -14,7 +14,7 @@ class StudentFormState extends State<StudentFormPage> {
         lastName: lNameCon.text,
         id: idCon.text);
 
-    HiveBoxes.studentsBox().add(student).then((value) {
+    HiveBoxes.studentsBox().put(student.id, student).then((value) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Added $student! (${student.id})")));
       Navigator.pop(context);
