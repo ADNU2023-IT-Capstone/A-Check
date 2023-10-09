@@ -10,8 +10,10 @@ class ClassCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onTap() {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => ClassPage(classKey: mClass.key)));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ClassPage(classKey: mClass.key)));
     }
 
     return GestureDetector(

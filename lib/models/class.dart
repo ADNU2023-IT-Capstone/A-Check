@@ -47,50 +47,45 @@ enum DaysOfTheWeek {
 }
 
 @HiveType(typeId: 0)
-class Class extends HiveObject{
+class Class extends HiveObject {
   @HiveField(0)
-  late String _code;
+  String code;
 
   @HiveField(1)
-  late String _name;
+  String name;
 
   @HiveField(2)
-  late String _section;
+  String section;
 
   @HiveField(3)
-  late List<ClassSchedule> _schedule;
+  List<ClassSchedule> schedule;
 
   @HiveField(4)
-  final Set<String> _studentIds = {};
+  Set<String> studentIds = {};
 
-  Class({required code, required name, required section, required schedule}) {
-    _code = code;
-    _name = name;
-    _section = section;
-    _schedule = schedule;
+  Class(
+      {required this.code,
+      required this.name,
+      required this.section,
+      required this.schedule,
+      List<String>? studentIds}) {
+    if (studentIds != null) this.studentIds = studentIds.toSet();
+  }
+
+  Future<void> addStudents(Iterable<String> studentsIds) async {
+    studentIds.addAll(studentsIds);
+    await save();
   }
 
   @override
-  String get key => "$_code-$_section";
-  String get code => _code;
-  String get name => _name;
-  String get section => _section;
-  List<ClassSchedule> get schedule => _schedule;
-  Set<String> get studentIds => _studentIds;
-
-  set name(String name) {
-    _name = name;
-  }
-
-  set schedule(List<ClassSchedule> schedule) {
-    _schedule = schedule;
-  }
+  // ignore: unnecessary_brace_in_string_interps
+  String get key => "${code}_${section}";
 
   @override
   String toString() {
     String classInfo = "$code: $name [$section]\n";
     var classSchedBuf = StringBuffer();
-    for (var s in _schedule) {
+    for (var s in schedule) {
       classSchedBuf.write(
           "${s.day} ${s.startTimeHour.toString().padLeft(2, '0')}:${s.startTimeMinute.toString().padLeft(2, '0')} - ${s.endTimeHour.toString().padLeft(2, '0')}:${s.endTimeMinute.toString().padLeft(2, '0')}\n");
     }
@@ -99,7 +94,7 @@ class Class extends HiveObject{
   }
 
   List<Student> getStudents() {
-    final studentsList = _studentIds.map((id) {
+    final studentsList = studentIds.map((id) {
       return HiveBoxes.studentsBox().get(id) as Student;
     }).toList();
     studentsList.sort(
@@ -112,7 +107,6 @@ class Class extends HiveObject{
   Map<DateTime, List<AttendanceRecord>> getAttendanceRecords() {
     final castedBox =
         HiveBoxes.attendancesBox().values.cast<AttendanceRecord>();
-
     final list = castedBox.where((element) => element.classKey == key).toList();
     list.sort((a, b) => a.dateTime.compareTo(b.dateTime));
 

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:image/image.dart' as imglib;
@@ -21,7 +22,7 @@ class MLService {
       _interpreter = await Interpreter.fromAsset('assets/mobilefacenet.tflite',
           options: interpreterOptions);
     } catch (e) {
-      print("Failed to load model.\n$e");
+      Fluttertoast.showToast(msg: "Failed to load model.\n$e");
     }
   }
 

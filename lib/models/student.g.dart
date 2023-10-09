@@ -30,15 +30,15 @@ class PersonAdapter extends TypeAdapter<Person> {
     writer
       ..writeByte(5)
       ..writeByte(0)
-      ..write(obj._firstName)
+      ..write(obj.firstName)
       ..writeByte(1)
-      ..write(obj._middleName)
+      ..write(obj.middleName)
       ..writeByte(2)
-      ..write(obj._lastName)
+      ..write(obj.lastName)
       ..writeByte(3)
-      ..write(obj._email)
+      ..write(obj.email)
       ..writeByte(4)
-      ..write(obj._phone);
+      ..write(obj.phone);
   }
 
   @override
@@ -64,13 +64,13 @@ class StudentAdapter extends TypeAdapter<Student> {
     };
     return Student(
       id: fields[5] as String,
+      firstName: fields[0] as dynamic,
+      middleName: fields[1] as dynamic,
+      lastName: fields[2] as dynamic,
+      email: fields[3] as dynamic,
+      phone: fields[4] as dynamic,
       guardian: fields[6] as Person?,
       faceArray: (fields[7] as List?)?.cast<dynamic>(),
-      firstName: fields[0] as String,
-      middleName: fields[1] as String,
-      lastName: fields[2] as String,
-      email: fields[3] as String?,
-      phone: fields[4] as String?,
     );
   }
 
@@ -79,21 +79,21 @@ class StudentAdapter extends TypeAdapter<Student> {
     writer
       ..writeByte(8)
       ..writeByte(5)
-      ..write(obj._id)
+      ..write(obj.id)
       ..writeByte(6)
-      ..write(obj._guardian)
+      ..write(obj.guardian)
       ..writeByte(7)
-      ..write(obj._faceArray)
+      ..write(obj.faceArray)
       ..writeByte(0)
-      ..write(obj._firstName)
+      ..write(obj.firstName)
       ..writeByte(1)
-      ..write(obj._middleName)
+      ..write(obj.middleName)
       ..writeByte(2)
-      ..write(obj._lastName)
+      ..write(obj.lastName)
       ..writeByte(3)
-      ..write(obj._email)
+      ..write(obj.email)
       ..writeByte(4)
-      ..write(obj._phone);
+      ..write(obj.phone);
   }
 
   @override

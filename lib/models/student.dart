@@ -7,122 +7,67 @@ part 'student.g.dart';
 @HiveType(typeId: 3)
 class Person {
   @HiveField(0)
-  late String _firstName;
+  String firstName;
 
   @HiveField(1)
-  late String _middleName;
+  String middleName;
 
   @HiveField(2)
-  late String _lastName;
+  String lastName;
 
   @HiveField(3)
-  String? _email;
+  String? email;
 
   @HiveField(4)
-  String? _phone;
+  String? phone;
 
   Person(
-      {required firstName,
-      required middleName,
-      required lastName,
-      email,
-      phone}) {
-    _firstName = firstName;
-    _middleName = middleName;
-    _lastName = lastName;
-    _email = email;
-    _phone = phone;
-  }
-
-  String get firstName => _firstName;
-  String get middleName => _middleName;
-  String get lastName => _lastName;
-  String? get email => _email;
-  String? get phone => _phone;
-
-  set value(Person newPerson) {
-    _firstName = newPerson._firstName;
-    _middleName = newPerson._middleName;
-    _lastName = newPerson._lastName;
-    _email = newPerson._email;
-    _phone = newPerson._phone;
-  }
-
-  set firstName(String firstName) {
-    _firstName = firstName;
-  }
-
-  set middleName(String middleName) {
-    _middleName = middleName;
-  }
-
-  set lastName(String lastName) {
-    _lastName = lastName;
-  }
-
-  set email(String? email) {
-    _email = email;
-  }
-
-  set phone(String? phone) {
-    _phone = phone;
-  }
+      {required this.firstName,
+      required this.middleName,
+      required this.lastName,
+      this.email,
+      this.phone});
 
   @override
   String toString() {
-    if (_middleName.isEmpty) return "$_firstName $_lastName";
+    if (middleName.isEmpty) return "$firstName $lastName";
 
-    return "$_firstName ${_middleName[0]}. $_lastName";
+    return "$firstName ${middleName[0]}. $lastName";
   }
 }
 
 @HiveType(typeId: 4)
 class Student extends Person with HiveObjectMixin {
   @HiveField(5)
-  late String _id;
+  String id;
 
   @HiveField(6)
-  Person? _guardian;
+  Person? guardian;
 
   @HiveField(7)
-  List? _faceArray;
+  List? faceArray;
 
   Student(
-      {required id,
+      {required this.id,
       required firstName,
       required middleName,
       required lastName,
       email,
       phone,
-      guardian,
-      faceArray})
+      this.guardian,
+      this.faceArray})
       : super(
             firstName: firstName,
             middleName: middleName,
             lastName: lastName,
             email: email,
-            phone: phone) {
-    _id = id;
-    _guardian = guardian;
-    _faceArray = faceArray;
-  }
+            phone: phone);
 
   @override
-  String get key => _id;
-  String get id => _id;
-  Person? get guardian => _guardian;
-  List? get faceArray => _faceArray;
-
-  set guardian(Person? guardian) {
-    _guardian = guardian;
-  }
-
-  set faceArray(List? faceArray) {
-    _faceArray = faceArray;
-  }
+  String get key => id;
 
   bool hasRegisteredFace() {
-    if (_faceArray != null && _faceArray!.isNotEmpty) {
+    if (faceArray != null && faceArray!.isNotEmpty) {
       return true;
     }
 

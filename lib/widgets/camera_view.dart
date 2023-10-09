@@ -4,9 +4,13 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
 class CameraViewWidget extends StatefulWidget {
-  const CameraViewWidget({Key? key, required this.onCapture}) : super(key: key);
+  const CameraViewWidget(
+      {Key? key, required this.onCapture, this.onImage, this.customPaint})
+      : super(key: key);
 
   final Function(XFile photoFile) onCapture;
+  final Function(CameraImage cameraImage)? onImage;
+  final CustomPaint? customPaint;
 
   @override
   State<CameraViewWidget> createState() => CameraViewState();
@@ -21,18 +25,30 @@ class CameraView extends WidgetView<CameraViewWidget, CameraViewState> {
     // final deviceRatio = size.width / size.height;
 
     Widget buildBody() {
-      if (!state.camCon!.value.isInitialized) {
-        return const Center(
-          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Padding(
-              padding: EdgeInsets.all(8.0),
-              child: CircularProgressIndicator(),
-            ),
-            Text("Initializing camera...")
-          ]),
-        );
-      }
-      return Center(child: CameraPreview(state.camCon!));
+      return FutureBuilder(
+        future: state.initializeCamConFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Center(
+              child: CameraPreview(
+                state.camCon!,
+                child: widget.customPaint,
+              ),
+            );
+          } else {
+            return const Center(
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CircularProgressIndicator(),
+                ),
+                Text("Initializing camera...")
+              ]),
+            );
+          }
+        },
+      );
     }
 
     Widget? buildFab() {

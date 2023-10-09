@@ -25,10 +25,19 @@ class StudentCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Card(
-        color: Theme.of(context).colorScheme.background,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: Text(student.toString()),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                student.toString(),
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
+              Text(student.id)
+            ],
+          ),
         ),
       ),
     );

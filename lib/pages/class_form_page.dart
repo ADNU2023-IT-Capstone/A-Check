@@ -5,8 +5,6 @@ import 'package:a_check/utils/validators.dart';
 import 'package:a_check/widgets/schedule_row.dart';
 import 'package:flutter/material.dart';
 
-// TODO: Input Validation
-
 class ClassFormPage extends StatefulWidget {
   const ClassFormPage({super.key});
 
@@ -71,6 +69,7 @@ class ClassFormView extends WidgetView<ClassFormPage, ClassFormState> {
             obscureText: false,
             textAlign: TextAlign.start,
             inputFormatters: [UpperCaseTextFormatter()],
+            textInputAction: TextInputAction.next,
             maxLines: 1,
             style: const TextStyle(
               fontWeight: FontWeight.w400,
@@ -88,6 +87,7 @@ class ClassFormView extends WidgetView<ClassFormPage, ClassFormState> {
             controller: state.nameTedCon,
             obscureText: false,
             textAlign: TextAlign.start,
+            textInputAction: TextInputAction.next,
             maxLines: 1,
             style: const TextStyle(
               fontWeight: FontWeight.w400,
@@ -105,6 +105,7 @@ class ClassFormView extends WidgetView<ClassFormPage, ClassFormState> {
             controller: state.sectionTedCon,
             obscureText: false,
             textAlign: TextAlign.start,
+            textInputAction: TextInputAction.done,
             maxLines: 1,
             style: const TextStyle(
               fontWeight: FontWeight.w400,

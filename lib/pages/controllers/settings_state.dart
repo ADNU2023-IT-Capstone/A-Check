@@ -80,6 +80,10 @@ class SettingsState extends State<SettingsPage> {
     });
   }
 
+  void setAbsentLimit() {
+    
+  }
+
   @override
   Widget build(BuildContext context) => SettingsView(this);
 }

@@ -53,27 +53,8 @@ class AttendanceRecord extends HiveObject {
       required this.dateTime,
       required this.status});
 
-  set value(AttendanceRecord newRecord) {
-    if (newRecord != this) {
-      studentId = newRecord.studentId;
-      classKey = newRecord.classKey;
-      dateTime = newRecord.dateTime;
-      status = newRecord.status;
-    }
-  }
-
   Student get getStudent {
     return HiveBoxes.studentsBox().get(studentId) as Student;
-  }
-
-  late AttendanceStatus _previousStatus = status;
-  set setStatus(AttendanceStatus newStatus) {
-    if (newStatus != _previousStatus) {
-      _previousStatus = status;
-      status = newStatus;
-    }
-
-    save();
   }
 }
 

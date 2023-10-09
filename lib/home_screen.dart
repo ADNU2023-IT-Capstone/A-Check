@@ -1,3 +1,4 @@
+import 'package:a_check/pages/calendar_page.dart';
 import 'package:a_check/pages/home_page.dart';
 import 'package:a_check/pages/settings_page.dart';
 import 'package:a_check/pages/students_page.dart';
@@ -29,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
       return PageView(
         controller: pageController,
         physics: const NeverScrollableScrollPhysics(),
-        children: const [HomePage(), StudentsPage(), Placeholder(), SettingsPage()],
+        children: const [HomePage(), StudentsPage(), CalendarPage(), SettingsPage()],
         onPageChanged: (index) {
           pageChanged(index);
         },

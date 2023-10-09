@@ -49,7 +49,7 @@ class ScheduleDialogView
     }
 
     return AlertDialog(
-      title: const Text("Add Schedule"),
+      title: Text(widget.schedule == null ? "Add Schedule" : "Edit Schedule"),
       content: StatefulBuilder(builder: (context, setState) {
         return Column(
           mainAxisSize: MainAxisSize.min,
@@ -101,7 +101,7 @@ class ScheduleDialogView
       }),
       actions: [
         ElevatedButton(
-            onPressed: state.finalizeSchedule, child: const Text("Add")),
+            onPressed: state.finalizeSchedule, child: Text(widget.schedule == null ? "Add" : "Edit")),
       ],
     );
   }

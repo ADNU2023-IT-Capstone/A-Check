@@ -21,25 +21,37 @@ class StudentsView extends WidgetView<StudentsPage, StudentsState> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: ValueListenableBuilder(
-            valueListenable: HiveBoxes.studentsBox().listenable(),
-            builder: (context, box, _) {
-              final castedBox = box.values.cast();
-              final studentsList =
-                  castedBox.map((e) => e as Student).toList();
-              studentsList.sort(
-                (a, b) => a.firstName[0]
-                    .toLowerCase()
-                    .compareTo(b.firstName[0].toLowerCase()),
-              );
+        child: Padding(
+          padding: const EdgeInsets.only(top: 16, left: 8, right: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Students",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              ValueListenableBuilder(
+                  valueListenable: HiveBoxes.studentsBox().listenable(),
+                  builder: (context, box, _) {
+                    final castedBox = box.values.cast();
+                    final studentsList =
+                        castedBox.map((e) => e as Student).toList();
+                    studentsList.sort(
+                      (a, b) => a.firstName[0]
+                          .toLowerCase()
+                          .compareTo(b.firstName[0].toLowerCase()),
+                    );
 
-              return ListView(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 4, horizontal: 8),
-                  children: studentsList
-                      .map((e) => StudentCard(student: e))
-                      .toList());
-            }),
+                    return ListView(
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.only(top: 8),
+                        children: studentsList
+                            .map((e) => StudentCard(student: e))
+                            .toList());
+                  }),
+            ],
+          ),
+        ),
       ),
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.menu_close,

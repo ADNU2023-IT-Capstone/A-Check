@@ -40,6 +40,12 @@ class SettingsView extends WidgetView<SettingsPage, SettingsState> {
                     onTap: state.clearAllAttendanceRecords,
                   ),
                 ),
+                Card(
+                  child: ListTile(
+                    title: const Text("Set Absent Limit"),
+                    onTap: state.setAbsentLimit,
+                  ),
+                ),
               ],
             ),
           )),

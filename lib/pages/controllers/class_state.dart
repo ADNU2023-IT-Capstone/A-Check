@@ -4,10 +4,13 @@ import 'package:a_check/pages/student_form_page.dart';
 import 'package:a_check/pages/students_form_page.dart';
 import 'package:a_check/pages/take_attendance_page.dart';
 import 'package:a_check/utils/localdb.dart';
+import 'package:a_check/widgets/dialogs.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class ClassState extends State<ClassPage> {
   late Class mClass;
+  late ClassValueNotifier classValueNotifier;
 
   void backButtonPressed() {
     Navigator.pop(context);
@@ -18,13 +21,13 @@ class ClassState extends State<ClassPage> {
         context,
         MaterialPageRoute(
             builder: (context) => TakeAttendancePage(mClass: mClass)));
+
+    onClassValueChanged();
   }
 
   void addNewStudent() {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => const StudentFormPage()));
-
-    setState(() {});
   }
 
   void addExistingStudent() async {
@@ -33,10 +36,30 @@ class ClassState extends State<ClassPage> {
 
     if (result == null || result.isEmpty) return;
 
-    setState(() {
-      mClass.studentIds.addAll(result);
-      mClass.save();
-    });
+    await mClass.addStudents(result);
+  }
+
+  void deleteClass() async {
+    if (!await Dialogs.showConfirmDialog(
+        context,
+        const Text("Delete Class"),
+        const Text(
+            "This will delete the class and its related data. Continue?"))) {
+      return;
+    }
+
+    if (context.mounted) {
+      mClass.getAttendanceRecords().forEach((_, value) async {
+        for (var record in value) {
+          await record.delete();
+        }
+      });
+
+      classValueNotifier.dispose();
+      mClass.delete().then((_) {
+        Navigator.pop(context);
+      });
+    }
   }
 
   @override
@@ -44,6 +67,25 @@ class ClassState extends State<ClassPage> {
     super.initState();
 
     mClass = HiveBoxes.classesBox().get(widget.classKey);
+    classValueNotifier = ClassValueNotifier(mClass);
+
+    HiveBoxes.classesBox()
+        .listenable(keys: [mClass.key]).addListener(onClassValueChanged);
+  }
+
+  void onClassValueChanged() {
+    if (mounted) {
+      setState(() {
+        mClass = HiveBoxes.classesBox().get(widget.classKey);
+        classValueNotifier.value = mClass;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    classValueNotifier.dispose();
+    super.dispose();
   }
 
   @override

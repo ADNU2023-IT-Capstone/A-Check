@@ -79,6 +79,7 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
             textAlign: TextAlign.start,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             keyboardType: TextInputType.number,
+            textInputAction: TextInputAction.next,
             maxLines: 1,
             style: const TextStyle(
               fontWeight: FontWeight.w400,
@@ -96,6 +97,7 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
             controller: state.studentFNameCon,
             obscureText: false,
             textAlign: TextAlign.start,
+            textInputAction: TextInputAction.next,
             maxLines: 1,
             style: const TextStyle(
               fontWeight: FontWeight.w400,
@@ -113,6 +115,7 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
             controller: state.studentMNameCon,
             obscureText: false,
             textAlign: TextAlign.start,
+            textInputAction: TextInputAction.next,
             maxLines: 1,
             style: const TextStyle(
               fontWeight: FontWeight.w400,
@@ -130,6 +133,7 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
             controller: state.studentLNameCon,
             obscureText: false,
             textAlign: TextAlign.start,
+            textInputAction: TextInputAction.next,
             maxLines: 1,
             style: const TextStyle(
               fontWeight: FontWeight.w400,
@@ -149,6 +153,7 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
             textAlign: TextAlign.start,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             keyboardType: TextInputType.number,
+            textInputAction: TextInputAction.next,
             maxLength: 11,
             maxLines: 1,
             style: const TextStyle(
@@ -168,6 +173,7 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
             obscureText: false,
             textAlign: TextAlign.start,
             keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.next,
             maxLines: 1,
             style: const TextStyle(
               fontWeight: FontWeight.w400,
@@ -203,6 +209,7 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
             controller: state.guardianFNameCon,
             obscureText: false,
             textAlign: TextAlign.start,
+            textInputAction: TextInputAction.next,
             maxLines: 1,
             style: const TextStyle(
               fontWeight: FontWeight.w400,
@@ -220,6 +227,7 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
             controller: state.guardianMNameCon,
             obscureText: false,
             textAlign: TextAlign.start,
+            textInputAction: TextInputAction.next,
             maxLines: 1,
             style: const TextStyle(
               fontWeight: FontWeight.w400,
@@ -237,6 +245,7 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
             controller: state.guardianLNameCon,
             obscureText: false,
             textAlign: TextAlign.start,
+            textInputAction: TextInputAction.next,
             maxLines: 1,
             style: const TextStyle(
               fontWeight: FontWeight.w400,
@@ -256,6 +265,7 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
             textAlign: TextAlign.start,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             keyboardType: TextInputType.number,
+            textInputAction: TextInputAction.next,
             maxLength: 11,
             maxLines: 1,
             style: const TextStyle(
@@ -275,6 +285,7 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
             obscureText: false,
             textAlign: TextAlign.start,
             keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.done,
             maxLines: 1,
             style: const TextStyle(
               fontWeight: FontWeight.w400,

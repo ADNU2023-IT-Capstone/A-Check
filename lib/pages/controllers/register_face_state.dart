@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:a_check/pages/register_face_page.dart';
 import 'package:a_check/utils/mlservice.dart';
+import 'package:a_check/widgets/dialogs.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
@@ -9,29 +10,6 @@ import 'package:image/image.dart' as imglib;
 
 class RegisterFaceState extends State<RegisterFacePage> {
   final _mlService = MLService();
-
-  Future<bool> showConfirmDialog(imglib.Image faceImage) async {
-    final bytes = imglib.encodeJpg(faceImage);
-
-    return await showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: const Text("Register face"),
-              content: Image.memory(bytes),
-              actions: [
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context, true);
-                    },
-                    child: const Text("Yes")),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context, false);
-                    },
-                    child: const Text("No")),
-              ],
-            ));
-  }
 
   void showSnackBar(Widget widget) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: widget));
@@ -58,18 +36,26 @@ class RegisterFaceState extends State<RegisterFacePage> {
       return;
     }
 
-    final faceImages = await _mlService.getFaceImages(faces, photoFile);
-    bool isConfirmed = false;
-    if (await showConfirmDialog(faceImages[0])) {
-      widget.student.faceArray = await _mlService.predict(faceImages[0]);
-      widget.student.save();
-      
-      isConfirmed = true;
-    }
-
+    final faceImage = (await _mlService.getFaceImages(faces, photoFile)).first;
+    final encodedImage = imglib.encodeJpg(faceImage);
     if (context.mounted) {
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      Navigator.pop(context, isConfirmed);
+      if (await Dialogs.showConfirmDialog(
+          context, const Text("Register face"), Image.memory(encodedImage))) {
+        widget.student.faceArray = await _mlService.predict(faceImage);
+        widget.student.save().catchError((e) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            Navigator.pop(context, {'result': false, 'error': e});
+          }
+        });
+
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          Navigator.pop(context, true);
+        }
+      } else {
+        if (context.mounted) ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      }
     }
   }
 

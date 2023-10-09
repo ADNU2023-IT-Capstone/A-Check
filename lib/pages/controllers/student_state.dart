@@ -16,10 +16,10 @@ class StudentState extends State<StudentPage> {
         content: Text("Successfully registered ${student.firstName}'s face!")));
   }
 
-  void showFailedSnackBar() {
+  void showFailedSnackBar(error) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-            "Something went wrong with saving ${student.firstName}'s face...")));
+            "Something went wrong with saving ${student.firstName}'s face...\n$error")));
   }
 
   void editStudent() {
@@ -50,8 +50,8 @@ class StudentState extends State<StudentPage> {
     if (result == true) {
       showSuccessSnackBar();
       setState(() {});
-    } else if (result == false) {
-      showFailedSnackBar();
+    } else if (result['result'] == false) {
+      showFailedSnackBar(result['error']);
     }
   }
 
@@ -77,14 +77,23 @@ class StudentState extends State<StudentPage> {
     student = HiveBoxes.studentsBox().get(widget.studentKey);
     studentValueNotifier = StudentValueNotifier(student);
 
-    HiveBoxes.studentsBox().listenable().addListener(onStudentValueChanged);
+    HiveBoxes.studentsBox()
+        .listenable(keys: [student.key]).addListener(onStudentValueChanged);
   }
 
   void onStudentValueChanged() {
-    setState(() {
-      student = HiveBoxes.studentsBox().get(widget.studentKey);
-      studentValueNotifier.value = student;
-    });
+    if (mounted) {
+      setState(() {
+        student = HiveBoxes.studentsBox().get(widget.studentKey);
+        studentValueNotifier.value = student;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    studentValueNotifier.dispose();
+    super.dispose();
   }
 
   @override

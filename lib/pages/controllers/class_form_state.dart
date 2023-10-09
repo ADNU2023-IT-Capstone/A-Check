@@ -5,7 +5,7 @@ import 'package:a_check/widgets/dialogs.dart';
 import 'package:flutter/material.dart';
 
 class ClassFormState extends State<ClassFormPage> {
-  late TextEditingController nameTedCon, codeTedCon, sectionTedCon;
+  late TextEditingController? nameTedCon, codeTedCon, sectionTedCon;
   List<ClassSchedule> schedules = [];
   final formKey = GlobalKey<FormState>();
 
@@ -44,14 +44,14 @@ class ClassFormState extends State<ClassFormPage> {
     }
 
     final mClass = Class(
-        code: codeTedCon.text,
-        name: nameTedCon.text,
-        section: sectionTedCon.text,
+        code: codeTedCon!.text,
+        name: nameTedCon!.text,
+        section: sectionTedCon!.text,
         schedule: schedules);
 
-    HiveBoxes.classesBox().put(mClass.code, mClass).then((value) {
+    HiveBoxes.classesBox().put(mClass.key, mClass).then((value) {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Added ${mClass.code}!")));
+          .showSnackBar(SnackBar(content: Text("Added ${mClass.key}!")));
       Navigator.pop(context);
     }).onError((error, stackTrace) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

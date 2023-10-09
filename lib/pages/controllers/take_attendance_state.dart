@@ -7,6 +7,7 @@ import 'package:a_check/utils/localdb.dart';
 import 'package:a_check/utils/mlservice.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image/image.dart' as imglib;
 
@@ -79,6 +80,13 @@ class TakeAttendanceState extends State<TakeAttendancePage> {
       if (student != null) recognizedStudents.add(student);
     }
 
+    if (recognizedStudents.isEmpty) {
+      if (!context.mounted) return; 
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      showSnackBar(const Text("Heyo, we recognized no one!"));
+      return;
+    }
+
     final currentDateTime = DateTime.now();
     for (Student student in classStudents) {
       AttendanceRecord record;
@@ -88,7 +96,7 @@ class TakeAttendanceState extends State<TakeAttendancePage> {
         record = AttendanceRecord(studentId: student.id, classKey: widget.mClass.key, dateTime: currentDateTime, status: AttendanceStatus.absent);
       }
 
-      HiveBoxes.attendancesBox().add(record);
+      HiveBoxes.attendancesBox().add(record).then((value) => Fluttertoast.showToast(msg: "successfully added"));
     }
 
     await showSuccessDialog(recognizedStudents.toList());

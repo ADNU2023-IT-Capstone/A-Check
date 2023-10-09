@@ -5,33 +5,13 @@ import 'package:flutter/material.dart';
 class SARCState extends State<StudentAttendanceRecordCard> {
   AttendanceStatus? status;
 
-  void onRadioChanged(AttendanceStatus? value) {
-    final oldValue = status;
-
+  void onRadioChanged(AttendanceStatus? value) async {
     setState(() {
       status = value;
     });
 
-    if (value != null) widget.record.setStatus = value;
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(
-          "Changed the status of ${widget.record.getStudent.lastName} to ${status.toString()}"),
-      action:
-          SnackBarAction(label: "Undo", onPressed: () => _undoChange(oldValue)),
-    ));
-  }
-
-  void _undoChange(AttendanceStatus? oldValue) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    setState(() {
-      status = oldValue;
-    });
-
-    if (oldValue != null) widget.record.setStatus = oldValue;
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(
-          "Restored the status of ${widget.record.getStudent.lastName} to ${status.toString()}"),
-    ));
+    if (value != null) widget.record.status = value;
+    await widget.record.save();
   }
 
   @override

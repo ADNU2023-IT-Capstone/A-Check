@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 
 class CameraViewState extends State<CameraViewWidget>
     with WidgetsBindingObserver {
-  CameraController? camCon;
+  late CameraController? camCon;
+  late Future<void> initializeCamConFuture;
   var savedCamDesc = cameras.first;
 
   void takePicture() async {
@@ -51,9 +52,10 @@ class CameraViewState extends State<CameraViewWidget>
                 ));
       }
     });
-    controller.initialize();
-
-    setState(() => camCon = controller);
+    initializeCamConFuture = controller.initialize().then((value) {
+      controller.startImageStream((image) => widget.onImage);
+      setState(() => camCon = controller);
+    });
   }
 
   @override
