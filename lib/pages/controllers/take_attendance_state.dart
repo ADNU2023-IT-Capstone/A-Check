@@ -1,34 +1,21 @@
 import 'dart:io';
 
+import 'package:a_check/main.dart';
 import 'package:a_check/models/attendance_record.dart';
 import 'package:a_check/models/student.dart';
 import 'package:a_check/pages/take_attendance_page.dart';
 import 'package:a_check/utils/localdb.dart';
 import 'package:a_check/utils/mlservice.dart';
+import 'package:a_check/widgets/dialogs.dart';
 import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image/image.dart' as imglib;
+import 'package:ml_algo/kd_tree.dart';
 
 class TakeAttendanceState extends State<TakeAttendancePage> {
   final MLService _mlService = MLService();
-
-  Future<void> showSuccessDialog(List<Student> student) async {
-    await showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: const Text("Recognized someone!"),
-              content: Text(student.join(' ')),
-              actions: [
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text("Nice"))
-              ],
-            ));
-  }
 
   void showSnackBar(Widget widget) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: widget));
@@ -49,7 +36,7 @@ class TakeAttendanceState extends State<TakeAttendancePage> {
     ));
     final faces = await _mlService.getFaces(inputImage);
     if (faces.isEmpty) {
-      if (!context.mounted) return; 
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       showSnackBar(const Text("Heyo, we got no faces!"));
       return;
@@ -58,30 +45,38 @@ class TakeAttendanceState extends State<TakeAttendancePage> {
     final faceImages = await _mlService.getFaceImages(faces, photoFile);
 
     List<Student> classStudents = widget.mClass.getStudents();
-    Set<Student> recognizedStudents = {};
+    List<Student> studentsWithRegisteredFaces = [
+      for (var student in classStudents)
+        if (student.faceArray != null) student
+    ];
+    List<List<num>> embeddings = [
+      for (var student in studentsWithRegisteredFaces) student.faceArray!.cast()
+    ];
+    final tree = KDTree.fromIterable(embeddings);
+
+    Map<Student, num> recognizedStudents = {};
     for (imglib.Image image in faceImages) {
       List predictedArray = await _mlService.predict(image);
-      final student = classStudents.cast().firstWhere((e) {
-        final Student s = e;
-        if (s.faceArray == null) return false;
+      var neighbor = tree.queryIterable(predictedArray.cast(), 1);
+      if (kDebugMode) {
+        print(neighbor);
+      }
 
-        int minDistance = 999;
-        double threshold = 1.5;
-        var distance =
-            _mlService.euclideanDistance(predictedArray, s.faceArray!);
+      final threshold = prefs.getDouble('threshold')!;
+      if (neighbor.first.distance <= threshold) {
+        final student =
+            studentsWithRegisteredFaces.elementAt(neighbor.first.index);
 
-        if (distance <= threshold && distance < minDistance) {
-          return true;
-        } else {
-          return false;
+        if (kDebugMode) {
+          print(
+              "recognized $student with distance of ${neighbor.first.distance}");
         }
-      }, orElse: () => null);
-
-      if (student != null) recognizedStudents.add(student);
+        recognizedStudents.addAll({student: neighbor.first.distance});
+      }
     }
 
     if (recognizedStudents.isEmpty) {
-      if (!context.mounted) return; 
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       showSnackBar(const Text("Heyo, we recognized no one!"));
       return;
@@ -90,16 +85,34 @@ class TakeAttendanceState extends State<TakeAttendancePage> {
     final currentDateTime = DateTime.now();
     for (Student student in classStudents) {
       AttendanceRecord record;
-      if (recognizedStudents.contains(student)) {
-        record = AttendanceRecord(studentId: student.id, classKey: widget.mClass.key, dateTime: currentDateTime, status: AttendanceStatus.present);
+      if (recognizedStudents[student] != null) {
+        record = AttendanceRecord(
+            studentId: student.id,
+            classKey: widget.mClass.key,
+            dateTime: currentDateTime,
+            status: AttendanceStatus.present);
       } else {
-        record = AttendanceRecord(studentId: student.id, classKey: widget.mClass.key, dateTime: currentDateTime, status: AttendanceStatus.absent);
+        record = AttendanceRecord(
+            studentId: student.id,
+            classKey: widget.mClass.key,
+            dateTime: currentDateTime,
+            status: AttendanceStatus.absent);
       }
 
-      HiveBoxes.attendancesBox().add(record).then((value) => Fluttertoast.showToast(msg: "successfully added"));
+      HiveBoxes.attendancesBox().add(record);
     }
 
-    await showSuccessDialog(recognizedStudents.toList());
+    if (context.mounted) {
+      await Dialogs.showAlertDialog(
+        context,
+        const Text("Recognized students"),
+        Text(recognizedStudents.entries
+            .map((e) => "${e.key.toString()} (${e.value.toStringAsFixed(3)})")
+            .cast<String>()
+            .toList()
+            .join('\n')),
+      );
+    }
     if (context.mounted) {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       Navigator.pop(context);

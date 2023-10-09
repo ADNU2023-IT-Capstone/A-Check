@@ -32,7 +32,7 @@ class MLService {
       sum += pow((l1[i] - l2[i]), 2);
     }
 
-    return pow(sum, 0.5);
+    return sqrt(sum);
   }
 
   Float32List _imageToByteListFloat32(imglib.Image image) {

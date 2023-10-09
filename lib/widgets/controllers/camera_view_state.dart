@@ -2,6 +2,7 @@ import 'package:a_check/main.dart';
 import 'package:a_check/widgets/camera_view.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class CameraViewState extends State<CameraViewWidget>
     with WidgetsBindingObserver {
@@ -12,7 +13,11 @@ class CameraViewState extends State<CameraViewWidget>
   void takePicture() async {
     final photo = await camCon!.takePicture();
 
-    widget.onCapture(photo);
+    if (widget.onCapture == null) {
+      Fluttertoast.showToast(msg: "Feature disabled.");
+    }
+
+    widget.onCapture!(photo);
   }
 
   void switchCamera() {
@@ -32,8 +37,8 @@ class CameraViewState extends State<CameraViewWidget>
   }
 
   void _initializeCameraController() {
-    final controller =
-        CameraController(savedCamDesc, ResolutionPreset.high, enableAudio: false);
+    final controller = CameraController(savedCamDesc, ResolutionPreset.high,
+        enableAudio: false);
     controller.addListener(() {
       if (mounted) {
         setState(() {});
@@ -52,9 +57,10 @@ class CameraViewState extends State<CameraViewWidget>
                 ));
       }
     });
-    initializeCamConFuture = controller.initialize().then((value) {
-      controller.startImageStream((image) => widget.onImage);
-      setState(() => camCon = controller);
+
+    camCon = controller;
+    initializeCamConFuture = camCon!.initialize().then((value) {
+      camCon!.startImageStream((image) => widget.onImage);
     });
   }
 

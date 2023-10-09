@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 
 class CameraViewWidget extends StatefulWidget {
   const CameraViewWidget(
-      {Key? key, required this.onCapture, this.onImage, this.customPaint})
+      {Key? key, this.onCapture, this.onImage, this.customPaint})
       : super(key: key);
 
-  final Function(XFile photoFile) onCapture;
+  final Function(XFile photoFile)? onCapture;
   final Function(CameraImage cameraImage)? onImage;
   final CustomPaint? customPaint;
 
@@ -58,19 +58,22 @@ class CameraView extends WidgetView<CameraViewWidget, CameraViewState> {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             FloatingActionButton(
               onPressed: state.takePicture,
               heroTag: null,
               child: const Icon(Icons.camera),
             ),
+            const SizedBox(
+              width: 16,
+            ),
             FloatingActionButton(
               onPressed: state.switchCamera,
               heroTag: null,
               child: const Icon(Icons.switch_camera),
             ),
-          ],
+          ].reversed.toList(),
         ),
       );
     }

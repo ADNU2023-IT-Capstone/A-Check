@@ -21,6 +21,10 @@ class SARCView extends WidgetView<StudentAttendanceRecordCard, SARCState> {
       children: [
         Text(title),
         Radio<AttendanceStatus>(
+            visualDensity: const VisualDensity(
+                horizontal: VisualDensity.minimumDensity,
+                vertical: VisualDensity.minimumDensity),
+            materialTapTargetSize: MaterialTapTargetSize.padded,
             value: value,
             groupValue: state.status,
             onChanged: state.onRadioChanged)
@@ -31,25 +35,38 @@ class SARCView extends WidgetView<StudentAttendanceRecordCard, SARCState> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      clipBehavior: Clip.antiAliasWithSaveLayer,
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Row(
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.record.getStudent.toString(),
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Text(widget.record.getStudent.id),
-              ],
+            Flexible(
+              flex: 2,
+              fit: FlexFit.tight,
+              child: Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.record.getStudent.toString(),
+                        softWrap: false,
+                        overflow: TextOverflow.clip,
+                        maxLines: 2,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(widget.record.getStudent.id),
+                    ],
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(width: 24,),
             Row(
               mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 radioButton(title: "P", value: AttendanceStatus.present),
                 radioButton(title: "A", value: AttendanceStatus.absent),

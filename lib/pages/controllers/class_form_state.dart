@@ -23,7 +23,7 @@ class ClassFormState extends State<ClassFormPage> {
 
     if (result == null) return;
     setState(() {
-      schedules.insert(index, result);
+      schedules[index] = result;
     });
   }
 
