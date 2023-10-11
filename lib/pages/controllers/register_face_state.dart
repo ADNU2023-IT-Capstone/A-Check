@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:a_check/pages/register_face_page.dart';
 import 'package:a_check/utils/mlservice.dart';
-import 'package:a_check/widgets/dialogs.dart';
+import 'package:a_check/utils/dialogs.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';

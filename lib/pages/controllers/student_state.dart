@@ -3,7 +3,7 @@ import 'package:a_check/pages/register_face_page.dart';
 import 'package:a_check/pages/student_form_page.dart';
 import 'package:a_check/pages/student_page.dart';
 import 'package:a_check/utils/localdb.dart';
-import 'package:a_check/widgets/dialogs.dart';
+import 'package:a_check/utils/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 

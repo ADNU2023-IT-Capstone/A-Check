@@ -1,6 +1,6 @@
 import 'package:a_check/home_screen.dart';
 import 'package:a_check/utils/localdb.dart';
-import 'package:a_check/widgets/dialogs.dart';
+import 'package:a_check/utils/dialogs.dart';
 import 'package:flutter/material.dart';
 
 class SplashWidget extends StatefulWidget {

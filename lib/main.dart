@@ -1,3 +1,4 @@
+import 'package:a_check/globals.dart';
 import 'package:a_check/splash.dart';
 import 'package:a_check/utils/localdb.dart';
 import 'package:camera/camera.dart';
@@ -35,6 +36,7 @@ class MainApp extends StatelessWidget {
     // ignore: prefer_const_constructors
     return MaterialApp(
       // theme: ThemeData(useMaterial3: true),
+      scaffoldMessengerKey: snackbarKey,
       home: const Scaffold(
         body: SplashWidget(),
       ),

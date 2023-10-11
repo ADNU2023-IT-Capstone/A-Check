@@ -1,6 +1,6 @@
 import 'package:a_check/pages/attendance_records_page.dart';
 import 'package:a_check/utils/localdb.dart';
-import 'package:a_check/widgets/dialogs.dart';
+import 'package:a_check/utils/dialogs.dart';
 import 'package:flutter/material.dart';
 
 class AttendanceRecordsState extends State<AttendanceRecordsPage> {

@@ -4,7 +4,7 @@ import 'package:a_check/pages/student_form_page.dart';
 import 'package:a_check/pages/students_form_page.dart';
 import 'package:a_check/pages/take_attendance_page.dart';
 import 'package:a_check/utils/localdb.dart';
-import 'package:a_check/widgets/dialogs.dart';
+import 'package:a_check/utils/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 

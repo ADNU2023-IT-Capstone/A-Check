@@ -6,7 +6,7 @@ import 'package:a_check/models/student.dart';
 import 'package:a_check/pages/take_attendance_page.dart';
 import 'package:a_check/utils/localdb.dart';
 import 'package:a_check/utils/mlservice.dart';
-import 'package:a_check/widgets/dialogs.dart';
+import 'package:a_check/utils/dialogs.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
