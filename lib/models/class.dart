@@ -9,20 +9,20 @@ part 'class.g.dart';
 @HiveType(typeId: 1)
 enum DaysOfTheWeek {
   @HiveField(0)
-  monday,
+  sunday,
   @HiveField(1)
-  tuesday,
+  monday,
   @HiveField(2)
-  wednesday,
+  tuesday,
   @HiveField(3)
-  thursday,
+  wednesday,
   @HiveField(4)
-  friday,
+  thursday,
   @HiveField(5)
-  saturday,
+  friday,
   @HiveField(6)
-  sunday;
-
+  saturday;
+  
   @override
   String toString() {
     switch (this) {
@@ -65,6 +65,8 @@ enum DaysOfTheWeek {
         return "";
     }
   }
+
+
 }
 
 @HiveType(typeId: 0)

@@ -2,6 +2,7 @@ import 'package:a_check/models/student.dart';
 import 'package:a_check/pages/controllers/register_face_state.dart';
 import 'package:a_check/utils/abstracts.dart';
 import 'package:a_check/widgets/camera_view.dart';
+import 'package:a_check/widgets/ip_camera_view.dart';
 import 'package:flutter/material.dart';
 
 class RegisterFacePage extends StatefulWidget {
@@ -23,9 +24,16 @@ class RegisterFaceView extends WidgetView<RegisterFacePage, RegisterFaceState> {
         title: const Text("Register Face"),
       ),
       body: SafeArea(
-          child: CameraViewWidget(
-        onCapture: state.processCapturedImage,
-      )),
+          child: state.isUsingIPCamera
+              ? IPCameraWidget(onScreenshot: state.processScreenshot)
+              : CameraViewWidget(
+                  onCapture: state.processCapturedImage,
+                )),
+      floatingActionButton: FloatingActionButton(
+          heroTag: null,
+          onPressed: state.switchCamera,
+          child: const Icon(Icons.switch_video)),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
     );
   }
 }

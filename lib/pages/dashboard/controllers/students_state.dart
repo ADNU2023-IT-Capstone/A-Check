@@ -8,13 +8,9 @@ class StudentsState extends State<StudentsPage> {
         MaterialPageRoute(builder: (context) => const StudentFormPage()));
   }
 
-  void openIPCam() {
-    
-  }
+  void openIPCam() {}
 
-  void openPhoneCam() {
-
-  }
+  void openPhoneCam() {}
 
   @override
   Widget build(BuildContext context) => StudentsView(this);

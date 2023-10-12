@@ -105,10 +105,6 @@ class SettingsState extends State<SettingsPage> {
     });
   }
 
-  void toggleSMSNotifs(bool? value) {}
-
-  void toggleEmailNotifs(bool? value) {}
-
   void setAbsentLimit() async {
     final result = await Dialogs.showTextInputDialog(
         context, const Text("Enter new absent limit value"),
@@ -128,11 +124,15 @@ class SettingsState extends State<SettingsPage> {
     });
   }
 
+  void toggleSMSNotifs(bool? value) {}
+
+  void toggleEmailNotifs(bool? value) {}
+
   void setDistanceThreshold() async {
     final result = await Dialogs.showTextInputDialog(
         context, const Text("Enter new distance threshold value"),
         content: Text("Current value: ${prefs.getDouble('threshold')}"),
-        formatters: [FilteringTextInputFormatter.allow("[0-9\\.]")],
+        formatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*'))],
         keyboardType: TextInputType.number);
 
     if (result == null || result.isEmpty) return;

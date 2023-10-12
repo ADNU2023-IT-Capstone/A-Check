@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:a_check/globals.dart';
 import 'package:a_check/main.dart';
 import 'package:a_check/models/attendance_record.dart';
 import 'package:a_check/models/student.dart';
@@ -13,12 +14,35 @@ import 'package:flutter/material.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image/image.dart' as imglib;
 import 'package:ml_algo/kd_tree.dart';
+import 'package:path_provider/path_provider.dart';
 
 class TakeAttendanceState extends State<TakeAttendancePage> {
   final MLService _mlService = MLService();
+  bool isUsingIPCamera = false;
 
   void showSnackBar(Widget widget) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: widget));
+    snackbarKey.currentState!.hideCurrentSnackBar();
+    snackbarKey.currentState!.showSnackBar(SnackBar(content: widget));
+  }
+
+  void switchCamera() {
+    setState(() => isUsingIPCamera = !isUsingIPCamera);
+  }
+
+  void processScreenshot(Uint8List screenshot) async {
+    showSnackBar(const Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text("Capturing screenshot..."),
+        CircularProgressIndicator()
+      ],
+    ));
+    final tempDir = await getTemporaryDirectory();
+    final file = await File("${tempDir.path}/screenshot.jpg").create();
+    file.writeAsBytesSync(screenshot);
+    final xfile = XFile(file.path);
+
+    processCapturedImage(xfile);
   }
 
   void processCapturedImage(XFile photoXFile) async {
@@ -37,7 +61,6 @@ class TakeAttendanceState extends State<TakeAttendancePage> {
     final faces = await _mlService.getFaces(inputImage);
     if (faces.isEmpty) {
       if (!context.mounted) return;
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
       showSnackBar(const Text("Heyo, we got no faces!"));
       return;
     }
@@ -77,7 +100,6 @@ class TakeAttendanceState extends State<TakeAttendancePage> {
 
     if (recognizedStudents.isEmpty) {
       if (!context.mounted) return;
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
       showSnackBar(const Text("Heyo, we recognized no one!"));
       return;
     }
@@ -114,7 +136,7 @@ class TakeAttendanceState extends State<TakeAttendancePage> {
       );
     }
     if (context.mounted) {
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      snackbarKey.currentState!.hideCurrentSnackBar();
       Navigator.pop(context);
     }
   }

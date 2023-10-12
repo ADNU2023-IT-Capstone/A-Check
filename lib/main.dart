@@ -1,9 +1,11 @@
 import 'package:a_check/globals.dart';
 import 'package:a_check/splash.dart';
 import 'package:a_check/utils/localdb.dart';
+import 'package:calendar_view/calendar_view.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:media_kit/media_kit.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,6 +14,9 @@ late PackageInfo packageInfo;
 late SharedPreferences prefs;
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  MediaKit.ensureInitialized();
+
   await Hive.initFlutter();
   await HiveBoxes.initialize();
   cameras = await availableCameras();
@@ -34,11 +39,14 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // ignore: prefer_const_constructors
-    return MaterialApp(
-      // theme: ThemeData(useMaterial3: true),
-      scaffoldMessengerKey: snackbarKey,
-      home: const Scaffold(
-        body: SplashWidget(),
+    return CalendarControllerProvider(
+      controller: EventController(),
+      child: MaterialApp(
+        // theme: ThemeData(useMaterial3: true),
+        scaffoldMessengerKey: snackbarKey,
+        home: const Scaffold(
+          body: SplashWidget(),
+        ),
       ),
     );
   }

@@ -106,46 +106,46 @@ class DaysOfTheWeekAdapter extends TypeAdapter<DaysOfTheWeek> {
   DaysOfTheWeek read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return DaysOfTheWeek.monday;
-      case 1:
-        return DaysOfTheWeek.tuesday;
-      case 2:
-        return DaysOfTheWeek.wednesday;
-      case 3:
-        return DaysOfTheWeek.thursday;
-      case 4:
-        return DaysOfTheWeek.friday;
-      case 5:
-        return DaysOfTheWeek.saturday;
-      case 6:
         return DaysOfTheWeek.sunday;
-      default:
+      case 1:
         return DaysOfTheWeek.monday;
+      case 2:
+        return DaysOfTheWeek.tuesday;
+      case 3:
+        return DaysOfTheWeek.wednesday;
+      case 4:
+        return DaysOfTheWeek.thursday;
+      case 5:
+        return DaysOfTheWeek.friday;
+      case 6:
+        return DaysOfTheWeek.saturday;
+      default:
+        return DaysOfTheWeek.sunday;
     }
   }
 
   @override
   void write(BinaryWriter writer, DaysOfTheWeek obj) {
     switch (obj) {
-      case DaysOfTheWeek.monday:
+      case DaysOfTheWeek.sunday:
         writer.writeByte(0);
         break;
-      case DaysOfTheWeek.tuesday:
+      case DaysOfTheWeek.monday:
         writer.writeByte(1);
         break;
-      case DaysOfTheWeek.wednesday:
+      case DaysOfTheWeek.tuesday:
         writer.writeByte(2);
         break;
-      case DaysOfTheWeek.thursday:
+      case DaysOfTheWeek.wednesday:
         writer.writeByte(3);
         break;
-      case DaysOfTheWeek.friday:
+      case DaysOfTheWeek.thursday:
         writer.writeByte(4);
         break;
-      case DaysOfTheWeek.saturday:
+      case DaysOfTheWeek.friday:
         writer.writeByte(5);
         break;
-      case DaysOfTheWeek.sunday:
+      case DaysOfTheWeek.saturday:
         writer.writeByte(6);
         break;
     }
