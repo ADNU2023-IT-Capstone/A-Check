@@ -307,48 +307,44 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
         title: Text(
             widget.student == null ? "Create a student" : "Editing student"),
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.only(top: 24, left: 16, right: 16, bottom: MediaQuery.of(context).viewInsets.bottom),
-        physics: const ClampingScrollPhysics(),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-              minWidth: MediaQuery.of(context).size.width,
-              minHeight: MediaQuery.of(context).size.height),
-          child: Form(
-              key: state.formKey,
-              child: Column(
-                children: [
-                  buildStudentForms(),
-                  buildGuardianForms(),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: MaterialButton(
-                      onPressed: state.addStudent,
-                      color: const Color(0xff000000),
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        side: const BorderSide(
-                            color: Color(0xff808080), width: 1),
-                      ),
-                      padding: const EdgeInsets.all(16),
-                      textColor: const Color(0xffffffff),
-                      height: 40,
-                      minWidth: 140,
-                      child: Text(
-                        widget.student == null ? "Add Student" : "Confirm",
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          fontStyle: FontStyle.normal,
-                        ),
-                      ),
+      body: Form(
+          key: state.formKey,
+          child: ListView(
+            padding: const EdgeInsets.all(24),
+            children: [
+              buildStudentForms(),
+              CheckboxListTile(
+                  title: const Text("Has guardian?"),
+                  value: state.hasGuardian,
+                  onChanged: state.onHasGuardianChanged),
+              if (state.hasGuardian) buildGuardianForms(),
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: MaterialButton(
+                  onPressed: state.addStudent,
+                  color: const Color(0xff000000),
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    side:
+                        const BorderSide(color: Color(0xff808080), width: 1),
+                  ),
+                  padding: const EdgeInsets.all(16),
+                  textColor: const Color(0xffffffff),
+                  height: 40,
+                  minWidth: 140,
+                  child: Text(
+                    widget.student == null ? "Add Student" : "Confirm",
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      fontStyle: FontStyle.normal,
                     ),
                   ),
-                ],
-              )),
-        ),
-      ),
+                ),
+              ),
+            ],
+          )),
     );
   }
 }

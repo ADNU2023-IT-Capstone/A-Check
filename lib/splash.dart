@@ -1,4 +1,5 @@
 import 'package:a_check/home_screen.dart';
+import 'package:a_check/main.dart';
 import 'package:a_check/utils/localdb.dart';
 import 'package:a_check/utils/dialogs.dart';
 import 'package:flutter/material.dart';
@@ -118,6 +119,8 @@ class SplashWidgetState extends State<SplashWidget> {
                                 const Text("ya goofed up huh"),
                                 const Text("confirm to delete all data"))) {
                               HiveBoxes.clearAllData();
+                              prefs.clear();
+                              setupDefaultPrefs();
                             } else {
                               return;
                             }

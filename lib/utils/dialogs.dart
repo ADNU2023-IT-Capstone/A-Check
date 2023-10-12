@@ -1,5 +1,6 @@
 import 'package:a_check/models/class.dart';
 import 'package:a_check/widgets/schedule_dialog.dart';
+import 'package:a_check/widgets/select_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -54,7 +55,10 @@ class Dialogs {
   }
 
   static Future<String?> showTextInputDialog(BuildContext context, Widget title,
-      {Widget? content, List<TextInputFormatter>? formatters, TextInputType? keyboardType}) async {
+      {Widget? content,
+      List<TextInputFormatter>? formatters,
+      TextInputType? keyboardType,
+      bool? obscureText}) async {
     TextEditingController textCon = TextEditingController();
 
     return await showDialog(
@@ -69,6 +73,7 @@ class Dialogs {
               controller: textCon,
               inputFormatters: formatters,
               keyboardType: keyboardType,
+              obscureText: obscureText ?? false,
             ),
           ],
         ),
@@ -90,34 +95,14 @@ class Dialogs {
     );
   }
 
-  static Future<Object?> showSelectDialog(BuildContext context, Widget title,
-      {Widget? content}) async {
+  static Future<dynamic> showSelectDialog(BuildContext context, Map<String, dynamic> map,
+      {Widget? title}) async {
     return await showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context) => SelectDialog(
         title: title,
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (content != null) content,
-          ],
-        ),
-        actions: [
-          MaterialButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text("Ok"),
-          ),
-          MaterialButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text("Cancel"),
-          ),
-        ],
+        map: map,
       ),
     );
   }
-
 }

@@ -5,6 +5,7 @@ import 'package:a_check/pages/settings_page.dart';
 import 'package:a_check/utils/dialogs.dart';
 import 'package:a_check/utils/localdb.dart';
 import 'package:easy_onvif/onvif.dart';
+import 'package:easy_onvif/probe.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -95,19 +96,18 @@ class SettingsState extends State<SettingsPage> {
     if (result == null || result.isEmpty) return;
 
     prefs.setInt('absent_warn', int.parse(result)).then((_) {
-      snackbarKey.currentState!.showSnackBar(const SnackBar(content: Text("Successfully saved new absent warning value!")));
+      snackbarKey.currentState!.showSnackBar(const SnackBar(
+          content: Text("Successfully saved new absent warning value!")));
     }).onError((error, stackTrace) {
-      snackbarKey.currentState!.showSnackBar(SnackBar(content: Text("Something went horribly wrong!\n$error: $stackTrace")));
+      snackbarKey.currentState!.showSnackBar(SnackBar(
+          content:
+              Text("Something went horribly wrong!\n$error: $stackTrace")));
     });
   }
 
-  void toggleSMSNotifs() {
-    
-  }
+  void toggleSMSNotifs(bool? value) {}
 
-  void toggleEmailNotifs() {
-    
-  }
+  void toggleEmailNotifs(bool? value) {}
 
   void setAbsentLimit() async {
     final result = await Dialogs.showTextInputDialog(
@@ -119,9 +119,12 @@ class SettingsState extends State<SettingsPage> {
     if (result == null || result.isEmpty) return;
 
     prefs.setInt('absent_limit', int.parse(result)).then((_) {
-      snackbarKey.currentState!.showSnackBar(const SnackBar(content: Text("Successfully saved new absent limit value!")));
+      snackbarKey.currentState!.showSnackBar(const SnackBar(
+          content: Text("Successfully saved new absent limit value!")));
     }).onError((error, stackTrace) {
-      snackbarKey.currentState!.showSnackBar(SnackBar(content: Text("Something went horribly wrong!\n$error: $stackTrace")));
+      snackbarKey.currentState!.showSnackBar(SnackBar(
+          content:
+              Text("Something went horribly wrong!\n$error: $stackTrace")));
     });
   }
 
@@ -135,13 +138,16 @@ class SettingsState extends State<SettingsPage> {
     if (result == null || result.isEmpty) return;
 
     prefs.setDouble('threshold', double.parse(result)).then((_) {
-      snackbarKey.currentState!.showSnackBar(const SnackBar(content: Text("Successfully saved new distance threshold value!")));
+      snackbarKey.currentState!.showSnackBar(const SnackBar(
+          content: Text("Successfully saved new distance threshold value!")));
     }).onError((error, stackTrace) {
-      snackbarKey.currentState!.showSnackBar(SnackBar(content: Text("Something went horribly wrong!\n$error: $stackTrace")));
+      snackbarKey.currentState!.showSnackBar(SnackBar(
+          content:
+              Text("Something went horribly wrong!\n$error: $stackTrace")));
     });
   }
 
-  void connectToIpCam() async {
+  void searchIPCam() async {
     final prober = MulticastProbe(timeout: 5);
     snackbarKey.currentState!.showSnackBar(const SnackBar(
       content: Row(
@@ -162,14 +168,76 @@ class SettingsState extends State<SettingsPage> {
       return;
     }
 
-    List<String> cams = [];
+    Map<String, ProbeMatch> cams = {};
     for (var cam in prober.onvifDevices) {
-      cams.add("${cam.name} ${cam.xAddr}");
+      cams[cam.name] = cam;
+    }
+
+    ProbeMatch? cam;
+    String? username, password;
+    if (context.mounted) {
+      cam = await Dialogs.showSelectDialog(context, cams,
+          title: const Text("Select a camera"));
+      if (cam == null) return;
     }
 
     if (context.mounted) {
-      Dialogs.showAlertDialog(
-          context, const Text("Found cameras!"), Text(cams.join('\n')));
+      username = await Dialogs.showTextInputDialog(
+          context, const Text("Enter username"));
+      if (username == null) return;
+    }
+
+    if (context.mounted) {
+      password = await Dialogs.showTextInputDialog(
+          context, const Text("Enter password"),
+          obscureText: true);
+      if (password == null) return;
+    }
+
+    prefs.setString('onvif_cam_addr', cam!.xAddr);
+    prefs.setString('onvif_cam_username', username!);
+    prefs.setString('onvif_cam_password', password!);
+    snackbarKey.currentState!.showSnackBar(
+        SnackBar(content: Text("Successfully set IP camera to ${cam.name}!")));
+  }
+
+  void connectIPCam() async {
+    final host = prefs.getString('onvif_cam_addr');
+    final username = prefs.getString('onvif_cam_username');
+    final password = prefs.getString('onvif_cam_password');
+    if (host == null) {
+      snackbarKey.currentState!.showSnackBar(
+          const SnackBar(content: Text("You do not have an IP camera set!")));
+      return;
+    }
+
+    snackbarKey.currentState!.showSnackBar(const SnackBar(
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text("Connecting to IP camera..."),
+          CircularProgressIndicator()
+        ],
+      ),
+      duration: Duration(seconds: 5),
+    ));
+
+    try {
+      final onvif = await Onvif.connect(
+              host: host, username: username, password: password)
+          .timeout(const Duration(seconds: 5))
+          .onError(
+              (error, stackTrace) => throw Exception("OnvifConnectionFailure"));
+
+      snackbarKey.currentState!.hideCurrentSnackBar();
+      var deviceInfo = await onvif.deviceManagement.getDeviceInformation();
+      snackbarKey.currentState!.showSnackBar(
+          SnackBar(content: Text("Connected to ${deviceInfo.model}!")));
+    } catch (ex) {
+      snackbarKey.currentState!.hideCurrentSnackBar();
+      snackbarKey.currentState!.showSnackBar(
+          const SnackBar(content: Text("Failed to connect to IP camera")));
+      return;
     }
   }
 

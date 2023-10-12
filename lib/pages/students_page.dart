@@ -21,37 +21,28 @@ class StudentsView extends WidgetView<StudentsPage, StudentsState> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 16, left: 8, right: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Students",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              ValueListenableBuilder(
-                  valueListenable: HiveBoxes.studentsBox().listenable(),
-                  builder: (context, box, _) {
-                    final castedBox = box.values.cast();
-                    final studentsList =
-                        castedBox.map((e) => e as Student).toList();
-                    studentsList.sort(
-                      (a, b) => a.firstName[0]
-                          .toLowerCase()
-                          .compareTo(b.firstName[0].toLowerCase()),
-                    );
+        child: ValueListenableBuilder(
+            valueListenable: HiveBoxes.studentsBox().listenable(),
+            builder: (context, box, _) {
+              final castedBox = box.values.cast();
+              final studentsList = castedBox.map((e) => e as Student).toList();
+              studentsList.sort(
+                (a, b) => a.firstName[0]
+                    .toLowerCase()
+                    .compareTo(b.firstName[0].toLowerCase()),
+              );
 
-                    return ListView(
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.only(top: 8),
-                        children: studentsList
-                            .map((e) => StudentCard(student: e))
-                            .toList());
-                  }),
-            ],
-          ),
-        ),
+              return ListView(padding: const EdgeInsets.all(8), children: [
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    "Students",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                for (var student in studentsList) StudentCard(student: student),
+              ]);
+            }),
       ),
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.menu_close,

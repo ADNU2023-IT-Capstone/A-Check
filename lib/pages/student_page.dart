@@ -168,7 +168,7 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
                   children: [
                     buildStudentInfo(student),
                     const SizedBox(height: 24),
-                    buildGuardianInfo(student)
+                    student.guardian != null ? buildGuardianInfo(student) : const Text("No guardian!"),
                   ],
                 )),
           ],

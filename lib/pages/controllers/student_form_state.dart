@@ -15,6 +15,7 @@ class StudentFormState extends State<StudentFormPage> {
       guardianLNameCon,
       guardianPhoneCon,
       guardianEmailCon;
+  bool hasGuardian = false;
   final formKey = GlobalKey<FormState>();
 
   void addStudent() {
@@ -33,7 +34,7 @@ class StudentFormState extends State<StudentFormPage> {
       lastName: studentLNameCon!.text,
       phone: studentPhoneCon!.text,
       email: studentEmailCon!.text,
-      guardian: guardian,
+      guardian: hasGuardian ? guardian : null,
       faceArray: widget.student != null ? widget.student!.faceArray : null
     );
 
@@ -45,6 +46,10 @@ class StudentFormState extends State<StudentFormPage> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("Failed to add $student!\n${error.toString()}")));
     });
+  }
+
+  void onHasGuardianChanged(bool? value) {
+    if (value != null) setState(() => hasGuardian = value);
   }
 
   @override
@@ -62,6 +67,7 @@ class StudentFormState extends State<StudentFormPage> {
       if (student.guardian == null) {
         values.addAll([null, null, null, null, null]);
       } else {
+        setState(() => hasGuardian = true);
         values.add(student.guardian!.firstName);
         values.add(student.guardian!.middleName);
         values.add(student.guardian!.lastName);

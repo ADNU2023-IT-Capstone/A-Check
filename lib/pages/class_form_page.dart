@@ -156,54 +156,40 @@ class ClassFormView extends WidgetView<ClassFormPage, ClassFormState> {
       appBar: AppBar(
         title: const Text("Create a class"),
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.only(
-            top: 24,
-            left: 16,
-            right: 16,
-            bottom: MediaQuery.of(context).viewInsets.bottom),
-        physics: const ClampingScrollPhysics(),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-              minWidth: MediaQuery.of(context).size.width,
-              minHeight: MediaQuery.of(context).size.height),
-          child: Form(
-            key: state.formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Column(
-                  children: [buildClassInfo(), buildScheduleList()],
+      body: Form(
+        key: state.formKey,
+        child: ListView(
+          padding: const EdgeInsets.all(24),
+          children: [
+            Column(
+              children: [buildClassInfo(), buildScheduleList()],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: MaterialButton(
+                onPressed: state.addClass,
+                color: const Color(0xff000000),
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  side:
+                      const BorderSide(color: Color(0xff808080), width: 1),
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
-                  child: MaterialButton(
-                    onPressed: state.addClass,
-                    color: const Color(0xff000000),
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      side:
-                          const BorderSide(color: Color(0xff808080), width: 1),
-                    ),
-                    padding: const EdgeInsets.all(16),
-                    textColor: const Color(0xffffffff),
-                    height: 40,
-                    minWidth: 140,
-                    child: const Text(
-                      "Add Class",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        fontStyle: FontStyle.normal,
-                      ),
-                    ),
+                padding: const EdgeInsets.all(16),
+                textColor: const Color(0xffffffff),
+                height: 40,
+                minWidth: 140,
+                child: const Text(
+                  "Add Class",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    fontStyle: FontStyle.normal,
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

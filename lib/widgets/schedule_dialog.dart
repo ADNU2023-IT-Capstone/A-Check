@@ -100,8 +100,12 @@ class ScheduleDialogView
         );
       }),
       actions: [
-        ElevatedButton(
-            onPressed: state.finalizeSchedule, child: Text(widget.schedule == null ? "Add" : "Edit")),
+        MaterialButton(
+            onPressed: state.finalizeSchedule,
+            child: Text(widget.schedule == null ? "Add" : "Edit")),
+        MaterialButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancel")),
       ],
     );
   }
