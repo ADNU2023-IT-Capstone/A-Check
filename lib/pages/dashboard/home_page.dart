@@ -1,6 +1,6 @@
 import 'package:a_check/main.dart';
 import 'package:a_check/models/class.dart';
-import 'package:a_check/pages/controllers/home_state.dart';
+import 'package:a_check/pages/dashboard/controllers/home_state.dart';
 import 'package:a_check/utils/abstracts.dart';
 import 'package:a_check/utils/localdb.dart';
 import 'package:a_check/widgets/class_card.dart';

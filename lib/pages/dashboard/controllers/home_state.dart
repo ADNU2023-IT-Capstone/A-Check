@@ -1,5 +1,5 @@
-import 'package:a_check/pages/class_form_page.dart';
-import 'package:a_check/pages/home_page.dart';
+import 'package:a_check/pages/forms/class_form_page.dart';
+import 'package:a_check/pages/dashboard/home_page.dart';
 import 'package:flutter/material.dart';
 
 class HomeState extends State<HomePage> {

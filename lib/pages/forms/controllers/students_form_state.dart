@@ -1,5 +1,5 @@
 import 'package:a_check/models/student.dart';
-import 'package:a_check/pages/students_form_page.dart';
+import 'package:a_check/pages/forms/students_form_page.dart';
 import 'package:a_check/utils/localdb.dart';
 import 'package:flutter/material.dart';
 

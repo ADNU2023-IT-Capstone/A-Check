@@ -1,5 +1,5 @@
 import 'package:a_check/models/class.dart';
-import 'package:a_check/pages/controllers/class_state.dart';
+import 'package:a_check/pages/class/controllers/class_state.dart';
 import 'package:a_check/utils/abstracts.dart';
 import 'package:a_check/utils/localdb.dart';
 import 'package:a_check/widgets/attendance_record_card.dart';

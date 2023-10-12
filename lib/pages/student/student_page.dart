@@ -1,6 +1,6 @@
 import 'package:a_check/models/class.dart';
 import 'package:a_check/models/student.dart';
-import 'package:a_check/pages/controllers/student_state.dart';
+import 'package:a_check/pages/student/controllers/student_state.dart';
 import 'package:a_check/utils/abstracts.dart';
 import 'package:flutter/material.dart';
 

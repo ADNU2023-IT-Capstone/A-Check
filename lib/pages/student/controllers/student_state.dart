@@ -1,7 +1,7 @@
 import 'package:a_check/models/student.dart';
 import 'package:a_check/pages/register_face_page.dart';
-import 'package:a_check/pages/student_form_page.dart';
-import 'package:a_check/pages/student_page.dart';
+import 'package:a_check/pages/forms/student_form_page.dart';
+import 'package:a_check/pages/student/student_page.dart';
 import 'package:a_check/utils/localdb.dart';
 import 'package:a_check/utils/dialogs.dart';
 import 'package:flutter/material.dart';

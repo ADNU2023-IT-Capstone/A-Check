@@ -1,4 +1,4 @@
-import 'package:a_check/pages/controllers/settings_state.dart';
+import 'package:a_check/pages/dashboard/controllers/settings_state.dart';
 import 'package:a_check/utils/abstracts.dart';
 import 'package:flutter/material.dart';
 

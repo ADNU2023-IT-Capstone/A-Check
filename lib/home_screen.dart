@@ -1,7 +1,7 @@
-import 'package:a_check/pages/calendar_page.dart';
-import 'package:a_check/pages/home_page.dart';
-import 'package:a_check/pages/settings_page.dart';
-import 'package:a_check/pages/students_page.dart';
+import 'package:a_check/pages/dashboard/calendar_page.dart';
+import 'package:a_check/pages/dashboard/home_page.dart';
+import 'package:a_check/pages/dashboard/settings_page.dart';
+import 'package:a_check/pages/dashboard/students_page.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {

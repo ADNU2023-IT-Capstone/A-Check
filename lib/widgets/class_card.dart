@@ -1,5 +1,5 @@
 import 'package:a_check/models/class.dart';
-import 'package:a_check/pages/class_page.dart';
+import 'package:a_check/pages/class/class_page.dart';
 import 'package:flutter/material.dart';
 
 class ClassCard extends StatelessWidget {

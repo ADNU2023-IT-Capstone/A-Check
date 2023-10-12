@@ -1,10 +1,10 @@
 import 'package:a_check/models/student.dart';
-import 'package:a_check/pages/controllers/student_form_state.dart';
+import 'package:a_check/pages/forms/controllers/student_form_state.dart';
 import 'package:a_check/utils/abstracts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../utils/validators.dart';
+import '../../utils/validators.dart';
 
 class StudentFormPage extends StatefulWidget {
   const StudentFormPage({Key? key, this.student}) : super(key: key);

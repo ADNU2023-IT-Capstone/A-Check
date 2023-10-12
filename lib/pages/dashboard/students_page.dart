@@ -1,5 +1,5 @@
 import 'package:a_check/models/student.dart';
-import 'package:a_check/pages/controllers/students_state.dart';
+import 'package:a_check/pages/dashboard/controllers/students_state.dart';
 import 'package:a_check/utils/abstracts.dart';
 import 'package:a_check/utils/localdb.dart';
 import 'package:a_check/widgets/student_card.dart';
@@ -53,6 +53,14 @@ class StudentsView extends WidgetView<StudentsPage, StudentsState> {
               child: const Icon(Icons.person_add),
               label: "Add Student",
               onTap: state.addStudent),
+          SpeedDialChild(
+              child: const Icon(Icons.camera_indoor),
+              label: "IP Camera",
+              onTap: state.openIPCam),
+          SpeedDialChild(
+              child: const Icon(Icons.camera_alt),
+              label: "Phone Camera",
+              onTap: state.openPhoneCam),
         ],
       ),
     );

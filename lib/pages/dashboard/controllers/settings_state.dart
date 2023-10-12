@@ -1,7 +1,7 @@
 import 'package:a_check/globals.dart';
 import 'package:a_check/main.dart';
 import 'package:a_check/models/class.dart';
-import 'package:a_check/pages/settings_page.dart';
+import 'package:a_check/pages/dashboard/settings_page.dart';
 import 'package:a_check/utils/dialogs.dart';
 import 'package:a_check/utils/localdb.dart';
 import 'package:easy_onvif/onvif.dart';

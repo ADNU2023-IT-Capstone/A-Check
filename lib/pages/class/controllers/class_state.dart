@@ -1,8 +1,8 @@
 import 'package:a_check/models/class.dart';
-import 'package:a_check/pages/class_form_page.dart';
-import 'package:a_check/pages/class_page.dart';
-import 'package:a_check/pages/student_form_page.dart';
-import 'package:a_check/pages/students_form_page.dart';
+import 'package:a_check/pages/forms/class_form_page.dart';
+import 'package:a_check/pages/class/class_page.dart';
+import 'package:a_check/pages/forms/student_form_page.dart';
+import 'package:a_check/pages/forms/students_form_page.dart';
 import 'package:a_check/pages/take_attendance_page.dart';
 import 'package:a_check/utils/localdb.dart';
 import 'package:a_check/utils/dialogs.dart';

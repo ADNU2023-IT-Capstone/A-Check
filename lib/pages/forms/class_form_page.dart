@@ -1,5 +1,5 @@
 import 'package:a_check/models/class.dart';
-import 'package:a_check/pages/controllers/class_form_state.dart';
+import 'package:a_check/pages/forms/controllers/class_form_state.dart';
 import 'package:a_check/utils/abstracts.dart';
 import 'package:a_check/utils/textformatters.dart';
 import 'package:a_check/utils/validators.dart';

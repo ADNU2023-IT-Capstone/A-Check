@@ -1,6 +1,6 @@
 import 'package:a_check/models/class.dart';
 import 'package:a_check/models/student.dart';
-import 'package:a_check/pages/student_page.dart';
+import 'package:a_check/pages/student/student_page.dart';
 import 'package:flutter/material.dart';
 
 class StudentCard extends StatelessWidget {
