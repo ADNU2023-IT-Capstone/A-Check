@@ -28,19 +28,19 @@ class StudentFormState extends State<StudentFormPage> {
         phone: guardianPhoneCon!.text,
         email: guardianEmailCon!.text);
     final student = Student(
-      id: idCon!.text,
-      firstName: studentFNameCon!.text,
-      middleName: studentMNameCon!.text,
-      lastName: studentLNameCon!.text,
-      phone: studentPhoneCon!.text,
-      email: studentEmailCon!.text,
-      guardian: hasGuardian ? guardian : null,
-      faceArray: widget.student != null ? widget.student!.faceArray : null
-    );
+        id: idCon!.text,
+        firstName: studentFNameCon!.text,
+        middleName: studentMNameCon!.text,
+        lastName: studentLNameCon!.text,
+        phone: studentPhoneCon!.text,
+        email: studentEmailCon!.text,
+        guardian: hasGuardian ? guardian : null,
+        faceArray: widget.student != null ? widget.student!.faceArray : null);
 
     HiveBoxes.studentsBox().put(student.id, student).then((value) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("${widget.student == null ? "Added" : "Edited"} $student! (${student.id})")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+              "${widget.student == null ? "Added" : "Edited"} $student! (${student.id})")));
       Navigator.pop(context);
     }).onError((error, stackTrace) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -57,39 +57,43 @@ class StudentFormState extends State<StudentFormPage> {
     List<String?> values = [];
     if (widget.student != null) {
       final student = widget.student!;
-      values.add(student.id.toString());
-      values.add(student.firstName);
-      values.add(student.middleName);
-      values.add(student.lastName);
-      values.add(student.phone);
-      values.add(student.email);
+      values.addAll([
+        student.id.toString(),
+        student.firstName,
+        student.middleName,
+        student.lastName,
+        student.phone,
+        student.email
+      ]);
 
       if (student.guardian == null) {
         values.addAll([null, null, null, null, null]);
       } else {
         setState(() => hasGuardian = true);
-        values.add(student.guardian!.firstName);
-        values.add(student.guardian!.middleName);
-        values.add(student.guardian!.lastName);
-        values.add(student.guardian!.phone);
-        values.add(student.guardian!.email);
+        values.addAll([
+          student.guardian!.firstName,
+          student.guardian!.middleName,
+          student.guardian!.lastName,
+          student.guardian!.phone,
+          student.guardian!.email
+        ]);
       }
     } else {
       values.addAll(
           [null, null, null, null, null, null, null, null, null, null, null]);
     }
 
-    idCon = TextEditingController(text: values.elementAt(0));
-    studentFNameCon = TextEditingController(text: values.elementAt(1));
-    studentMNameCon = TextEditingController(text: values.elementAt(2));
-    studentLNameCon = TextEditingController(text: values.elementAt(3));
-    studentPhoneCon = TextEditingController(text: values.elementAt(4));
-    studentEmailCon = TextEditingController(text: values.elementAt(5));
-    guardianFNameCon = TextEditingController(text: values.elementAt(6));
-    guardianMNameCon = TextEditingController(text: values.elementAt(7));
-    guardianLNameCon = TextEditingController(text: values.elementAt(8));
-    guardianPhoneCon = TextEditingController(text: values.elementAt(9));
-    guardianEmailCon = TextEditingController(text: values.elementAt(10));
+    idCon = TextEditingController(text: values[0]);
+    studentFNameCon = TextEditingController(text: values[1]);
+    studentMNameCon = TextEditingController(text: values[2]);
+    studentLNameCon = TextEditingController(text: values[3]);
+    studentPhoneCon = TextEditingController(text: values[4]);
+    studentEmailCon = TextEditingController(text: values[5]);
+    guardianFNameCon = TextEditingController(text: values[6]);
+    guardianMNameCon = TextEditingController(text: values[7]);
+    guardianLNameCon = TextEditingController(text: values[8]);
+    guardianPhoneCon = TextEditingController(text: values[9]);
+    guardianEmailCon = TextEditingController(text: values[10]);
 
     super.initState();
   }

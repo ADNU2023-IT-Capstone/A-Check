@@ -79,7 +79,7 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
                         children: [
                           Text("${classValue.name} [${classValue.section}]"),
                           Text(
-                            classValue.code,
+                            "${classValue.code}, ${classValue.getSchedule(context)}",
                             style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.normal,
@@ -101,6 +101,10 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
             actions: [
               PopupMenuButton(
                 itemBuilder: (context) => [
+                  PopupMenuItem(
+                    onTap: state.editClass,
+                    child: const Text("Edit class"),
+                  ),
                   PopupMenuItem(
                       onTap: state.deleteClass,
                       child: const Text("Delete class")),

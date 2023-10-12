@@ -19,7 +19,8 @@ class ClassFormState extends State<ClassFormPage> {
   }
 
   void editSchedule(int index) async {
-    final result = await Dialogs.showScheduleDialog(context, schedule: schedules[index]);
+    final result =
+        await Dialogs.showScheduleDialog(context, schedule: schedules[index]);
 
     if (result == null) return;
     setState(() {
@@ -28,8 +29,10 @@ class ClassFormState extends State<ClassFormPage> {
   }
 
   void deleteSchedule(int index) async {
-    if (!await Dialogs.showConfirmDialog(context, const Text("Delete Schedule"), const Text("Are you sure?"))) return;
-    
+    if (!await Dialogs.showConfirmDialog(
+        context, const Text("Delete Schedule"), const Text("Are you sure?")))
+      return;
+
     setState(() {
       schedules.removeAt(index);
     });
@@ -47,11 +50,13 @@ class ClassFormState extends State<ClassFormPage> {
         code: codeTedCon!.text,
         name: nameTedCon!.text,
         section: sectionTedCon!.text,
-        schedule: schedules);
+        schedule: schedules,
+        studentIds: widget.mClass?.studentIds.toList());
 
     HiveBoxes.classesBox().put(mClass.key, mClass).then((value) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Added ${mClass.key}!")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+              "${widget.mClass == null ? "Added" : "Edited"} ${mClass.key}!")));
       Navigator.pop(context);
     }).onError((error, stackTrace) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -63,9 +68,18 @@ class ClassFormState extends State<ClassFormPage> {
   void initState() {
     super.initState();
 
-    nameTedCon = TextEditingController();
-    codeTedCon = TextEditingController();
-    sectionTedCon = TextEditingController();
+    List<String?> values = [];
+    if (widget.mClass != null) {
+      final mClass = widget.mClass!;
+      values.addAll([mClass.code, mClass.name, mClass.section]);
+      schedules = mClass.schedule;
+    } else {
+      values.addAll([null, null, null]);
+    }
+
+    codeTedCon = TextEditingController(text: values[0]);
+    nameTedCon = TextEditingController(text: values[1]);
+    sectionTedCon = TextEditingController(text: values[2]);
   }
 
   @override

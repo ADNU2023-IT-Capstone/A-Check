@@ -1,4 +1,5 @@
 import 'package:a_check/models/class.dart';
+import 'package:a_check/pages/class_form_page.dart';
 import 'package:a_check/pages/class_page.dart';
 import 'package:a_check/pages/student_form_page.dart';
 import 'package:a_check/pages/students_form_page.dart';
@@ -39,6 +40,16 @@ class ClassState extends State<ClassPage> {
     await mClass.addStudents(result);
   }
 
+  void editClass() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ClassFormPage(
+            mClass: mClass,
+          ),
+        ));
+  }
+
   void deleteClass() async {
     if (!await Dialogs.showConfirmDialog(
         context,
@@ -49,13 +60,13 @@ class ClassState extends State<ClassPage> {
     }
 
     if (context.mounted) {
+      classValueNotifier.dispose(); // stop listening
       mClass.getAttendanceRecords().forEach((_, value) async {
         for (var record in value) {
           await record.delete();
         }
       });
 
-      classValueNotifier.dispose();
       mClass.delete().then((_) {
         Navigator.pop(context);
       });

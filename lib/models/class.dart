@@ -44,6 +44,27 @@ enum DaysOfTheWeek {
         return "";
     }
   }
+
+  String prefix() {
+    switch (this) {
+      case monday:
+        return "M";
+      case tuesday:
+        return "T";
+      case wednesday:
+        return "W";
+      case thursday:
+        return "TH";
+      case friday:
+        return "F";
+      case saturday:
+        return "SAT";
+      case sunday:
+        return "SUN";
+      default:
+        return "";
+    }
+  }
 }
 
 @HiveType(typeId: 0)
@@ -80,6 +101,18 @@ class Class extends HiveObject {
   @override
   // ignore: unnecessary_brace_in_string_interps
   String get key => "${code}_${section}";
+  
+  String getSchedule(BuildContext context) {
+    StringBuffer dayBuf = StringBuffer();
+    StringBuffer timeBuf = StringBuffer();
+    for (var s in schedule) {
+      dayBuf.write(s.day.prefix());
+      if (timeBuf.toString().contains("${s.getStartTime().format(context)} - ${s.getEndTime().format(context)}")) continue;
+      timeBuf.write("${s.getStartTime().format(context)} - ${s.getEndTime().format(context)}");
+    }
+
+    return "$dayBuf $timeBuf"; 
+  }
 
   @override
   String toString() {
