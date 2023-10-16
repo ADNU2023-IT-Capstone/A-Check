@@ -45,3 +45,7 @@ flutter:
   assets:
     - assets/mobilefacenet.tflite
     - assets/images/
+#  fonts:
+#    - family: Quicksand
+#      fonts:
+#        - asset: assets/fonts/Quicksand-Regular.ttf
