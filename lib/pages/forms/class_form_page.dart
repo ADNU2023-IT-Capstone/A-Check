@@ -24,13 +24,15 @@ class ClassFormView extends WidgetView<ClassFormPage, ClassFormState> {
         borderRadius: BorderRadius.circular(4.0),
         borderSide: const BorderSide(color: Colors.black26, width: 1),
       ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(4.0),
-        borderSide: const BorderSide(color: Color(0xff000000), width: 1),
-      ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(4.0),
-        borderSide: const BorderSide(color: Color(0xff000000), width: 2),
+        borderSide:
+        const BorderSide(color: Color(0xff9e9e9e), width: 1),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(4.0),
+        borderSide:
+        const BorderSide(color: Color(0xff9e9e9e), width: 1),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(4.0),
@@ -45,12 +47,12 @@ class ClassFormView extends WidgetView<ClassFormPage, ClassFormState> {
         fontWeight: FontWeight.w400,
         fontStyle: FontStyle.normal,
         fontSize: 14,
-        color: Color(0xff000000),
+        color: Color(0xff9e9e9e),
       ),
       counterText: "",
       filled: true,
-      fillColor: const Color(0xfff2f2f3),
-      isDense: true,
+      fillColor: const Color(0x00ffffff),
+      isDense: false,
       contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
     );
   }
@@ -59,13 +61,8 @@ class ClassFormView extends WidgetView<ClassFormPage, ClassFormState> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(bottom: 8.0),
-          child: Text("Class Information",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-        ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
+          padding: const EdgeInsets.symmetric(vertical: 0),
           child: TextFormField(
             enabled: widget.mClass == null,
             validator: Validators.hasValue,
@@ -81,7 +78,7 @@ class ClassFormView extends WidgetView<ClassFormPage, ClassFormState> {
               fontSize: 14,
               color: Color(0xff000000),
             ),
-            decoration: inputDecoration("Class Code"),
+            decoration: inputDecoration("Code"),
           ),
         ),
         Padding(
@@ -99,7 +96,7 @@ class ClassFormView extends WidgetView<ClassFormPage, ClassFormState> {
               fontSize: 14,
               color: Color(0xff000000),
             ),
-            decoration: inputDecoration("Class Name"),
+            decoration: inputDecoration("Name"),
           ),
         ),
         Padding(
@@ -118,7 +115,7 @@ class ClassFormView extends WidgetView<ClassFormPage, ClassFormState> {
               fontSize: 14,
               color: Color(0xff000000),
             ),
-            decoration: inputDecoration("Class Section"),
+            decoration: inputDecoration("Section"),
           ),
         ),
       ],
@@ -133,9 +130,19 @@ class ClassFormView extends WidgetView<ClassFormPage, ClassFormState> {
           children: [
             const Text("Schedule",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-            ElevatedButton(
+            // ElevatedButton(
+            //   style: BorderRadius.circular(2.00),
+            //   onPressed: state.addSchedule,
+            //   child: const Text("Add Schedule"),
+            // ),
+            TextButton(
               onPressed: state.addSchedule,
-              child: const Text("Add Schedule"),
+              style: TextButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+              child: const Text('Add Schedule', style: TextStyle(color: Colors.green),),
             ),
           ],
         ),
@@ -159,7 +166,23 @@ class ClassFormView extends WidgetView<ClassFormPage, ClassFormState> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Create a class"),
+        centerTitle: true,
+        title: const Text("Class Information"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.check),
+            onPressed: state.addClass,
+          ),
+        ],
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: <Color>[Colors.black, Colors.green]),
+          ),
+        ),
+
       ),
       body: Form(
         key: state.formKey,
@@ -168,31 +191,6 @@ class ClassFormView extends WidgetView<ClassFormPage, ClassFormState> {
           children: [
             Column(
               children: [buildClassInfo(), buildScheduleList()],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: MaterialButton(
-                onPressed: state.addClass,
-                color: const Color(0xff000000),
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  side:
-                      const BorderSide(color: Color(0xff808080), width: 1),
-                ),
-                padding: const EdgeInsets.all(16),
-                textColor: const Color(0xffffffff),
-                height: 40,
-                minWidth: 140,
-                child: Text(
-                  widget.mClass == null ? "Add Class" : "Edit Class",
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    fontStyle: FontStyle.normal,
-                  ),
-                ),
-              ),
             ),
           ],
         ),
