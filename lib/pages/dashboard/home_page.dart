@@ -27,11 +27,11 @@ class HomeView extends WidgetView<HomePage, HomeState> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Row(
                   children: [
                     const Padding(
-                      padding: EdgeInsets.only(right: 16.0),
+                      padding: EdgeInsets.only(right: 20.0),
                       child: Image(
                           image: AssetImage("assets/images/LOGO.png"), height: 56),
                     ),
@@ -70,12 +70,17 @@ class HomeView extends WidgetView<HomePage, HomeState> {
         ),
         floatingActionButton: SpeedDial(
           animatedIcon: AnimatedIcons.menu_close,
-          animatedIconTheme: const IconThemeData(size: 24),
+          animatedIconTheme: const IconThemeData(size: 27),
+          backgroundColor: Colors.green[900],
+          foregroundColor: Colors.lightGreen,
+          spacing: 10.00,
+          childMargin: const EdgeInsets.all(10),
           curve: Curves.bounceIn,
           children: [
             SpeedDialChild(
                 child: const Icon(Icons.add_comment),
                 label: 'Add Class',
+                foregroundColor: Colors.green[900],
                 onTap: state.addClass),
           ],
         ));
