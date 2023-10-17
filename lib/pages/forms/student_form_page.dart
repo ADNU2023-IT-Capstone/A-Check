@@ -171,7 +171,7 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
               fontSize: 14,
               color: Colors.black54,
             ),
-            decoration: inputDecoration("E-mail"),
+            decoration: inputDecoration("E-mail Address"),
           ),
         ),
       ],
