@@ -65,37 +65,50 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
         valueListenable: state.classValueNotifier,
         builder: (context, classValue, _) => Scaffold(
           appBar: AppBar(
-            title: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("${classValue.name} [${classValue.section}]"),
-                          Text(
-                            "${classValue.code}, ${classValue.getSchedule(context)}",
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(
+                Icons.arrow_back_ios_new,
+              ),
             ),
-            bottom: const TabBar(
+            backgroundColor: Colors.white60,
+            foregroundColor: Colors.black87,
+            elevation: 0,
+            // title: Row(
+            //   mainAxisSize: MainAxisSize.max,
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     Expanded(
+            //       child: Row(
+            //         mainAxisSize: MainAxisSize.max,
+            //         mainAxisAlignment: MainAxisAlignment.start,
+            //         children: [
+            //           Column(
+            //             crossAxisAlignment: CrossAxisAlignment.start,
+            //             children: [
+            //               Text("${classValue.name} [${classValue.section}]"),
+            //               Text(
+            //                 "${classValue.code}, ${classValue.getSchedule(context)}",
+            //                 style: const TextStyle(
+            //                   fontSize: 12,
+            //                   fontWeight: FontWeight.normal,
+            //                 ),
+            //               )
+            //             ],
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            bottom:
+            const TabBar(
+              indicatorColor: Colors.black,
               tabs: [
-                Tab(icon: Icon(Icons.group), text: "Student List"),
-                Tab(icon: Icon(Icons.assignment), text: "Attendance Records")
+                Tab(child: Text( "Student List", style: TextStyle(color: Colors.black)) ),
+                Tab(child: Text( "Attendance Records", style: TextStyle(color: Colors.black)))
               ],
             ),
             actions: [
@@ -112,19 +125,156 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
               )
             ],
           ),
-          body: SafeArea(
-            child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Expanded(
+          body: Column(
+            mainAxisAlignment:MainAxisAlignment.start,
+            crossAxisAlignment:CrossAxisAlignment.center,
+            mainAxisSize:MainAxisSize.max,
+            children: [
+              Container(
+                margin:const EdgeInsets.fromLTRB(0, 30, 0,20),
+                padding:const EdgeInsets.all(0),
+                width:360,
+                height:100,
+                decoration: const BoxDecoration(
+                  color:Color(0x1fffffff),
+                  shape:BoxShape.rectangle,
+                  borderRadius:BorderRadius.zero,
+                ),
+                child:
+
+                Column(
+                  mainAxisAlignment:MainAxisAlignment.start,
+                  crossAxisAlignment:CrossAxisAlignment.start,
+                  mainAxisSize:MainAxisSize.max,
+                  children: [
+                    Align(
+                      alignment:Alignment.center,
+                      child:Text(
+                        classValue.code,
+                        textAlign: TextAlign.left,
+                        overflow:TextOverflow.clip,
+                        style:const TextStyle(
+                          fontWeight:FontWeight.w300,
+                          fontStyle:FontStyle.normal,
+                          fontSize:24,
+                          color:Color(0xff000000),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(
+                      height:20,
+                      width:16,
+                    ),
+                    Padding(
+                      padding:const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                      child:Text(
+                        classValue.name,
+                        textAlign: TextAlign.start,
+                        overflow:TextOverflow.clip,
+                        style:const TextStyle(
+                          fontWeight:FontWeight.w900,
+                          fontSize:26,
+                          color:Colors.black87,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding:const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child:Text(
+                        "${classValue.section}, ${classValue.getSchedule(context)}",
+                        textAlign: TextAlign.start,
+                        overflow:TextOverflow.clip,
+                        style:const TextStyle(
+                          fontWeight:FontWeight.w400,
+                          fontStyle:FontStyle.normal,
+                          fontSize:14,
+                          color:Colors.green,
+                        ),
+                      ),
+                    ),
+                  ],),
+              ),
+              const Row(
+                mainAxisAlignment:MainAxisAlignment.start,
+                crossAxisAlignment:CrossAxisAlignment.center,
+                mainAxisSize:MainAxisSize.max,
+
+                // children:[
+                //   Expanded( // STUDENTS TAB
+                //     flex: 1,
+                //     child: MaterialButton(
+                //       onPressed:(){},
+                //       color:const Color(0xffffffff),
+                //       elevation:0,
+                //       shape:const RoundedRectangleBorder(
+                //         borderRadius:BorderRadius.zero,
+                //       ),
+                //       padding:const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                //       textColor:const Color(0xff000000),
+                //       height:40,
+                //       minWidth:140,
+                //       child:
+                //         const Text("Students", style: TextStyle(
+                //           fontSize:14,
+                //           fontWeight:FontWeight.w400,
+                //           fontStyle:FontStyle.normal,
+                //       ),),
+                //     ),
+                //   ),
+                //   Expanded( // RECORDS TAB
+                //     flex: 1,
+                //     child: MaterialButton(
+                //       onPressed:(){},
+                //       color:const Color(0xfff2f2f2),
+                //       elevation:0,
+                //       shape:const RoundedRectangleBorder(
+                //         borderRadius:BorderRadius.zero,
+                //       ),
+                //       padding:const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                //       textColor:const Color(0xff000000),
+                //       height:40,
+                //       minWidth:140,
+                //       child:
+                //         const Text("Records", style: TextStyle( fontSize:14,
+                //         fontWeight:FontWeight.w400,
+                //         fontStyle:FontStyle.normal,
+                //       ),),
+                //     ),
+                //   ),
+                // ],
+                ),
+                Expanded(
                     child: buildTabBarView(classValue),
-                  )
-                ]),
-          ),
+                ),
+            ],),
+          // SafeArea(
+          //   child: Column(
+          //       mainAxisSize: MainAxisSize.min,
+          //       mainAxisAlignment: MainAxisAlignment.start,
+          //       children: [
+          //         Container(
+          //           margin: EdgeInsets.zero,
+          //           padding: EdgeInsets.zero,
+          //           width: 400,
+          //           height: 100,
+          //           decoration: BoxDecoration(
+          //             shape: BoxShape.rectangle,
+          //             borderRadius: BorderRadius.zero,
+          //             border: Border.all(color: Colors.black, width: 1),
+          //           ),
+          //         ),
+          //         Expanded(
+          //           child: buildTabBarView(classValue),
+          //         ),
+          //       ],
+          //   ),
+          // ),
           floatingActionButton: SpeedDial(
             animatedIcon: AnimatedIcons.menu_close,
-            animatedIconTheme: const IconThemeData(size: 24),
+            animatedIconTheme: const IconThemeData(size: 30),
+            backgroundColor: Colors.green[900],
+            foregroundColor: Colors.lightGreen[400],
             visible: true,
             curve: Curves.bounceIn,
             children: [
