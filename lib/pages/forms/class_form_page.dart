@@ -32,7 +32,7 @@ class ClassFormView extends WidgetView<ClassFormPage, ClassFormState> {
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(4.0),
         borderSide:
-        const BorderSide(color: Color(0xff9e9e9e), width: 1),
+        const BorderSide(color: Colors.grey, width: 1),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(4.0),
@@ -47,7 +47,7 @@ class ClassFormView extends WidgetView<ClassFormPage, ClassFormState> {
         fontWeight: FontWeight.w400,
         fontStyle: FontStyle.normal,
         fontSize: 14,
-        color: Color(0xff9e9e9e),
+        color: Color(0xff000000),
       ),
       counterText: "",
       filled: true,
@@ -100,7 +100,7 @@ class ClassFormView extends WidgetView<ClassFormPage, ClassFormState> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
+          padding: const EdgeInsets.symmetric(vertical: 0),
           child: TextFormField(
             enabled: widget.mClass == null,
             validator: Validators.hasValue,
@@ -113,7 +113,7 @@ class ClassFormView extends WidgetView<ClassFormPage, ClassFormState> {
               fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
               fontSize: 14,
-              color: Color(0xff000000),
+                color: Colors.black54,
             ),
             decoration: inputDecoration("Section"),
           ),
@@ -130,11 +130,6 @@ class ClassFormView extends WidgetView<ClassFormPage, ClassFormState> {
           children: [
             const Text("Schedule",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-            // ElevatedButton(
-            //   style: BorderRadius.circular(2.00),
-            //   onPressed: state.addSchedule,
-            //   child: const Text("Add Schedule"),
-            // ),
             TextButton(
               onPressed: state.addSchedule,
               style: TextButton.styleFrom(
@@ -187,7 +182,7 @@ class ClassFormView extends WidgetView<ClassFormPage, ClassFormState> {
       body: Form(
         key: state.formKey,
         child: ListView(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(20),
           children: [
             Column(
               children: [buildClassInfo(), buildScheduleList()],
