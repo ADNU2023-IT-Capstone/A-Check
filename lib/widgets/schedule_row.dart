@@ -22,26 +22,32 @@ class ScheduleRow extends StatelessWidget {
             Expanded(
               flex: 1,
               child: Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: const BorderRadius.only(
+                  decoration: const BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(4),
                         bottomLeft: Radius.circular(4)),
                   ),
                   child: Center(
                       child: Text(
                     schedule.day.toString(),
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.onPrimary),
+                    style: const TextStyle(
+                        color: Colors.white),
                   ))),
             ),
             Expanded(
               flex: 2,
               child: Container(
-                padding: const EdgeInsets.only(left: 16),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.background,
-                  borderRadius: const BorderRadius.only(
+                padding: const EdgeInsets.only(left: 12),
+                decoration: const BoxDecoration(
+                  // boxShadow: [
+                  //   BoxShadow(color: Colors.grey.withOpacity(0.5),
+                  //   spreadRadius: 1,
+                  //   blurRadius: 0,
+                  //   offset: const Offset(3, 2),)
+                  // ],
+                  color: Colors.white30,
+                  borderRadius: BorderRadius.only(
                       topRight: Radius.circular(4),
                       bottomRight: Radius.circular(4)),
                 ),
@@ -56,11 +62,11 @@ class ScheduleRow extends StatelessWidget {
                       children: [
                         Text(
                           "Start: ${schedule.getStartTime().format(context)}",
-                          style: const TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.black45, fontStyle: FontStyle.italic, fontSize: 13),
                         ),
                         Text(
                           "End: ${schedule.getEndTime().format(context)}",
-                          style: const TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.black45, fontStyle: FontStyle.italic, fontSize: 13),
                         ),
                       ],
                     ),

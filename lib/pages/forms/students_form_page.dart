@@ -18,43 +18,46 @@ class StudentsFormView extends WidgetView<StudentsFormPage, StudentsFormState> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add an existing student"),
+        centerTitle: true,
+        title: const Text("Existing Students"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.check),
+            onPressed: state.addSelectedStudents,
+          ),
+        ],
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: <Color>[Colors.black, Colors.green]),
+          ),
+        ),
       ),
       body: SafeArea(
           child: Column(
         children: [
           Expanded(
             child: ListView(
+              padding: const EdgeInsetsDirectional.fromSTEB(15, 20, 20, 0),
               children: state.students.keys.map((e) {
                 final castedBox = HiveBoxes.studentsBox().values.cast();
                 final name = (castedBox.firstWhere((student) => student.id == e) as Student).toString();
                 
                 return CheckboxListTile(
                     value: state.students[e],
-                    title: Text(name),
+                    tileColor: const Color.fromRGBO(238,238,238, 0.5),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(26.0),
+                    ),
+                    title: Text(name, style: const TextStyle(letterSpacing: 0.5, fontSize: 14, fontWeight: FontWeight.w400),),
+                    checkColor: Colors.white70,
+                    activeColor: Colors.green,
                     onChanged: (value) => state.checkBoxOnChanged(e, value));
               }).toList(),
             ),
           ),
-          Container(
-            decoration:
-                BoxDecoration(color: Theme.of(context).colorScheme.secondary),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ElevatedButton(
-                    onPressed: state.addSelectedStudents,
-                    style: const ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(Colors.green),
-                    ),
-                    child: const Text("Add Selected Students"),
-                  ),
-                ],
-              ),
-            ),
-          )
         ],
       )),
     );

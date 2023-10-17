@@ -17,7 +17,7 @@ class SettingsView extends WidgetView<SettingsPage, SettingsState> {
     return Scaffold(
       body: SafeArea(
           child: ListView(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(20),
             children: [
               const Padding(
                 padding: EdgeInsets.all(8.0),

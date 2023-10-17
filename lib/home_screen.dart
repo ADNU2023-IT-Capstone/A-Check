@@ -41,12 +41,12 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         bottomNavbarSelectedIndex = index;
         pageController.animateToPage(index,
-            duration: const Duration(milliseconds: 200), curve: Curves.ease);
+            duration: const Duration(milliseconds: 400), curve: Curves.ease);
       });
     }
 
     List<BottomNavigationBarItem> bottomNavbarItems = const [
-      BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+      BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home",),
       BottomNavigationBarItem(icon: Icon(Icons.group), label: "Students"),
       BottomNavigationBarItem(
           icon: Icon(Icons.calendar_month), label: "Calendar"),
@@ -59,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
           type: BottomNavigationBarType.fixed,
           items: bottomNavbarItems,
           currentIndex: bottomNavbarSelectedIndex,
+          selectedItemColor: Colors.lightGreen[800],
           onTap: (index) {
             bottomNavbarTapped(index);
           }),

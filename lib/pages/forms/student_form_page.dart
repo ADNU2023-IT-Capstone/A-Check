@@ -26,11 +26,11 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(4.0),
-        borderSide: const BorderSide(color: Color(0xff000000), width: 1),
+        borderSide: const BorderSide(color: Colors.grey, width: 1),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(4.0),
-        borderSide: const BorderSide(color: Color(0xff000000), width: 2),
+        borderSide: const BorderSide(color: Color(0xff9e9e9e), width: 1),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(4.0),
@@ -49,8 +49,8 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
       ),
       counterText: "",
       filled: true,
-      fillColor: const Color(0xfff2f2f3),
-      isDense: true,
+      fillColor: const Color(0x00ffffff),
+      isDense: false,
       contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
     );
   }
@@ -59,16 +59,6 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(bottom: 8),
-          child: Text(
-            "Student Information",
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: TextFormField(
@@ -85,7 +75,7 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
               fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
               fontSize: 14,
-              color: Color(0xff000000),
+              color: Colors.black54,
             ),
             decoration: inputDecoration("Student ID"),
           ),
@@ -103,7 +93,7 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
               fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
               fontSize: 14,
-              color: Color(0xff000000),
+              color: Colors.black54,
             ),
             decoration: inputDecoration("First Name"),
           ),
@@ -121,7 +111,7 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
               fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
               fontSize: 14,
-              color: Color(0xff000000),
+              color: Colors.black54,
             ),
             decoration: inputDecoration("Middle Name"),
           ),
@@ -139,7 +129,7 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
               fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
               fontSize: 14,
-              color: Color(0xff000000),
+              color: Colors.black54,
             ),
             decoration: inputDecoration("Last Name"),
           ),
@@ -160,7 +150,7 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
               fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
               fontSize: 14,
-              color: Color(0xff000000),
+              color: Colors.black54,
             ),
             decoration: inputDecoration("Mobile Number"),
           ),
@@ -179,9 +169,9 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
               fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
               fontSize: 14,
-              color: Color(0xff000000),
+              color: Colors.black54,
             ),
-            decoration: inputDecoration("E-mail"),
+            decoration: inputDecoration("E-mail Address"),
           ),
         ),
       ],
@@ -215,7 +205,7 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
               fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
               fontSize: 14,
-              color: Color(0xff000000),
+              color: Colors.black54,
             ),
             decoration: inputDecoration("First Name"),
           ),
@@ -233,7 +223,7 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
               fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
               fontSize: 14,
-              color: Color(0xff000000),
+              color: Colors.black54,
             ),
             decoration: inputDecoration("Middle Name"),
           ),
@@ -251,7 +241,7 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
               fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
               fontSize: 14,
-              color: Color(0xff000000),
+              color: Colors.black54,
             ),
             decoration: inputDecoration("Last Name"),
           ),
@@ -272,7 +262,7 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
               fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
               fontSize: 14,
-              color: Color(0xff000000),
+              color: Colors.black54,
             ),
             decoration: inputDecoration("Contact Number"),
           ),
@@ -291,9 +281,9 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
               fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
               fontSize: 14,
-              color: Color(0xff000000),
+              color: Colors.black54,
             ),
-            decoration: inputDecoration("E-mail"),
+            decoration: inputDecoration("E-mail Address"),
           ),
         ),
       ],
@@ -304,45 +294,41 @@ class StudentFormView extends WidgetView<StudentFormPage, StudentFormState> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            widget.student == null ? "Create a student" : "Editing student"),
+        centerTitle: true,
+        title: const Text("Student Information"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.check),
+            onPressed: state.addStudent,
+          ),
+        ],
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: <Color>[Colors.black, Colors.green]),
+          ),
+        ),
       ),
       body: Form(
           key: state.formKey,
           child: ListView(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(20),
             children: [
               buildStudentForms(),
               CheckboxListTile(
-                  title: const Text("Has guardian?"),
+                  dense: true,
+                  checkColor: Colors.white70,
+                  activeColor: Colors.green,
+                  title: const Text("Has guardian?",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 15,
+                    ),),
                   value: state.hasGuardian,
                   onChanged: state.onHasGuardianChanged),
               if (state.hasGuardian) buildGuardianForms(),
-              Padding(
-                padding: const EdgeInsets.only(top: 16),
-                child: MaterialButton(
-                  onPressed: state.addStudent,
-                  color: const Color(0xff000000),
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    side:
-                        const BorderSide(color: Color(0xff808080), width: 1),
-                  ),
-                  padding: const EdgeInsets.all(16),
-                  textColor: const Color(0xffffffff),
-                  height: 40,
-                  minWidth: 140,
-                  child: Text(
-                    widget.student == null ? "Add Student" : "Confirm",
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      fontStyle: FontStyle.normal,
-                    ),
-                  ),
-                ),
-              ),
             ],
           )),
     );

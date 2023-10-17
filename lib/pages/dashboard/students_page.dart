@@ -32,7 +32,7 @@ class StudentsView extends WidgetView<StudentsPage, StudentsState> {
                     .compareTo(b.firstName[0].toLowerCase()),
               );
 
-              return ListView(padding: const EdgeInsets.all(8), children: [
+              return ListView(padding: const EdgeInsets.all(20), children: [
                 const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Text(
@@ -46,20 +46,27 @@ class StudentsView extends WidgetView<StudentsPage, StudentsState> {
       ),
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.menu_close,
-        animatedIconTheme: const IconThemeData(size: 24),
+        animatedIconTheme: const IconThemeData(size: 27),
+        backgroundColor: Colors.green[900],
+        foregroundColor: Colors.lightGreen,
+        spacing: 10.00,
+        childMargin: const EdgeInsets.all(10),
         curve: Curves.bounceIn,
         children: [
           SpeedDialChild(
               child: const Icon(Icons.person_add),
               label: "Add Student",
+              foregroundColor: Colors.green[900],
               onTap: state.addStudent),
           SpeedDialChild(
               child: const Icon(Icons.camera_indoor),
               label: "IP Camera",
+              foregroundColor: Colors.green[900],
               onTap: state.openIPCam),
           SpeedDialChild(
               child: const Icon(Icons.camera_alt),
               label: "Phone Camera",
+              foregroundColor: Colors.green[900],
               onTap: state.openPhoneCam),
         ],
       ),

@@ -15,30 +15,37 @@ class ClassCard extends StatelessWidget {
           MaterialPageRoute(
               builder: (context) => ClassPage(classKey: mClass.key)));
     }
-
     return GestureDetector(
       onTap: onTap,
       child: Card(
         clipBehavior: Clip.antiAliasWithSaveLayer,
-        elevation: 4,
+        elevation: 2,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(10),
-            bottomRight: Radius.circular(10),
-            topLeft: Radius.circular(10),
+            bottomLeft: Radius.circular(50),
             topRight: Radius.circular(50),
           ),
         ),
         child: Container(
-            decoration: const BoxDecoration(color: Color(0xFFFFD3BE)),
-            child: Center(
+            decoration: const BoxDecoration(color: Colors.white12),
+            child: Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(30, 4, 30, 4),
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Icon(Icons.class_rounded, size: 24),
-                  Text("${mClass.name} [${mClass.section}]"),
-                  Text(mClass.code),
+                  Text(mClass.code,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+                  const Divider(height: 20,thickness: 0.5, color: Colors.green),
+                  const SizedBox(height: 10),
+                  Text(mClass.name,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w300)),
+                  const SizedBox(height: 10),
+                  Text(mClass.section, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w300, fontStyle: FontStyle.italic)),
                 ],
               ),
             )),
