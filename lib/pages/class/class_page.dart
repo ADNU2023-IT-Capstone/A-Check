@@ -113,6 +113,8 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
             ),
             actions: [
               PopupMenuButton(
+                tooltip: "Edit or Delete Class",
+                elevation: 1,
                 itemBuilder: (context) => [
                   PopupMenuItem(
                     onTap: state.editClass,
