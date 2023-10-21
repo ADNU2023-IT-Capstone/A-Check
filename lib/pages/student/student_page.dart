@@ -20,171 +20,150 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
 
   Widget buildHeader(Student student) {
     return Container(
-      margin:const EdgeInsets.all(0),
-      padding:const EdgeInsets.all(0),
-      width:450,
-      height:190,
+      margin: const EdgeInsets.all(0),
+      padding: const EdgeInsets.all(0),
       decoration: const BoxDecoration(
         color: Colors.green,
-        shape:BoxShape.rectangle,
+        shape: BoxShape.rectangle,
         borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(35.0),
             bottomRight: Radius.circular(35.0)),
       ),
-      child:
-
-      Column(
-        mainAxisAlignment:MainAxisAlignment.start,
-        crossAxisAlignment:CrossAxisAlignment.center,
-        mainAxisSize:MainAxisSize.max,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
         children: [
-          const Padding(
-            padding:EdgeInsets.all(5),
-            child:Row(
-              mainAxisAlignment:MainAxisAlignment.spaceBetween,
-              crossAxisAlignment:CrossAxisAlignment.center,
-              mainAxisSize:MainAxisSize.max,
-            ),
-          ),
           Padding(
-            padding:const EdgeInsets.all(15),
-            child:Row(
-              mainAxisAlignment:MainAxisAlignment.start,
-              crossAxisAlignment:CrossAxisAlignment.center,
-              mainAxisSize:MainAxisSize.max,
-              children:[
-
-                Container(
-                  margin:const EdgeInsets.all(0),
-                  padding:const EdgeInsets.all(0),
-                  width:112,
-                  height:112,
-                  decoration: const BoxDecoration(
-                    color:Colors.black,
-                    shape:BoxShape.circle,
-                  ),
-                  child:
-
-                  Column(
-                    mainAxisAlignment:MainAxisAlignment.start,
-                    crossAxisAlignment:CrossAxisAlignment.center,
-                    mainAxisSize:MainAxisSize.max,
-                    children: [
-                      Opacity(
-                        opacity:0.8,
-                        child:
-                        Container(
-                          height:112,
-                          width:112,
-                          clipBehavior: Clip.antiAlias,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                          ),
-                          child:
-                          Image.network(
-                              "https://i.pinimg.com/736x/61/f9/51/61f95115e458137e5dc9cb2c77152069.jpg",
-                              fit:BoxFit.cover),
+            padding: const EdgeInsets.all(15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Opacity(
+                      opacity: 0.8,
+                      child: Container(
+                        height: 112,
+                        width: 112,
+                        clipBehavior: Clip.antiAlias,
+                        decoration: const BoxDecoration(
+                          border: Border.fromBorderSide(BorderSide()),
+                          shape: BoxShape.circle,
                         ),
+                        child: state.student.facePhotoBytes != null
+                            ? Image.memory(state.student.facePhotoBytes!)
+                            : const Icon(Icons.person_2),
                       ),
-                    ],),
+                    ),
+                  ],
                 ),
                 Expanded(
                   flex: 1,
-                  child:
-                  Column(
-                    mainAxisAlignment:MainAxisAlignment.start,
-                    crossAxisAlignment:CrossAxisAlignment.center,
-                    mainAxisSize:MainAxisSize.max,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
                     children: [
                       Padding(
-                        padding:const EdgeInsets.fromLTRB(12, 0, 12, 10),
-                        child:Text(
+                        padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+                        child: Text(
                           student.toString(),
                           textAlign: TextAlign.center,
-                          maxLines:2,
-                          overflow:TextOverflow.clip,
-                          style:const TextStyle(
-                            fontWeight:FontWeight.w700,
-                            fontStyle:FontStyle.normal,
-                            fontSize:16,
-                            color:Color(0xfffcfcfc),
+                          maxLines: 2,
+                          overflow: TextOverflow.clip,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontStyle: FontStyle.normal,
+                            fontSize: 16,
+                            color: Color(0xfffcfcfc),
                           ),
                         ),
                       ),
                       Text(
                         student.id,
                         textAlign: TextAlign.start,
-                        overflow:TextOverflow.clip,
-                        style:const TextStyle(
-                          fontWeight:FontWeight.w300,
-                          fontStyle:FontStyle.normal,
-                          fontSize:14,
-                          color:Color(0xffe9e9e9),
+                        overflow: TextOverflow.clip,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w300,
+                          fontStyle: FontStyle.normal,
+                          fontSize: 14,
+                          color: Color(0xffe9e9e9),
                         ),
                       ),
-                    ],),),
-              ],),),
-        ],),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
-    }
+  }
 
   Widget buildStudentInfo(Student student) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          margin:const EdgeInsets.all(0),
-          padding:const EdgeInsets.all(0),
+          margin: const EdgeInsets.all(0),
+          padding: const EdgeInsets.all(0),
           width: 400,
           height: 35,
           decoration: const BoxDecoration(
-            color:Color(0x00ffffff),
-            shape:BoxShape.rectangle,
-            borderRadius:BorderRadius.zero,
+            color: Color(0x00ffffff),
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.zero,
           ),
-          child:
-          Card(
-            margin:const EdgeInsets.all(2.0),
-            color:const Color(0xffffffff),
-            shadowColor:const Color(0xffebebeb),
-            elevation:2,
-            shape:RoundedRectangleBorder(
-              borderRadius:BorderRadius.circular(20.0),
+          child: Card(
+            margin: const EdgeInsets.all(2.0),
+            color: const Color(0xffffffff),
+            shadowColor: const Color(0xffebebeb),
+            elevation: 2,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
             ),
             child: student.hasRegisteredFace()
-                  ? GestureDetector(
+                ? GestureDetector(
                     onLongPress: state.registerFace,
                     child: Checkbox(
-                      value: student.hasRegisteredFace(),
-                      onChanged: (value) {/* do nothing */}),
+                        value: student.hasRegisteredFace(),
+                        onChanged: (value) {/* do nothing */}),
                   )
-                  : Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: MaterialButton(
-                        onPressed: state.registerFace,
-                        child: const Icon(Icons.camera_alt),
-                      ),
+                : Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: MaterialButton(
+                      onPressed: state.registerFace,
+                      child: const Icon(Icons.camera_alt),
                     ),
+                  ),
           ),
         ),
         Padding(
           padding: const EdgeInsetsDirectional.fromSTEB(10, 30, 10, 30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
+            children: [
               const Text(
                 "Student Information",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               TextField(
                 enabled: false,
-                decoration:
-                    const InputDecoration(labelText: "Contact Number", isDense: true),
+                decoration: const InputDecoration(
+                    labelText: "Contact Number", isDense: true),
                 controller: TextEditingController(text: student.phone),
               ),
               TextField(
                 enabled: false,
-                decoration: const InputDecoration(labelText: "E-mail", isDense: true),
+                decoration:
+                    const InputDecoration(labelText: "E-mail", isDense: true),
                 controller: TextEditingController(text: student.email),
               ),
             ],
@@ -210,14 +189,12 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
           enabled: false,
           decoration:
               const InputDecoration(labelText: "Contact Number", isDense: true),
-          controller:
-              TextEditingController(text: student.guardian?.phone),
+          controller: TextEditingController(text: student.guardian?.phone),
         ),
         TextField(
           enabled: false,
           decoration: const InputDecoration(labelText: "E-mail", isDense: true),
-          controller:
-              TextEditingController(text: student.guardian?.email),
+          controller: TextEditingController(text: student.guardian?.email),
         )
       ],
     );
@@ -226,10 +203,8 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable:
-          state.studentValueNotifier,
+      valueListenable: state.studentValueNotifier,
       builder: (context, student, _) => Scaffold(
-
         appBar: AppBar(
           backgroundColor: Colors.green,
           foregroundColor: Colors.white,
@@ -261,7 +236,9 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
                   children: [
                     buildStudentInfo(student),
                     const SizedBox(height: 24),
-                    student.guardian != null ? buildGuardianInfo(student) : const Text("No guardian!"),
+                    student.guardian != null
+                        ? buildGuardianInfo(student)
+                        : const Text("No guardian!"),
                   ],
                 )),
           ],
