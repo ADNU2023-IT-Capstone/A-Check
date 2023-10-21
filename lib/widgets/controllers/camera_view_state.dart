@@ -11,12 +11,13 @@ class CameraViewState extends State<CameraViewWidget>
   var savedCamDesc = cameras.first;
 
   void takePicture() async {
-    final photo = await camCon!.takePicture();
-
     if (widget.onCapture == null) {
       Fluttertoast.showToast(msg: "Feature disabled.");
+      return;
     }
-
+    
+    final photo = await camCon!.takePicture();
+    
     widget.onCapture!(photo);
   }
 

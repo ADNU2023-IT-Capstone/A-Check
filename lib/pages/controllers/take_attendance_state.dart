@@ -11,6 +11,7 @@ import 'package:a_check/utils/dialogs.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image/image.dart' as imglib;
 import 'package:ml_algo/kd_tree.dart';
@@ -45,6 +46,7 @@ class TakeAttendanceState extends State<TakeAttendancePage> {
     processCapturedImage(xfile);
   }
 
+  // TODO: Orientation detection
   void processCapturedImage(XFile photoXFile) async {
     final photoFile = File(photoXFile.path);
     final inputImage = InputImage.fromFile(photoFile);
@@ -141,6 +143,34 @@ class TakeAttendanceState extends State<TakeAttendancePage> {
     }
   }
 
+  Future<bool> onWillPop() async {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown
+    ]);
+
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) => TakeAttendanceView(this);
+
+    @override
+  void initState() {
+    super.initState();
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown
+    ]);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 }

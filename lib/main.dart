@@ -1,9 +1,9 @@
 import 'package:a_check/globals.dart';
 import 'package:a_check/splash.dart';
 import 'package:a_check/utils/localdb.dart';
-import 'package:calendar_view/calendar_view.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -24,7 +24,10 @@ void main() async {
   prefs = await SharedPreferences.getInstance();
   await setupDefaultPrefs();
 
-  runApp(const MainApp());
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(const MainApp());
+  });
 }
 
 Future<void> setupDefaultPrefs() async {
@@ -39,14 +42,11 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // ignore: prefer_const_constructors
-    return CalendarControllerProvider(
-      controller: EventController(),
-      child: MaterialApp(
-        // theme: ThemeData(useMaterial3: true),
-        scaffoldMessengerKey: snackbarKey,
-        home: const Scaffold(
-          body: SplashWidget(),
-        ),
+    return MaterialApp(
+      // theme: ThemeData(useMaterial3: true),
+      scaffoldMessengerKey: snackbarKey,
+      home: const Scaffold(
+        body: SplashWidget(),
       ),
     );
   }

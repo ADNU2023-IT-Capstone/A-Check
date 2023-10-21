@@ -71,19 +71,22 @@ class StudentAdapter extends TypeAdapter<Student> {
       phone: fields[4] as dynamic,
       guardian: fields[6] as Person?,
       faceArray: (fields[7] as List?)?.cast<dynamic>(),
+      facePhotoBytes: fields[8] as Uint8List?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Student obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(5)
       ..write(obj.id)
       ..writeByte(6)
       ..write(obj.guardian)
       ..writeByte(7)
       ..write(obj.faceArray)
+      ..writeByte(8)
+      ..write(obj.facePhotoBytes)
       ..writeByte(0)
       ..write(obj.firstName)
       ..writeByte(1)

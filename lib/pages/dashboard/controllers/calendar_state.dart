@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:a_check/models/class.dart';
 import 'package:a_check/pages/dashboard/calendar_page.dart';
 import 'package:a_check/utils/localdb.dart';
@@ -7,6 +5,8 @@ import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 
 class CalendarState extends State<CalendarPage> {
+  late final EventController calendarController;
+
   /// The [weekday] may be 0 for Sunday, 1 for Monday, etc. up to 7 for Sunday.
   DateTime mostRecentWeekday(DateTime date, int weekday) =>
       DateTime(date.year, date.month, date.day - (date.weekday - weekday) % 7);
@@ -25,7 +25,7 @@ class CalendarState extends State<CalendarPage> {
             date: date,
             startTime: startTime,
             endTime: endTime);
-        CalendarControllerProvider.of(context).controller.add(event);
+        calendarController.add(event);
       }
     }
   }
@@ -33,6 +33,8 @@ class CalendarState extends State<CalendarPage> {
   @override
   void initState() {
     super.initState();
+
+    calendarController = EventController();
   }
 
   @override

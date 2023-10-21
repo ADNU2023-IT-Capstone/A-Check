@@ -103,12 +103,15 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
             //     ),
             //   ],
             // ),
-            bottom:
-            const TabBar(
+            bottom: const TabBar(
               indicatorColor: Colors.black,
               tabs: [
-                Tab(child: Text( "Student List", style: TextStyle(color: Colors.black)) ),
-                Tab(child: Text( "Attendance Records", style: TextStyle(color: Colors.black)))
+                Tab(
+                    child: Text("Student List",
+                        style: TextStyle(color: Colors.black))),
+                Tab(
+                    child: Text("Attendance Records",
+                        style: TextStyle(color: Colors.black)))
               ],
             ),
             actions: [
@@ -128,79 +131,75 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
             ],
           ),
           body: Column(
-            mainAxisAlignment:MainAxisAlignment.start,
-            crossAxisAlignment:CrossAxisAlignment.center,
-            mainAxisSize:MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
             children: [
               Container(
-                margin:const EdgeInsets.fromLTRB(0, 30, 0,20),
-                padding:const EdgeInsets.all(0),
-                width:360,
-                height:100,
+                margin: const EdgeInsets.fromLTRB(0, 30, 0, 20),
+                padding: const EdgeInsets.all(0),
+                width: 360,
                 decoration: const BoxDecoration(
-                  color:Color(0x1fffffff),
-                  shape:BoxShape.rectangle,
-                  borderRadius:BorderRadius.zero,
+                  color: Color(0x1fffffff),
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.zero,
                 ),
-                child:
-
-                Column(
-                  mainAxisAlignment:MainAxisAlignment.start,
-                  crossAxisAlignment:CrossAxisAlignment.start,
-                  mainAxisSize:MainAxisSize.max,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
                   children: [
                     Align(
-                      alignment:Alignment.center,
-                      child:Text(
-                        classValue.code,
-                        textAlign: TextAlign.left,
-                        overflow:TextOverflow.clip,
-                        style:const TextStyle(
-                          fontWeight:FontWeight.w300,
-                          fontStyle:FontStyle.normal,
-                          fontSize:24,
-                          color:Color(0xff000000),
+                      alignment: Alignment.center,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 0, bottom: 20),
+                        child: Text(
+                          classValue.code,
+                          textAlign: TextAlign.left,
+                          overflow: TextOverflow.clip,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w300,
+                            fontStyle: FontStyle.normal,
+                            fontSize: 24,
+                            color: Color(0xff000000),
+                          ),
                         ),
                       ),
                     ),
-
-                    const SizedBox(
-                      height:20,
-                      width:16,
-                    ),
                     Padding(
-                      padding:const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                      child:Text(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                      child: Text(
                         classValue.name,
                         textAlign: TextAlign.start,
-                        overflow:TextOverflow.clip,
-                        style:const TextStyle(
-                          fontWeight:FontWeight.w900,
-                          fontSize:26,
-                          color:Colors.black87,
+                        overflow: TextOverflow.clip,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 26,
+                          color: Colors.black87,
                         ),
                       ),
                     ),
                     Padding(
-                      padding:const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      child:Text(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: Text(
                         "${classValue.section}, ${classValue.getSchedule(context)}",
                         textAlign: TextAlign.start,
-                        overflow:TextOverflow.clip,
-                        style:const TextStyle(
-                          fontWeight:FontWeight.w400,
-                          fontStyle:FontStyle.normal,
-                          fontSize:14,
-                          color:Colors.green,
+                        overflow: TextOverflow.clip,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontStyle: FontStyle.normal,
+                          fontSize: 14,
+                          color: Colors.green,
                         ),
                       ),
                     ),
-                  ],),
+                  ],
+                ),
               ),
               const Row(
-                mainAxisAlignment:MainAxisAlignment.start,
-                crossAxisAlignment:CrossAxisAlignment.center,
-                mainAxisSize:MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
 
                 // children:[
                 //   Expanded( // STUDENTS TAB
@@ -245,11 +244,12 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
                 //     ),
                 //   ),
                 // ],
-                ),
-                Expanded(
-                    child: buildTabBarView(classValue),
-                ),
-            ],),
+              ),
+              Expanded(
+                child: buildTabBarView(classValue),
+              ),
+            ],
+          ),
           // SafeArea(
           //   child: Column(
           //       mainAxisSize: MainAxisSize.min,

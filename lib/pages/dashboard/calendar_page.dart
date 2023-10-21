@@ -10,23 +10,19 @@ class CalendarPage extends StatefulWidget {
   State<CalendarPage> createState() => CalendarState();
 }
 
-class CustomEventArranger extends EventArranger {
-  @override
-  List<OrganizedCalendarEventData<Object?>> arrange({required List<CalendarEventData<Object?>> events, required double height, required double width, required double heightPerMinute}) {
-    // TODO: implement arrange
-    throw UnimplementedError();
-  }
-}
-
 class CalendarView extends WidgetView<CalendarPage, CalendarState> {
   const CalendarView(state, {Key? key}) : super(state, key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: SafeArea(child: WeekView(
-        eventArranger: SideEventArranger(),
+        controller: state.calendarController,
+        eventArranger: const SideEventArranger(),
       )),
     );
+    // return Scaffold(
+    //   body: Placeholder(),
+    // );
   }
 }

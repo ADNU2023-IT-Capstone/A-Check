@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 part 'student.g.dart';
@@ -47,6 +46,9 @@ class Student extends Person with HiveObjectMixin {
   @HiveField(7)
   List? faceArray;
 
+  @HiveField(8)
+  Uint8List? facePhotoBytes;
+
   Student(
       {required this.id,
       required firstName,
@@ -55,7 +57,8 @@ class Student extends Person with HiveObjectMixin {
       email,
       phone,
       this.guardian,
-      this.faceArray})
+      this.faceArray,
+      this.facePhotoBytes})
       : super(
             firstName: firstName,
             middleName: middleName,

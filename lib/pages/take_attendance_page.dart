@@ -20,21 +20,24 @@ class TakeAttendanceView
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Take Attendance"),
+    return WillPopScope(
+      onWillPop: state.onWillPop,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Take Attendance"),
+        ),
+        body: SafeArea(
+            child: state.isUsingIPCamera
+                ? IPCameraWidget(onScreenshot: state.processScreenshot)
+                : CameraViewWidget(
+                    onCapture: state.processCapturedImage,
+                  )),
+        floatingActionButton: FloatingActionButton(
+            heroTag: null,
+            onPressed: state.switchCamera,
+            child: const Icon(Icons.switch_video)),
+        floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
       ),
-      body: SafeArea(
-          child: state.isUsingIPCamera
-              ? IPCameraWidget(onScreenshot: state.processScreenshot)
-              : CameraViewWidget(
-                  onCapture: state.processCapturedImage,
-                )),
-      floatingActionButton: FloatingActionButton(
-          heroTag: null,
-          onPressed: state.switchCamera,
-          child: const Icon(Icons.switch_video)),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
     );
   }
 }

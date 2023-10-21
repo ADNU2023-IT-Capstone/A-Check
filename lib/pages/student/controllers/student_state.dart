@@ -47,9 +47,9 @@ class StudentState extends State<StudentPage> {
         MaterialPageRoute(
             builder: (context) => RegisterFacePage(student: student)));
 
+    if (result == null) return;
     if (result == true) {
       showSuccessSnackBar();
-      setState(() {});
     } else if (result['result'] == false) {
       showFailedSnackBar(result['error']);
     }
