@@ -56,20 +56,26 @@ class CameraView extends WidgetView<CameraViewWidget, CameraViewState> {
         return null;
       }
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 15),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             FloatingActionButton(
+              elevation: 0,
+              tooltip: "Capture Image",
               onPressed: state.takePicture,
               heroTag: null,
               child: const Icon(Icons.camera),
             ),
             const SizedBox(
-              width: 16,
+              width: 30,
             ),
             FloatingActionButton(
+              elevation: 0,
+              tooltip: "Switch Camera",
               onPressed: state.switchCamera,
+              backgroundColor: Colors.white,
+              foregroundColor: Colors.green,
               heroTag: null,
               child: const Icon(Icons.switch_camera),
             ),
