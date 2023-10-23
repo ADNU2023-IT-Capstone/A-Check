@@ -19,9 +19,101 @@ class ClassPage extends StatefulWidget {
 class ClassView extends WidgetView<ClassPage, ClassState> {
   const ClassView(state, {Key? key}) : super(state, key: key);
 
+  Widget buildTabBar() {
+    return const TabBar(
+      indicatorColor: Colors.black,
+      tabs: [
+        Tab(child: Text("Student List", style: TextStyle(color: Colors.black))),
+        Tab(
+            child: Text("Attendance Records",
+                style: TextStyle(color: Colors.black)))
+      ],
+    );
+  }
+
   Widget buildTabBarView(Class mClass) {
     return TabBarView(
       children: [buildStudentsListView(mClass), buildReportsListView(mClass)],
+    );
+  }
+
+  Widget buildHeader(Class mClass) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(0, 30, 0, 20),
+      padding: const EdgeInsets.all(0),
+      width: 360,
+      decoration: const BoxDecoration(
+        color: Color(0x1fffffff),
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.zero,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Align(
+            alignment: Alignment.center,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 0, bottom: 20),
+              child: Text(
+                mClass.code,
+                textAlign: TextAlign.left,
+                overflow: TextOverflow.clip,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w300,
+                  fontStyle: FontStyle.normal,
+                  fontSize: 24,
+                  color: Color(0xff000000),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+            child: Text(
+              mClass.name,
+              textAlign: TextAlign.start,
+              overflow: TextOverflow.clip,
+              style: const TextStyle(
+                fontWeight: FontWeight.w900,
+                fontSize: 26,
+                color: Colors.black87,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+            child: Text(
+              "${mClass.section}, ${mClass.getSchedule(state.context)}",
+              textAlign: TextAlign.start,
+              overflow: TextOverflow.clip,
+              style: const TextStyle(
+                fontWeight: FontWeight.w400,
+                fontStyle: FontStyle.normal,
+                fontSize: 14,
+                color: Colors.green,
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Container(
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: Colors.green.shade900),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "${mClass.studentIds.length.toString()} student${mClass.studentIds.length > 1 ? "s" : ""}",
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -103,17 +195,6 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
             //     ),
             //   ],
             // ),
-            bottom: const TabBar(
-              indicatorColor: Colors.black,
-              tabs: [
-                Tab(
-                    child: Text("Student List",
-                        style: TextStyle(color: Colors.black))),
-                Tab(
-                    child: Text("Attendance Records",
-                        style: TextStyle(color: Colors.black)))
-              ],
-            ),
             actions: [
               PopupMenuButton(
                 tooltip: "Edit or Delete Class",
@@ -135,116 +216,8 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: [
-              Container(
-                margin: const EdgeInsets.fromLTRB(0, 30, 0, 20),
-                padding: const EdgeInsets.all(0),
-                width: 360,
-                decoration: const BoxDecoration(
-                  color: Color(0x1fffffff),
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.zero,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 0, bottom: 20),
-                        child: Text(
-                          classValue.code,
-                          textAlign: TextAlign.left,
-                          overflow: TextOverflow.clip,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w300,
-                            fontStyle: FontStyle.normal,
-                            fontSize: 24,
-                            color: Color(0xff000000),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                      child: Text(
-                        classValue.name,
-                        textAlign: TextAlign.start,
-                        overflow: TextOverflow.clip,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w900,
-                          fontSize: 26,
-                          color: Colors.black87,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      child: Text(
-                        "${classValue.section}, ${classValue.getSchedule(context)}",
-                        textAlign: TextAlign.start,
-                        overflow: TextOverflow.clip,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontStyle: FontStyle.normal,
-                          fontSize: 14,
-                          color: Colors.green,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-
-                // children:[
-                //   Expanded( // STUDENTS TAB
-                //     flex: 1,
-                //     child: MaterialButton(
-                //       onPressed:(){},
-                //       color:const Color(0xffffffff),
-                //       elevation:0,
-                //       shape:const RoundedRectangleBorder(
-                //         borderRadius:BorderRadius.zero,
-                //       ),
-                //       padding:const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                //       textColor:const Color(0xff000000),
-                //       height:40,
-                //       minWidth:140,
-                //       child:
-                //         const Text("Students", style: TextStyle(
-                //           fontSize:14,
-                //           fontWeight:FontWeight.w400,
-                //           fontStyle:FontStyle.normal,
-                //       ),),
-                //     ),
-                //   ),
-                //   Expanded( // RECORDS TAB
-                //     flex: 1,
-                //     child: MaterialButton(
-                //       onPressed:(){},
-                //       color:const Color(0xfff2f2f2),
-                //       elevation:0,
-                //       shape:const RoundedRectangleBorder(
-                //         borderRadius:BorderRadius.zero,
-                //       ),
-                //       padding:const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                //       textColor:const Color(0xff000000),
-                //       height:40,
-                //       minWidth:140,
-                //       child:
-                //         const Text("Records", style: TextStyle( fontSize:14,
-                //         fontWeight:FontWeight.w400,
-                //         fontStyle:FontStyle.normal,
-                //       ),),
-                //     ),
-                //   ),
-                // ],
-              ),
+              buildHeader(classValue),
+              buildTabBar(),
               Expanded(
                 child: buildTabBarView(classValue),
               ),
