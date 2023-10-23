@@ -56,10 +56,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: buildPageView(),
       bottomNavigationBar: BottomNavigationBar(
+          iconSize: 30,
+          showSelectedLabels: true,
+          showUnselectedLabels: false,
           type: BottomNavigationBarType.fixed,
           items: bottomNavbarItems,
           currentIndex: bottomNavbarSelectedIndex,
-          selectedItemColor: Colors.lightGreen[800],
+          selectedItemColor: const Color(0xff557A46),
           onTap: (index) {
             bottomNavbarTapped(index);
           }),
