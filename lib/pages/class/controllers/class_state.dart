@@ -27,8 +27,12 @@ class ClassState extends State<ClassPage> {
   }
 
   void addNewStudent() {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const StudentFormPage()));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => StudentFormPage(
+                  currentClass: mClass,
+                )));
   }
 
   void addExistingStudent() async {
@@ -51,16 +55,17 @@ class ClassState extends State<ClassPage> {
   }
 
   void deleteClass() async {
-    if (!await Dialogs.showConfirmDialog(
+    final result = await Dialogs.showConfirmDialog(
         context,
         const Text("Delete Class"),
         const Text(
-            "This will delete the class and its related data. Continue?"))) {
+            "This will delete the class and its related data. Continue?"));
+    if (result == null || !result) {
       return;
     }
 
     if (context.mounted) {
-      classValueNotifier.dispose(); // stop listening
+      classValueNotifier.removeListener(onClassValueChanged);
       mClass.getAttendanceRecords().forEach((_, value) async {
         for (var record in value) {
           await record.delete();

@@ -1,3 +1,4 @@
+import 'package:a_check/models/class.dart';
 import 'package:a_check/models/student.dart';
 import 'package:a_check/pages/forms/controllers/student_form_state.dart';
 import 'package:a_check/utils/abstracts.dart';
@@ -7,9 +8,10 @@ import 'package:flutter/services.dart';
 import '../../utils/validators.dart';
 
 class StudentFormPage extends StatefulWidget {
-  const StudentFormPage({Key? key, this.student}) : super(key: key);
+  const StudentFormPage({Key? key, this.student, this.currentClass}) : super(key: key);
 
   final Student? student;
+  final Class? currentClass;
 
   @override
   State<StudentFormPage> createState() => StudentFormState();

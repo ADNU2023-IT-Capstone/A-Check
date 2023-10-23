@@ -200,6 +200,18 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
     );
   }
 
+  Widget buildClassInfo(Student student) {
+    final paleMap = student.getPALEValues(widget.studentClass!.key);
+    return Column(
+      children: [
+        Text("Present: ${paleMap['present']}"),
+        Text("Absent: ${paleMap['absent']}"),
+        Text("Late: ${paleMap['late']}"),
+        Text("Excused: ${paleMap['excused']}"),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
@@ -219,6 +231,10 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
                 PopupMenuItem(
                   onTap: state.editStudent,
                   child: const Text("Edit student"),
+                ),
+                PopupMenuItem(
+                  onTap: state.deleteStudent,
+                  child: const Text("Delete student"),
                 )
               ],
             )
@@ -239,6 +255,7 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
                     student.guardian != null
                         ? buildGuardianInfo(student)
                         : const Text("No guardian!"),
+                    if (widget.studentClass != null) buildClassInfo(student),
                   ],
                 )),
           ],

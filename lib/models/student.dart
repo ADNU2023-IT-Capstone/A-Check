@@ -1,3 +1,6 @@
+import 'package:a_check/models/attendance_record.dart';
+import 'package:a_check/models/class.dart';
+import 'package:a_check/utils/localdb.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
@@ -75,6 +78,41 @@ class Student extends Person with HiveObjectMixin {
     }
 
     return false;
+  }
+
+  Map<String, int> getPALEValues(String classKey) {
+    final attendances = HiveBoxes.attendancesBox()
+        .values
+        .cast<AttendanceRecord>()
+        .where((element) =>
+            element.classKey == classKey && element.studentId == id);
+
+    int present = 0, absent = 0, late = 0, excused = 0;
+    for (AttendanceRecord record in attendances) {
+      switch (record.status) {
+        case AttendanceStatus.present:
+          present++;
+          break;
+        case AttendanceStatus.absent:
+          absent++;
+          break;
+        case AttendanceStatus.late:
+          late++;
+          break;
+        case AttendanceStatus.excused:
+          excused++;
+          break;
+        default:
+          break;
+      }
+    }
+
+    return {
+      'present': present,
+      'absent': absent,
+      'late': late,
+      'excused': excused
+    };
   }
 }
 

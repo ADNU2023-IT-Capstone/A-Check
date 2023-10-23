@@ -61,8 +61,9 @@ class RegisterFaceState extends State<RegisterFacePage> {
     final faceImage = (await _mlService.getFaceImages([faces.first], photoFile)).first;
     final encodedImage = imglib.encodeJpg(faceImage);
     if (context.mounted) {
-      if (await Dialogs.showConfirmDialog(
-          context, const Text("Register face"), Image.memory(encodedImage))) {
+      final result = await Dialogs.showConfirmDialog(
+          context, const Text("Register face"), Image.memory(encodedImage));
+      if (result != null && result) {
         widget.student.faceArray = await _mlService.predict(faceImage);
         widget.student.facePhotoBytes = encodedImage;
         widget.student.save().catchError((e) {

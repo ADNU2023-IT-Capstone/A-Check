@@ -47,6 +47,7 @@ class TakeAttendanceState extends State<TakeAttendancePage> {
   }
 
   // TODO: Orientation detection
+  // TODO: also make this into separate methods
   void processCapturedImage(XFile photoXFile) async {
     final photoFile = File(photoXFile.path);
     final inputImage = InputImage.fromFile(photoFile);

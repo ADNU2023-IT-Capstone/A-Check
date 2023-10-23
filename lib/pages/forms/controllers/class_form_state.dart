@@ -29,9 +29,9 @@ class ClassFormState extends State<ClassFormPage> {
   }
 
   void deleteSchedule(int index) async {
-    if (!await Dialogs.showConfirmDialog(
-        context, const Text("Delete Schedule"), const Text("Are you sure?")))
-      return;
+    final result = await Dialogs.showConfirmDialog(
+        context, const Text("Delete Schedule"), const Text("Are you sure?"));
+    if (result == null || !result) return;
 
     setState(() {
       schedules.removeAt(index);

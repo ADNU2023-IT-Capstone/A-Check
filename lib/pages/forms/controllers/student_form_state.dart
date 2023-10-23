@@ -38,6 +38,7 @@ class StudentFormState extends State<StudentFormPage> {
         faceArray: widget.student != null ? widget.student!.faceArray : null);
 
     HiveBoxes.studentsBox().put(student.id, student).then((value) {
+      if (widget.currentClass != null) widget.currentClass!.addStudents([student.id]);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
               "${widget.student == null ? "Added" : "Edited"} $student! (${student.id})")));

@@ -30,13 +30,37 @@ class StudentState extends State<StudentPage> {
         ));
   }
 
+  void deleteStudent() async {
+    final result = await Dialogs.showConfirmDialog(
+        context,
+        const Text("Delete Student"),
+        const Text("This will delete the student and its data. Continue?"));
+
+    if (result == null || !result) {
+      return;
+    }
+
+    if (widget.studentClass != null) {
+      widget.studentClass!.studentIds.remove(student.id);
+      widget.studentClass!.save();
+    }
+
+    if (context.mounted) {
+      studentValueNotifier.removeListener(onStudentValueChanged);
+      student.delete().then((_) {
+        Navigator.pop(context);
+      });
+    }
+  }
+
   void registerFace() async {
     if (student.hasRegisteredFace()) {
-      if (!await Dialogs.showConfirmDialog(
+      final result = await Dialogs.showConfirmDialog(
           context,
           const Text("Warning"),
           Text(
-              "${student.firstName} already has a face registered. Continue?"))) {
+              "${student.firstName} already has a face registered. Continue?"));
+      if (result == null || !result) {
         return;
       }
     }
@@ -56,11 +80,12 @@ class StudentState extends State<StudentPage> {
   }
 
   void removeFromClass() async {
-    if (!await Dialogs.showConfirmDialog(
+    final result = await Dialogs.showConfirmDialog(
         context,
         const Text("Warning"),
         Text(
-            "${student.firstName} will be removed to class ${widget.studentClass!.code}. Continue?"))) {
+            "${student.firstName} will be removed to class ${widget.studentClass!.code}. Continue?"));
+    if (result == null || !result) {
       return;
     }
 

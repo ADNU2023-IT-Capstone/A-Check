@@ -109,33 +109,34 @@ class SplashWidgetState extends State<SplashWidget> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                      Expanded(
-                        flex: 1,
-                        child: MaterialButton(
-                          onPressed: () async {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const HomeScreen()));
-                          },
-                          color: const Color.fromRGBO(69, 93, 14, 90),
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          padding: const EdgeInsets.all(16),
-                          textColor: const Color(0xffffffff),
-                          height: 40,
-                          minWidth: 140,
-                          child: const Text(
-                            "Get Started",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                              fontStyle: FontStyle.normal,
+                        Expanded(
+                          flex: 1,
+                          child: MaterialButton(
+                            onPressed: () async {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const HomeScreen()));
+                            },
+                            color: const Color.fromRGBO(69, 93, 14, 90),
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            padding: const EdgeInsets.all(16),
+                            textColor: const Color(0xffffffff),
+                            height: 40,
+                            minWidth: 140,
+                            child: const Text(
+                              "Get Started",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                fontStyle: FontStyle.normal,
+                              ),
                             ),
                           ),
-                        ),
                         ),
                         const SizedBox(
                           width: 16,
@@ -144,10 +145,11 @@ class SplashWidgetState extends State<SplashWidget> {
                           flex: 1,
                           child: MaterialButton(
                             onPressed: () async {
-                              if (await Dialogs.showConfirmDialog(
+                              final result = await Dialogs.showConfirmDialog(
                                   context,
                                   const Text("ya goofed up huh"),
-                                  const Text("confirm to delete all data"))) {
+                                  const Text("confirm to delete all data"));
+                              if (result != null && result) {
                                 HiveBoxes.clearAllData();
                                 prefs.clear();
                                 setupDefaultPrefs();
@@ -160,14 +162,15 @@ class SplashWidgetState extends State<SplashWidget> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                        const HomeScreen()));
+                                            const HomeScreen()));
                               }
                             },
                             color: const Color(0xffffffff),
                             elevation: 0,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.0),
-                              side: const BorderSide(color: Color(0xff9e9e9e), width: 1),
+                              side: const BorderSide(
+                                  color: Color(0xff9e9e9e), width: 1),
                             ),
                             padding: const EdgeInsets.all(16),
                             textColor: const Color(0xff000000),

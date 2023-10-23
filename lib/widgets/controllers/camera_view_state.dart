@@ -15,9 +15,10 @@ class CameraViewState extends State<CameraViewWidget>
       Fluttertoast.showToast(msg: "Feature disabled.");
       return;
     }
-    
+
     final photo = await camCon!.takePicture();
-    
+    print(camCon!.description.sensorOrientation);
+
     widget.onCapture!(photo);
   }
 

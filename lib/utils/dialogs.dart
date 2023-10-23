@@ -22,7 +22,7 @@ class Dialogs {
             ));
   }
 
-  static Future<bool> showConfirmDialog(
+  static Future<bool?> showConfirmDialog(
       BuildContext context, Widget title, Widget content) async {
     return await showDialog(
         context: context,
