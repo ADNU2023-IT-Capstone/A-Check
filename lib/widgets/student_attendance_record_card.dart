@@ -21,7 +21,8 @@ class SARCView extends WidgetView<StudentAttendanceRecordCard, SARCState> {
       children: [
         Text(title),
         Radio<AttendanceStatus>(
-            visualDensity: const VisualDensity(
+          fillColor: MaterialStateProperty.all(const Color(0xff004225)),
+                visualDensity: const VisualDensity(
                 horizontal: VisualDensity.minimumDensity,
                 vertical: VisualDensity.minimumDensity),
             materialTapTargetSize: MaterialTapTargetSize.padded,
@@ -35,6 +36,8 @@ class SARCView extends WidgetView<StudentAttendanceRecordCard, SARCState> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: const Color(0xfff3f6f4),
+      elevation: 1,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       child: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -66,12 +69,17 @@ class SARCView extends WidgetView<StudentAttendanceRecordCard, SARCState> {
             ),
             Row(
               mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                radioButton(title: "P", value: AttendanceStatus.present),
-                radioButton(title: "A", value: AttendanceStatus.absent),
-                radioButton(title: "L", value: AttendanceStatus.late),
-                radioButton(title: "E", value: AttendanceStatus.excused),
+                radioButton(title: "", value: AttendanceStatus.present),
+                const SizedBox(width: 10),
+                radioButton(title: "", value: AttendanceStatus.absent),
+                const SizedBox(width: 10),
+                radioButton(title: "", value: AttendanceStatus.late),
+                const SizedBox(width: 10),
+                radioButton(title: "", value: AttendanceStatus.excused),
+                const SizedBox(width: 5),
               ],
             )
           ],
