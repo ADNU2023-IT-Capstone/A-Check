@@ -21,13 +21,14 @@ class HomeView extends WidgetView<HomePage, HomeState> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: const Color(0xffFFF4F4),
         body: SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsetsDirectional.fromSTEB(20, 25, 20, 0),
                 child: Row(
                   children: [
                     const Padding(
@@ -39,10 +40,14 @@ class HomeView extends WidgetView<HomePage, HomeState> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text("A-Check", style: TextStyle(
+                          color: Color(0xff557A46),
                           fontSize: 24,
                           fontWeight: FontWeight.bold
                         ),),
-                        Text(packageInfo.version)
+                        Text(packageInfo.version, style: const TextStyle(
+                            color: Color(0xff8b9094),
+                            fontSize: 12,
+                        ),)
                       ],
                     )
                   ],
@@ -56,8 +61,8 @@ class HomeView extends WidgetView<HomePage, HomeState> {
 
                     return GridView.count(
                       crossAxisCount: 2,
-                      padding: const EdgeInsets.all(8),
-                      crossAxisSpacing: 4,
+                      padding: const EdgeInsets.all(20),
+                      crossAxisSpacing: 10,
                       mainAxisSpacing: 8,
                       children:
                           castedBox.map((e) => ClassCard(mClass: e)).toList(),
@@ -69,10 +74,12 @@ class HomeView extends WidgetView<HomePage, HomeState> {
           ),
         ),
         floatingActionButton: SpeedDial(
+          buttonSize: const Size(60.0, 60.0),
+          childrenButtonSize: const Size(60.0, 60.0),
           animatedIcon: AnimatedIcons.menu_close,
           animatedIconTheme: const IconThemeData(size: 27),
-          backgroundColor: Colors.green[900],
-          foregroundColor: Colors.lightGreen,
+          backgroundColor: const Color(0xff557A46),
+          foregroundColor: const Color(0xffF2EE9D),
           spacing: 10.00,
           childMargin: const EdgeInsets.all(10),
           curve: Curves.bounceIn,
@@ -80,7 +87,7 @@ class HomeView extends WidgetView<HomePage, HomeState> {
             SpeedDialChild(
                 child: const Icon(Icons.add_comment),
                 label: 'Add Class',
-                foregroundColor: Colors.green[900],
+                foregroundColor: const Color(0xff557A46),
                 onTap: state.addClass),
           ],
         ));

@@ -25,9 +25,9 @@ class StudentCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Card(
-        elevation: 0,
+        elevation: 0.5,
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(15.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -37,11 +37,11 @@ class StudentCard extends StatelessWidget {
                   Text(
                     student.toString(),
                     style:
-                      const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   ),
                   Text(student.id,
                     style:
-                      const TextStyle(fontSize: 12, fontWeight: FontWeight.w300),)
+                      const TextStyle(fontSize: 16, fontWeight: FontWeight.w300),)
                 ],
               ),
             ],

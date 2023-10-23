@@ -20,6 +20,7 @@ class StudentsView extends WidgetView<StudentsPage, StudentsState> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xffFFF4F4),
       body: SafeArea(
         child: ValueListenableBuilder(
             valueListenable: HiveBoxes.studentsBox().listenable(),
@@ -37,7 +38,7 @@ class StudentsView extends WidgetView<StudentsPage, StudentsState> {
                   padding: EdgeInsets.all(8.0),
                   child: Text(
                     "Students",
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Color(0xff557A46),fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                 ),
                 for (var student in studentsList) StudentCard(student: student),

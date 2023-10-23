@@ -15,6 +15,7 @@ class SettingsView extends WidgetView<SettingsPage, SettingsState> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xffFFF4F4),
       body: SafeArea(
           child: ListView(
             padding: const EdgeInsets.all(20),
@@ -23,7 +24,7 @@ class SettingsView extends WidgetView<SettingsPage, SettingsState> {
                 padding: EdgeInsets.all(8.0),
                 child: Text(
                   "Settings",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: TextStyle(color: Color(0xff606C5D), fontSize: 24, fontWeight: FontWeight.bold),
                 ),
               ),
               Card(

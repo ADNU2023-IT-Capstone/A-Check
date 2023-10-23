@@ -25,6 +25,7 @@ class SplashWidgetState extends State<SplashWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xffFFF4F4),
       body: Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -38,7 +39,7 @@ class SplashWidgetState extends State<SplashWidget> {
                 height: 100,
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Color(0x00FFFFFF), Color(0xFFFFFFFF)],
+                    colors: [Color(0xffAEC3AE),Color(0xffFFF4F4)],
                     stops: [0, 1],
                     begin: AlignmentDirectional(0, -1),
                     end: AlignmentDirectional(0, 1),
@@ -49,8 +50,6 @@ class SplashWidgetState extends State<SplashWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      width: 120,
-                      height: 120,
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                       ),
@@ -66,31 +65,32 @@ class SplashWidgetState extends State<SplashWidget> {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 35.00,
-                          fontFamily: 'Quicksand',
+                          fontFamily: 'Montserrat',
                         ),
                       ),
                     ),
+                    const SizedBox(height: 15),
                     const Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(44, 8, 44, 0),
                       child: Text(
                         'Embrace the future of efficient attendance management with face recognition technology.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontFamily: 'Quicksand',
+                          fontFamily: 'Montserrat',
                         ),
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(44, 8, 44, 0),
-                      child: Text(
-                        'App still in development. Bugs may occur.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          // fontFamily: 'Quicksand',
-                        ),
-                      ),
-                    ),
+                    // const Padding(
+                    //   padding: EdgeInsetsDirectional.fromSTEB(44, 8, 44, 0),
+                    //   child: Text(
+                    //     'App still in development. Bugs may occur.',
+                    //     textAlign: TextAlign.center,
+                    //     style: TextStyle(
+                    //       fontStyle: FontStyle.italic,
+                    //       // fontFamily: 'Quicksand',
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -119,7 +119,7 @@ class SplashWidgetState extends State<SplashWidget> {
                                       builder: (context) =>
                                           const HomeScreen()));
                             },
-                            color: const Color.fromRGBO(69, 93, 14, 90),
+                            color: const Color(0xff557A46),
                             elevation: 0,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.0),

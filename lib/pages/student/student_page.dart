@@ -23,46 +23,48 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
       margin: const EdgeInsets.all(0),
       padding: const EdgeInsets.all(0),
       decoration: const BoxDecoration(
-        color: Colors.green,
+        color: Color(0xffD7E5CA),
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(35.0),
             bottomRight: Radius.circular(35.0)),
-      ),
+        ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
         children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Container(
+                height: 100,
+                width: 100,
+                clipBehavior: Clip.antiAlias,
+                decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: <Color>[Color(0xffD7E5CA),Color(0xffF9F3CC)]),
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.all(Radius.circular(35.0)),
+                border: Border.fromBorderSide(BorderSide()),
+                ),
+                child: state.student.facePhotoBytes != null
+                    ? Image.memory(state.student.facePhotoBytes!)
+                    : const Icon(Icons.person_2),
+              ),
+            ],
+          ),
           Padding(
-            padding: const EdgeInsets.all(15),
+            padding: const EdgeInsetsDirectional.fromSTEB(30, 20, 20, 50),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Opacity(
-                      opacity: 0.8,
-                      child: Container(
-                        height: 112,
-                        width: 112,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: const BoxDecoration(
-                          border: Border.fromBorderSide(BorderSide()),
-                          shape: BoxShape.circle,
-                        ),
-                        child: state.student.facePhotoBytes != null
-                            ? Image.memory(state.student.facePhotoBytes!)
-                            : const Icon(Icons.person_2),
-                      ),
-                    ),
-                  ],
-                ),
                 Expanded(
                   flex: 1,
                   child: Column(
@@ -80,8 +82,8 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
                           style: const TextStyle(
                             fontWeight: FontWeight.w700,
                             fontStyle: FontStyle.normal,
-                            fontSize: 16,
-                            color: Color(0xfffcfcfc),
+                            fontSize: 18,
+                            color: Color(0xff8EACCD),
                           ),
                         ),
                       ),
@@ -93,7 +95,7 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
                           fontWeight: FontWeight.w300,
                           fontStyle: FontStyle.normal,
                           fontSize: 14,
-                          color: Color(0xffe9e9e9),
+                          color: Color(0xff8EACCD),
                         ),
                       ),
                     ],
@@ -217,8 +219,9 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
     return ValueListenableBuilder(
       valueListenable: state.studentValueNotifier,
       builder: (context, student, _) => Scaffold(
+        backgroundColor: const Color(0xffFFF4F4),
         appBar: AppBar(
-          backgroundColor: Colors.green,
+          backgroundColor: const Color(0xffD7E5CA),
           foregroundColor: Colors.white,
           elevation: 0,
           actions: [

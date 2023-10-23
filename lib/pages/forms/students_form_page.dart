@@ -31,7 +31,7 @@ class StudentsFormView extends WidgetView<StudentsFormPage, StudentsFormState> {
             gradient: LinearGradient(
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
-                colors: <Color>[Colors.black, Colors.green]),
+                colors: <Color>[Color(0xff557A46),Color(0xffffae77)]),
           ),
         ),
       ),
