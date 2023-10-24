@@ -71,6 +71,12 @@ class Student extends Person with HiveObjectMixin {
   @override
   String get key => id;
 
+  Future<void> registerFace(List faceArray, Uint8List facePhotoBytes) {
+    this.faceArray = faceArray;
+    this.facePhotoBytes = facePhotoBytes;
+    return save();
+  }
+
   bool hasRegisteredFace() {
     if (faceArray != null && faceArray!.isNotEmpty) {
       return true;

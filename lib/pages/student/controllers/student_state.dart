@@ -1,5 +1,5 @@
 import 'package:a_check/models/student.dart';
-import 'package:a_check/pages/register_face_page.dart';
+import 'package:a_check/pages/face_recognition_page.dart';
 import 'package:a_check/pages/forms/student_form_page.dart';
 import 'package:a_check/pages/student/student_page.dart';
 import 'package:a_check/utils/localdb.dart';
@@ -69,7 +69,7 @@ class StudentState extends State<StudentPage> {
     final result = await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => RegisterFacePage(student: student)));
+            builder: (context) => FaceRecognitionPage(student: student)));
 
     if (result == null) return;
     if (result == true) {

@@ -74,7 +74,7 @@ class MLService {
   }
 
   Future<List<imglib.Image>> getFaceImages(
-      List<Face> faces, File imageFile) async {
+      List<Face> faces, dynamic image) async {
     if (faces.isEmpty) return List.empty();
 
     List<Map<String, int>> faceMaps = [];
@@ -89,8 +89,14 @@ class MLService {
     }
 
     List<imglib.Image> faceImages = [];
-    final bytes = await imageFile.readAsBytes();
-    final decodedImage = imglib.decodeImage(bytes);
+    imglib.Image? decodedImage;
+    if (image is File) {
+      final bytes = await image.readAsBytes();
+      decodedImage = imglib.decodeImage(bytes);
+    } else {
+      decodedImage = image;
+    }
+    
     for (Map<String, int> faceMap in faceMaps) {
       final faceCropImage = imglib.copyCrop(decodedImage!,
           x: faceMap['x']!,

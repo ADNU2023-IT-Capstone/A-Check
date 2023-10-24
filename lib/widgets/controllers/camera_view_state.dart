@@ -2,7 +2,7 @@ import 'package:a_check/main.dart';
 import 'package:a_check/widgets/camera_view.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 
 class CameraViewState extends State<CameraViewWidget>
     with WidgetsBindingObserver {
@@ -11,15 +11,10 @@ class CameraViewState extends State<CameraViewWidget>
   var savedCamDesc = cameras.first;
 
   void takePicture() async {
-    if (widget.onCapture == null) {
-      Fluttertoast.showToast(msg: "Feature disabled.");
-      return;
-    }
-
     final photo = await camCon!.takePicture();
-    print(camCon!.description.sensorOrientation);
-
-    widget.onCapture!(photo);
+    final inputImage = InputImage.fromFilePath(photo.path);
+    
+    widget.onCapture!(inputImage);
   }
 
   void switchCamera() {

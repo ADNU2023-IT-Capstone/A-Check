@@ -1,9 +1,9 @@
 import 'package:a_check/models/class.dart';
+import 'package:a_check/pages/face_recognition_page.dart';
 import 'package:a_check/pages/forms/class_form_page.dart';
 import 'package:a_check/pages/class/class_page.dart';
 import 'package:a_check/pages/forms/student_form_page.dart';
 import 'package:a_check/pages/forms/students_form_page.dart';
-import 'package:a_check/pages/take_attendance_page.dart';
 import 'package:a_check/utils/localdb.dart';
 import 'package:a_check/utils/dialogs.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ class ClassState extends State<ClassPage> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => TakeAttendancePage(mClass: mClass)));
+            builder: (context) => FaceRecognitionPage(mClass: mClass)));
 
     onClassValueChanged();
   }

@@ -2,14 +2,15 @@ import 'package:a_check/utils/abstracts.dart';
 import 'package:a_check/widgets/controllers/camera_view_state.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 
 class CameraViewWidget extends StatefulWidget {
   const CameraViewWidget(
       {Key? key, this.onCapture, this.onImage, this.customPaint})
       : super(key: key);
 
-  final Function(XFile photoFile)? onCapture;
-  final Function(CameraImage cameraImage)? onImage;
+  final Function(InputImage inputImage)? onCapture;
+  final Function(InputImage inputImage)? onImage;
   final CustomPaint? customPaint;
 
   @override
