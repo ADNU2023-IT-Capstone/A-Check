@@ -1,3 +1,4 @@
+import 'package:a_check/globals.dart';
 import 'package:a_check/models/student.dart';
 import 'package:a_check/pages/face_recognition_page.dart';
 import 'package:a_check/pages/forms/student_form_page.dart';
@@ -76,6 +77,24 @@ class StudentState extends State<StudentPage> {
       showSuccessSnackBar();
     } else if (result['result'] == false) {
       showFailedSnackBar(result['error']);
+    }
+  }
+
+  void removeFace() async {
+    if (student.hasRegisteredFace()) {
+      final result = await Dialogs.showConfirmDialog(
+          context,
+          const Text("Warning"),
+          Text("${student.firstName}'s face data will be deleted. Continue?"));
+      if (result == null || !result) {
+        return;
+      } else {
+        student.deleteFace();
+        snackbarKey.currentState!.showSnackBar(SnackBar(
+            content: Text("Deleted ${student.firstName}'s face data.")));
+      }
+    } else {
+      return;
     }
   }
 
