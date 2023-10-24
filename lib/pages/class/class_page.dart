@@ -168,33 +168,6 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
             backgroundColor: Colors.white60,
             foregroundColor: Colors.black87,
             elevation: 0,
-            // title: Row(
-            //   mainAxisSize: MainAxisSize.max,
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     Expanded(
-            //       child: Row(
-            //         mainAxisSize: MainAxisSize.max,
-            //         mainAxisAlignment: MainAxisAlignment.start,
-            //         children: [
-            //           Column(
-            //             crossAxisAlignment: CrossAxisAlignment.start,
-            //             children: [
-            //               Text("${classValue.name} [${classValue.section}]"),
-            //               Text(
-            //                 "${classValue.code}, ${classValue.getSchedule(context)}",
-            //                 style: const TextStyle(
-            //                   fontSize: 12,
-            //                   fontWeight: FontWeight.normal,
-            //                 ),
-            //               )
-            //             ],
-            //           ),
-            //         ],
-            //       ),
-            //     ),
-            //   ],
-            // ),
             actions: [
               PopupMenuButton(
                 tooltip: "Edit or Delete Class",
@@ -223,28 +196,6 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
               ),
             ],
           ),
-          // SafeArea(
-          //   child: Column(
-          //       mainAxisSize: MainAxisSize.min,
-          //       mainAxisAlignment: MainAxisAlignment.start,
-          //       children: [
-          //         Container(
-          //           margin: EdgeInsets.zero,
-          //           padding: EdgeInsets.zero,
-          //           width: 400,
-          //           height: 100,
-          //           decoration: BoxDecoration(
-          //             shape: BoxShape.rectangle,
-          //             borderRadius: BorderRadius.zero,
-          //             border: Border.all(color: Colors.black, width: 1),
-          //           ),
-          //         ),
-          //         Expanded(
-          //           child: buildTabBarView(classValue),
-          //         ),
-          //       ],
-          //   ),
-          // ),
           floatingActionButton: SpeedDial(
             animatedIcon: AnimatedIcons.menu_close,
             animatedIconTheme: const IconThemeData(size: 30),
