@@ -43,10 +43,19 @@ class AttendanceRecordCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                DateFormat("MMMM d, y").format(dateTime),
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    DateFormat.yMMMd().format(dateTime),
+                    style:
+                        const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "${DateFormat(DateFormat.ABBR_WEEKDAY).format(dateTime)}, ${DateFormat(DateFormat.HOUR_MINUTE).format(dateTime)}",
+                    style: const TextStyle(),
+                  )
+                ],
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,

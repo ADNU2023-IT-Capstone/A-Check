@@ -14,6 +14,8 @@ class ClassState extends State<ClassPage> {
   late Class mClass;
   late ClassValueNotifier classValueNotifier;
 
+  bool _delete = false;
+
   void backButtonPressed() {
     Navigator.pop(context);
   }
@@ -71,7 +73,7 @@ class ClassState extends State<ClassPage> {
     }
 
     if (context.mounted) {
-      classValueNotifier.removeListener(onClassValueChanged);
+      _delete = true;
       mClass.getAttendanceRecords().forEach((_, value) async {
         for (var record in value) {
           await record.delete();
@@ -96,6 +98,7 @@ class ClassState extends State<ClassPage> {
   }
 
   void onClassValueChanged() {
+    if (_delete) return;
     if (mounted) {
       setState(() {
         mClass = HiveBoxes.classesBox().get(widget.classKey);
