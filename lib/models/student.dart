@@ -77,6 +77,12 @@ class Student extends Person with HiveObjectMixin {
     return save();
   }
 
+  Future<void> deleteFace() {
+    faceArray = null;
+    facePhotoBytes = null;
+    return save();
+  }
+
   bool hasRegisteredFace() {
     if (faceArray != null && faceArray!.isNotEmpty) {
       return true;

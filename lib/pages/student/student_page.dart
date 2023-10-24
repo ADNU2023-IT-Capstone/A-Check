@@ -28,35 +28,51 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
         borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(35.0),
             bottomRight: Radius.circular(35.0)),
-        ),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Container(
-                height: 100,
-                width: 100,
-                clipBehavior: Clip.antiAlias,
-                decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: <Color>[Color(0xffD7E5CA),Color(0xffF9F3CC)]),
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.all(Radius.circular(35.0)),
-                border: Border.fromBorderSide(BorderSide()),
+          GestureDetector(
+            onTap: state.registerFace,
+            onLongPress: state.removeFace,
+            child: Stack(
+              clipBehavior: Clip.antiAlias,
+              alignment: Alignment.bottomRight,
+              fit: StackFit.loose,
+              children: [
+                Container(
+                  height: 112,
+                  width: 112,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        colors: <Color>[Color(0xffD7E5CA), Color(0xffF9F3CC)]),
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.all(Radius.circular(35.0)),
+                    border: Border.fromBorderSide(BorderSide()),
+                  ),
+                  child: state.student.facePhotoBytes != null
+                      ? Image.memory(state.student.facePhotoBytes!)
+                      : const Icon(Icons.person_add_alt),
                 ),
-                child: state.student.facePhotoBytes != null
-                    ? Image.memory(state.student.facePhotoBytes!)
-                    : const Icon(Icons.person_2),
-              ),
-            ],
+                Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                        color: Colors.green[300],
+                        shape: BoxShape.circle,
+                        boxShadow: const [
+                          BoxShadow(offset: Offset(0, 2), blurRadius: 1)
+                        ]),
+                    child: const Icon(
+                      Icons.camera_alt,
+                      size: 20,
+                    )),
+              ],
+            ),
           ),
           Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(30, 20, 20, 50),
@@ -110,95 +126,94 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
   }
 
   Widget buildStudentInfo(Student student) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          margin: const EdgeInsets.all(0),
-          padding: const EdgeInsets.all(0),
-          width: 400,
-          height: 35,
-          decoration: const BoxDecoration(
-            color: Color(0x00ffffff),
-            shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.zero,
+    return Padding(
+      padding: const EdgeInsetsDirectional.fromSTEB(10, 30, 10, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // Container(
+          //   margin: const EdgeInsets.all(0),
+          //   padding: const EdgeInsets.all(0),
+          //   width: 400,
+          //   height: 35,
+          //   decoration: const BoxDecoration(
+          //     color: Color(0x00ffffff),
+          //     shape: BoxShape.rectangle,
+          //     borderRadius: BorderRadius.zero,
+          //   ),
+          //   child: Card(
+          //     margin: const EdgeInsets.all(2.0),
+          //     color: const Color(0xffffffff),
+          //     shadowColor: const Color(0xffebebeb),
+          //     elevation: 2,
+          //     shape: RoundedRectangleBorder(
+          //       borderRadius: BorderRadius.circular(20.0),
+          //     ),
+          //     child: student.hasRegisteredFace()
+          //         ? GestureDetector(
+          //             onLongPress: state.registerFace,
+          //             child: Checkbox(
+          //                 value: student.hasRegisteredFace(),
+          //                 onChanged: (value) {/* do nothing */}),
+          //           )
+          //         : Padding(
+          //             padding: const EdgeInsets.only(left: 8),
+          //             child: MaterialButton(
+          //               onPressed: state.registerFace,
+          //               child: const Icon(Icons.camera_alt),
+          //             ),
+          //           ),
+          //   ),
+          // ),
+          const Text(
+            "Student Information",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          child: Card(
-            margin: const EdgeInsets.all(2.0),
-            color: const Color(0xffffffff),
-            shadowColor: const Color(0xffebebeb),
-            elevation: 2,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            child: student.hasRegisteredFace()
-                ? GestureDetector(
-                    onLongPress: state.registerFace,
-                    child: Checkbox(
-                        value: student.hasRegisteredFace(),
-                        onChanged: (value) {/* do nothing */}),
-                  )
-                : Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: MaterialButton(
-                      onPressed: state.registerFace,
-                      child: const Icon(Icons.camera_alt),
-                    ),
-                  ),
+          TextField(
+            enabled: false,
+            decoration: const InputDecoration(
+                labelText: "Contact Number", isDense: true),
+            controller: TextEditingController(text: student.phone),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(10, 30, 10, 30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Text(
-                "Student Information",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              TextField(
-                enabled: false,
-                decoration: const InputDecoration(
-                    labelText: "Contact Number", isDense: true),
-                controller: TextEditingController(text: student.phone),
-              ),
-              TextField(
-                enabled: false,
-                decoration:
-                    const InputDecoration(labelText: "E-mail", isDense: true),
-                controller: TextEditingController(text: student.email),
-              ),
-            ],
+          TextField(
+            enabled: false,
+            decoration:
+                const InputDecoration(labelText: "E-mail", isDense: true),
+            controller: TextEditingController(text: student.email),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
   Widget buildGuardianInfo(Student student) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          "Guardian Information",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        Text(
-          student.guardian.toString(),
-          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-        TextField(
-          enabled: false,
-          decoration:
-              const InputDecoration(labelText: "Contact Number", isDense: true),
-          controller: TextEditingController(text: student.guardian?.phone),
-        ),
-        TextField(
-          enabled: false,
-          decoration: const InputDecoration(labelText: "E-mail", isDense: true),
-          controller: TextEditingController(text: student.guardian?.email),
-        )
-      ],
+    return Padding(
+      padding: const EdgeInsetsDirectional.fromSTEB(10, 0, 10, 30),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text(
+            "Guardian Information",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            student.guardian.toString(),
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          TextField(
+            enabled: false,
+            decoration: const InputDecoration(
+                labelText: "Contact Number", isDense: true),
+            controller: TextEditingController(text: student.guardian?.phone),
+          ),
+          TextField(
+            enabled: false,
+            decoration:
+                const InputDecoration(labelText: "E-mail", isDense: true),
+            controller: TextEditingController(text: student.guardian?.email),
+          )
+        ],
+      ),
     );
   }
 
