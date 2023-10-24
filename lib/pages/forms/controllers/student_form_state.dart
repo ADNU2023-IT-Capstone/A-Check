@@ -35,7 +35,8 @@ class StudentFormState extends State<StudentFormPage> {
         phone: studentPhoneCon!.text,
         email: studentEmailCon!.text,
         guardian: hasGuardian ? guardian : null,
-        faceArray: widget.student != null ? widget.student!.faceArray : null);
+        faceArray: widget.student != null ? widget.student!.faceArray : null,
+        facePhotoBytes: widget.student != null ? widget.student!.facePhotoBytes : null);
 
     HiveBoxes.studentsBox().put(student.id, student).then((value) {
       if (widget.currentClass != null) widget.currentClass!.addStudents([student.id]);
@@ -64,7 +65,7 @@ class StudentFormState extends State<StudentFormPage> {
         student.middleName,
         student.lastName,
         student.phone,
-        student.email
+        student.email,
       ]);
 
       if (student.guardian == null) {
