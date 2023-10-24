@@ -1,22 +1,23 @@
 import 'package:a_check/models/class.dart';
-import 'package:a_check/pages/controllers/take_attendance_state.dart';
+import 'package:a_check/models/student.dart';
+import 'package:a_check/pages/controllers/face_recognition_state.dart';
 import 'package:a_check/utils/abstracts.dart';
 import 'package:a_check/widgets/camera_view.dart';
 import 'package:a_check/widgets/ip_camera_view.dart';
 import 'package:flutter/material.dart';
 
-class TakeAttendancePage extends StatefulWidget {
-  const TakeAttendancePage({Key? key, required this.mClass}) : super(key: key);
+class FaceRecognitionPage extends StatefulWidget {
+  const FaceRecognitionPage({super.key, this.student, this.mClass});
 
-  final Class mClass;
+  final Student? student;
+  final Class? mClass;
 
   @override
-  State<TakeAttendancePage> createState() => TakeAttendanceState();
+  State<FaceRecognitionPage> createState() => FaceRecognitionState();
 }
 
-class TakeAttendanceView
-    extends WidgetView<TakeAttendancePage, TakeAttendanceState> {
-  const TakeAttendanceView(state, {Key? key}) : super(state, key: key);
+class FaceRecognitionView extends WidgetView<FaceRecognitionPage, FaceRecognitionState> {
+  const FaceRecognitionView(super.state, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +25,15 @@ class TakeAttendanceView
       onWillPop: state.onWillPop,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Take Attendance"),
+          title: Text(widget.student != null ? "Register face" : "Take attendance"),
         ),
         body: SafeArea(
             child: state.isUsingIPCamera
                 ? IPCameraWidget(onScreenshot: state.processScreenshot)
                 : CameraViewWidget(
-                    onCapture: state.processCapturedImage,
-                  )),
+                    onCapture: state.capturePhoto,
+                  )
+                  ),
         floatingActionButton: FloatingActionButton(
             heroTag: null,
             onPressed: state.switchCamera,

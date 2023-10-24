@@ -9,6 +9,7 @@ environment:
 dependencies:
   calendar_view: ^1.0.4
   camera: ^0.10.5+5
+  camerawesome: ^1.4.0
   easy_onvif: ^2.1.2+13
   email_validator: ^2.1.17
   flutter:
