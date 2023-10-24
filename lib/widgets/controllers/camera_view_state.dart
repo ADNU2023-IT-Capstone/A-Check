@@ -8,10 +8,15 @@ class CameraViewState extends State<CameraViewWidget>
     with WidgetsBindingObserver {
   late CameraController? camCon;
   late Future<void> initializeCamConFuture;
+  bool takingPicture = false;
   var savedCamDesc = cameras.first;
 
   void takePicture() async {
-    final photo = await camCon!.takePicture();
+    takingPicture = true;
+    final photo = await camCon!.takePicture().then((value) {
+      takingPicture = false;
+      return value;
+    });
     final inputImage = InputImage.fromFilePath(photo.path);
     
     widget.onCapture!(inputImage);
@@ -57,7 +62,7 @@ class CameraViewState extends State<CameraViewWidget>
 
     camCon = controller;
     initializeCamConFuture = camCon!.initialize().then((value) {
-      camCon!.startImageStream((image) => widget.onImage);
+      // camCon!.startImageStream((image) => widget.onImage);
     });
   }
 

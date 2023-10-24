@@ -1,3 +1,4 @@
+import 'package:a_check/main.dart';
 import 'package:a_check/models/class.dart';
 import 'package:a_check/models/student.dart';
 import 'package:a_check/pages/student/student_page.dart';
@@ -22,9 +23,28 @@ class StudentCard extends StatelessWidget {
                   )));
     }
 
+    Color? colorByAbsent() {
+      if (studentClass == null) {
+        return null;
+      }
+      
+      final absences = student.getPALEValues(studentClass!.key)['absent']!;
+      final warning = prefs.getInt('absent_warn')!;
+      final limit = prefs.getInt('absent_limit')!;
+
+      if (absences >= limit) {
+        return Colors.red[200];
+      } else if (absences >= warning) {
+        return Colors.amber[200];
+      } else {
+        return null;
+      }
+    }
+
     return GestureDetector(
       onTap: onTap,
       child: Card(
+        color: colorByAbsent(),
         elevation: 0.5,
         child: Padding(
           padding: const EdgeInsets.all(15.0),

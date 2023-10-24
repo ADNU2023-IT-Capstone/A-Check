@@ -64,7 +64,7 @@ class CameraView extends WidgetView<CameraViewWidget, CameraViewState> {
             FloatingActionButton(
               elevation: 0,
               tooltip: "Capture Image",
-              onPressed: state.takePicture,
+              onPressed: state.takingPicture ? null : state.takePicture,
               heroTag: null,
               child: const Icon(Icons.camera),
             ),

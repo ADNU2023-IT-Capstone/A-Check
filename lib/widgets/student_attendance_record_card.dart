@@ -16,21 +16,16 @@ class StudentAttendanceRecordCard extends StatefulWidget {
 class SARCView extends WidgetView<StudentAttendanceRecordCard, SARCState> {
   const SARCView(state, {Key? key}) : super(state, key: key);
 
-  Widget radioButton({required String title, required AttendanceStatus value}) {
-    return Column(
-      children: [
-        Text(title),
-        Radio<AttendanceStatus>(
-          fillColor: MaterialStateProperty.all(const Color(0xff004225)),
-                visualDensity: const VisualDensity(
-                horizontal: VisualDensity.minimumDensity,
-                vertical: VisualDensity.minimumDensity),
-            materialTapTargetSize: MaterialTapTargetSize.padded,
-            value: value,
-            groupValue: state.status,
-            onChanged: state.onRadioChanged)
-      ],
-    );
+  Widget radioButton({required AttendanceStatus value}) {
+    return Radio<AttendanceStatus>(
+      fillColor: MaterialStateProperty.all(const Color(0xff004225)),
+            visualDensity: const VisualDensity(
+            horizontal: VisualDensity.minimumDensity,
+            vertical: VisualDensity.minimumDensity),
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        value: value,
+        groupValue: state.status,
+        onChanged: state.onRadioChanged);
   }
 
   @override
@@ -67,20 +62,18 @@ class SARCView extends WidgetView<StudentAttendanceRecordCard, SARCState> {
                 ],
               ),
             ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                radioButton(title: "", value: AttendanceStatus.present),
-                const SizedBox(width: 10),
-                radioButton(title: "", value: AttendanceStatus.absent),
-                const SizedBox(width: 10),
-                radioButton(title: "", value: AttendanceStatus.late),
-                const SizedBox(width: 10),
-                radioButton(title: "", value: AttendanceStatus.excused),
-                const SizedBox(width: 5),
-              ],
+            Expanded(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  radioButton(value: AttendanceStatus.present),
+                  radioButton(value: AttendanceStatus.absent),
+                  radioButton(value: AttendanceStatus.late),
+                  radioButton(value: AttendanceStatus.excused),
+                ],
+              ),
             )
           ],
         ),

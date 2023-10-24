@@ -4,6 +4,7 @@ import 'package:a_check/globals.dart';
 import 'package:a_check/main.dart';
 import 'package:a_check/models/attendance_record.dart';
 import 'package:a_check/models/student.dart';
+import 'package:a_check/pages/face_detected_page.dart';
 import 'package:a_check/pages/face_recognition_page.dart';
 import 'package:a_check/utils/dialogs.dart';
 import 'package:a_check/utils/localdb.dart';
@@ -23,22 +24,7 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
   KDTree? _faceDataTree;
   bool isUsingIPCamera = false;
 
-  void processScreenshot(Uint8List screenshot) async {
-    snackbarKey.currentState!.showSnackBar(const SnackBar(
-        content: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [Text("Capturing screenshot..."), CircularProgressIndicator()],
-    )));
-    final tempDir = await getTemporaryDirectory();
-    final file = await File("${tempDir.path}/screenshot.jpg").create();
-    await file.writeAsBytes(screenshot);
-    final inputImage = InputImage.fromFile(file);
-
-    snackbarKey.currentState!.hideCurrentSnackBar();
-    processCapturedImage(inputImage);
-  }
-
-  processCapturedImage(InputImage inputImage) async {
+  Future<void> processCapturedImage(InputImage inputImage) async {
     snackbarKey.currentState!.showSnackBar(const SnackBar(
         content: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -65,7 +51,10 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
   Future<bool> _getFaceImages(InputImage inputImage) async {
     dynamic photo;
     if (inputImage.filePath != null && inputImage.filePath!.isNotEmpty) {
-      photo = File(inputImage.filePath!);
+      final file = File(inputImage.filePath!);
+      photo = await imglib.decodeImageFile(file.path);
+
+      if (photo == null) return false;
     } else if (inputImage.bytes != null) {
       photo = imglib.Image.fromBytes(
           width: inputImage.metadata!.size.width.toInt(),
@@ -87,7 +76,7 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
     return true;
   }
 
-  _registerFace() async {
+  Future<void> _registerFace() async {
     final faceImage = _faceImages.first;
     final encodedImage = imglib.encodeJpg(faceImage);
 
@@ -112,9 +101,10 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
     }
   }
 
-  _takeAttendance() async {
+  Future<void> _takeAttendance() async {
     // Recognize students
     Map<Student, num> recognizedStudents = {};
+    Map<Student, Uint8List> recognizedFaces = {};
     for (imglib.Image image in _faceImages) {
       List predictedArray = await _mlService.predict(image);
       final neighbor =
@@ -125,6 +115,7 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
         final student =
             _studentsWithRegisteredFaces.elementAt(neighbor.first.index);
         recognizedStudents.addAll({student: neighbor.first.distance});
+        recognizedFaces.addAll({student: imglib.encodeJpg(image)});
       }
     }
 
@@ -159,15 +150,23 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
     // Display recognized students
     // TODO: yung gawa ni sam hehe
     if (context.mounted) {
-      await Dialogs.showAlertDialog(
-        context,
-        const Text("Recognized students"),
-        Text(recognizedStudents.entries
-            .map((e) => "${e.key.toString()} (${e.value.toStringAsFixed(3)})")
-            .cast<String>()
-            .toList()
-            .join('\n')),
-      );
+      // await Dialogs.showAlertDialog(
+      //   context,
+      //   const Text("Recognized students"),
+      //   Text(recognizedStudents.entries
+      //       .map((e) => "${e.key.toString()} (${e.value.toStringAsFixed(3)})")
+      //       .cast<String>()
+      //       .toList()
+      //       .join('\n')),
+      // );
+      final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetectedFacesPage(
+                recognizedStudents: recognizedStudents,
+                recognizedFaces: recognizedFaces,
+                studentsList: _studentsWithRegisteredFaces),
+          ));
     }
 
     if (context.mounted) {
@@ -183,10 +182,25 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
     await processCapturedImage(inputImage);
 
     if (widget.student != null) {
-      _registerFace();
+      await _registerFace();
     } else {
-      _takeAttendance();
+      await _takeAttendance();
     }
+  }
+
+  void captureScreenshot(Uint8List screenshot) async {
+    snackbarKey.currentState!.showSnackBar(const SnackBar(
+        content: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [Text("Capturing screenshot..."), CircularProgressIndicator()],
+    )));
+    final tempDir = await getTemporaryDirectory();
+    var file = await File("${tempDir.path}/screenshot.jpg").create();
+    file = await file.writeAsBytes(screenshot);
+    final inputImage = InputImage.fromFile(file);
+
+    snackbarKey.currentState!.hideCurrentSnackBar();
+    capturePhoto(inputImage);
   }
 
   Future<bool> onWillPop() async {
@@ -206,6 +220,13 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
       for (var student in _classStudents)
         if (student.faceArray != null) student
     ];
+
+    if (_studentsWithRegisteredFaces.isEmpty) {
+      snackbarKey.currentState!.showSnackBar(const SnackBar(
+          content: Text(
+              "You do not have at least a student with a registered face!")));
+      Navigator.pop(context);
+    }
 
     List<List<num>> embeddings = [
       for (Student student in _studentsWithRegisteredFaces)
