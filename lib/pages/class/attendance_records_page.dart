@@ -3,7 +3,6 @@ import 'package:a_check/pages/class/controllers/attendance_records_state.dart';
 import 'package:a_check/utils/abstracts.dart';
 import 'package:a_check/widgets/student_attendance_record_card.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class AttendanceRecordsPage extends StatefulWidget {
   const AttendanceRecordsPage({Key? key, required this.records})
