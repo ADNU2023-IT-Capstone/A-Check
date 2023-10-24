@@ -1,5 +1,4 @@
 import 'package:a_check/models/attendance_record.dart';
-import 'package:a_check/models/class.dart';
 import 'package:a_check/utils/localdb.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
