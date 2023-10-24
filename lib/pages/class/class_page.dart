@@ -85,7 +85,7 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
             child: Text(
-              "${mClass.section}, ${mClass.getSchedule(state.context)}",
+              "${mClass.section}\n${mClass.getSchedule()}",
               textAlign: TextAlign.start,
               overflow: TextOverflow.clip,
               style: const TextStyle(
@@ -96,18 +96,21 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Container(
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  color: Colors.green.shade900),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "${mClass.studentIds.length.toString()} student${mClass.studentIds.length > 1 ? "s" : ""}",
-                  style: const TextStyle(color: Colors.white),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Container(
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    color: Colors.green.shade900),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "${mClass.studentIds.length.toString()} student${mClass.studentIds.length > 1 ? "s" : ""}",
+                    style: const TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
             ),

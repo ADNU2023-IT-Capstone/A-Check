@@ -3,6 +3,7 @@ import 'package:a_check/models/student.dart';
 import 'package:a_check/utils/localdb.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 
 part 'class.g.dart';
 
@@ -22,7 +23,7 @@ enum DaysOfTheWeek {
   friday,
   @HiveField(6)
   saturday;
-  
+
   @override
   String toString() {
     switch (this) {
@@ -65,8 +66,6 @@ enum DaysOfTheWeek {
         return "";
     }
   }
-
-
 }
 
 @HiveType(typeId: 0)
@@ -103,17 +102,14 @@ class Class extends HiveObject {
   @override
   // ignore: unnecessary_brace_in_string_interps
   String get key => "${code}_${section}";
-  
-  String getSchedule(BuildContext context) {
-    StringBuffer dayBuf = StringBuffer();
-    StringBuffer timeBuf = StringBuffer();
-    for (var s in schedule) {
-      dayBuf.write(s.day.prefix());
-      if (timeBuf.toString().contains("${s.getStartTime().format(context)} - ${s.getEndTime().format(context)}")) continue;
-      timeBuf.write("${s.getStartTime().format(context)} - ${s.getEndTime().format(context)}");
+
+  String getSchedule() {
+    StringBuffer buffer = StringBuffer();
+    for (ClassSchedule s in schedule) {
+      buffer.writeln(s.toString());
     }
 
-    return "$dayBuf $timeBuf"; 
+    return buffer.toString();
   }
 
   @override
@@ -198,6 +194,17 @@ class ClassSchedule {
 
   TimeOfDay getEndTime() {
     return TimeOfDay(hour: endTimeHour, minute: endTimeMinute);
+  }
+
+  @override
+  String toString() {
+    final locale = DateFormat.jm();
+    final now = DateTime.now();
+    final startTime =
+        DateTime(now.year, now.month, now.day, startTimeHour, startTimeMinute);
+    final endTime =
+        DateTime(now.year, now.month, now.day, endTimeHour, endTimeMinute);
+    return "${day.prefix()} ${locale.format(startTime)} - ${locale.format(endTime)}";
   }
 }
 

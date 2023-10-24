@@ -35,6 +35,7 @@ class CalendarState extends State<CalendarPage> {
     super.initState();
 
     calendarController = EventController();
+    setSchedule();
   }
 
   @override
