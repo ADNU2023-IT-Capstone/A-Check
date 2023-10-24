@@ -10,7 +10,8 @@ class CameraViewWidget extends StatefulWidget {
       : super(key: key);
 
   final Function(InputImage inputImage)? onCapture;
-  final Function(InputImage inputImage, CameraLensDirection lensDirection)? onImage;
+  final Function(InputImage inputImage, CameraLensDirection lensDirection)?
+      onImage;
   final CustomPaint? customPaint;
 
   @override
@@ -27,12 +28,12 @@ class CameraView extends WidgetView<CameraViewWidget, CameraViewState> {
 
     Widget buildBody() {
       return FutureBuilder(
-        future: state.initializeCamConFuture,
+        future: state.initCameraControllerFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return Center(
               child: CameraPreview(
-                state.camCon!,
+                state.cameraController!,
                 child: widget.customPaint,
               ),
             );
@@ -44,7 +45,7 @@ class CameraView extends WidgetView<CameraViewWidget, CameraViewState> {
                   padding: EdgeInsets.all(8.0),
                   child: CircularProgressIndicator(),
                 ),
-                Text("Initializing camera...")
+                Text("Loading camera...")
               ]),
             );
           }
@@ -53,7 +54,7 @@ class CameraView extends WidgetView<CameraViewWidget, CameraViewState> {
     }
 
     Widget? buildFab() {
-      if (!state.camCon!.value.isInitialized) {
+      if (!state.isInitialized()) {
         return null;
       }
       return Padding(
@@ -75,7 +76,8 @@ class CameraView extends WidgetView<CameraViewWidget, CameraViewState> {
             FloatingActionButton(
               tooltip: "Switch Camera",
               onPressed: state.takingPicture ? null : state.switchCamera,
-              backgroundColor: state.takingPicture ? Colors.grey[600] : Colors.white,
+              backgroundColor:
+                  state.takingPicture ? Colors.grey[600] : Colors.white,
               foregroundColor: Colors.green,
               disabledElevation: 0,
               heroTag: null,

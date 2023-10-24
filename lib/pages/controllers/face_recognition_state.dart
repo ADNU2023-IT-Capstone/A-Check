@@ -95,6 +95,28 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
     return true;
   }
 
+  Future<bool> _recognizeFaces() async {
+    recognizedStudents = {};
+    recognizedFaces = {};
+
+    if (_faceImages.isEmpty) return false;
+    for (imglib.Image image in _faceImages) {
+      List predictedArray = await _mlService.predict(image);
+      final neighbor =
+          _faceDataTree!.queryIterable(predictedArray.cast<num>(), 1);
+      final threshold = prefs.getDouble('threshold')!;
+
+      if (neighbor.first.distance <= threshold) {
+        final student =
+            _studentsWithRegisteredFaces.elementAt(neighbor.first.index);
+        recognizedStudents.addAll({student: neighbor.first.distance});
+        recognizedFaces.addAll({student: imglib.encodeJpg(image)});
+      }
+    }
+
+    return true;
+  }
+
   Future<void> _registerFace() async {
     final faceImage = _faceImages.first;
     final encodedImage = imglib.encodeJpg(faceImage);
@@ -120,33 +142,11 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
     }
   }
 
-  Future<bool> _recognizeFaces() async {
-    recognizedStudents = {};
-    recognizedFaces = {};
-
-    if (_faceImages.isEmpty) return false;
-    for (imglib.Image image in _faceImages) {
-      List predictedArray = await _mlService.predict(image);
-      final neighbor =
-          _faceDataTree!.queryIterable(predictedArray.cast<num>(), 1);
-      final threshold = prefs.getDouble('threshold')!;
-
-      if (neighbor.first.distance <= threshold) {
-        final student =
-            _studentsWithRegisteredFaces.elementAt(neighbor.first.index);
-        recognizedStudents.addAll({student: neighbor.first.distance});
-        recognizedFaces.addAll({student: imglib.encodeJpg(image)});
-      }
-    }
-
-    return true;
-  }
-
   Future<void> _takeAttendance() async {
     await _recognizeFaces();
 
+    snackbarKey.currentState!.hideCurrentSnackBar();
     if (recognizedStudents.isEmpty) {
-      snackbarKey.currentState!.hideCurrentSnackBar();
       snackbarKey.currentState!.showSnackBar(
           const SnackBar(content: Text("No recognized students!")));
       return;
@@ -210,15 +210,31 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [Text("Processing image..."), CircularProgressIndicator()],
     )));
+
     _canRealtimeProcess = false;
     await processCapturedImage(inputImage);
-    _canRealtimeProcess = true;
+    snackbarKey.currentState!.hideCurrentSnackBar();
 
     if (widget.student != null) {
+      snackbarKey.currentState!.showSnackBar(const SnackBar(
+          content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [Text("Getting face..."), CircularProgressIndicator()],
+      )));
       await _registerFace();
     } else {
+      snackbarKey.currentState!.showSnackBar(const SnackBar(
+          content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text("Getting recognized students..."),
+          CircularProgressIndicator()
+        ],
+      )));
       await _takeAttendance();
     }
+
+    _canRealtimeProcess = true;
   }
 
   void captureScreenshot(Uint8List screenshot) async {

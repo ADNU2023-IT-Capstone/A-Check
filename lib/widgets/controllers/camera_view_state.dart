@@ -7,8 +7,8 @@ import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 
 class CameraViewState extends State<CameraViewWidget>
     with WidgetsBindingObserver {
-  late CameraController? camCon;
-  late Future<void> initializeCamConFuture;
+  late CameraController? cameraController;
+  late Future<void> initCameraControllerFuture;
   late final bool _hasOnImage;
   bool takingPicture = false;
   var savedCamDesc = cameras.first;
@@ -22,7 +22,7 @@ class CameraViewState extends State<CameraViewWidget>
 
   void takePicture() async {
     takingPicture = true;
-    final photo = await camCon!.takePicture().then((value) {
+    final photo = await cameraController!.takePicture().then((value) {
       takingPicture = false;
       return value;
     });
@@ -42,7 +42,8 @@ class CameraViewState extends State<CameraViewWidget>
   InputImage? _convertToInputImage(CameraImage cameraImage) {
     final sensorOrientation = savedCamDesc.sensorOrientation;
 
-    var rotationCompensation = _orientations[camCon!.value.deviceOrientation];
+    var rotationCompensation =
+        _orientations[cameraController!.value.deviceOrientation];
     if (rotationCompensation == null) return null;
     if (savedCamDesc.lensDirection == CameraLensDirection.front) {
       rotationCompensation = (sensorOrientation + rotationCompensation) % 360;
@@ -70,7 +71,7 @@ class CameraViewState extends State<CameraViewWidget>
   }
 
   void switchCamera() {
-    final currentLensDesc = camCon!.description.lensDirection;
+    final currentLensDesc = cameraController!.description.lensDirection;
     CameraDescription newDesc;
 
     if (currentLensDesc == CameraLensDirection.front) {
@@ -82,12 +83,13 @@ class CameraViewState extends State<CameraViewWidget>
     }
 
     setState(() => savedCamDesc = newDesc);
-    _initializeCameraController();
+    _initCamera();
   }
 
-  void _initializeCameraController() {
+  void _initCamera() {
     final controller = CameraController(savedCamDesc, ResolutionPreset.high,
         enableAudio: false, imageFormatGroup: ImageFormatGroup.nv21);
+
     controller.addListener(() {
       if (mounted) {
         setState(() {});
@@ -106,47 +108,60 @@ class CameraViewState extends State<CameraViewWidget>
                 ));
       }
     });
-
-    camCon = controller;
-    initializeCamConFuture = controller.initialize().then((value) {
-      if (_hasOnImage) controller.startImageStream(_processCameraImage);
+    cameraController = controller;
+    initCameraControllerFuture = cameraController!.initialize().then((_) {
+      if (_hasOnImage) cameraController!.startImageStream(_processCameraImage);
     });
+  }
+
+  bool isInitialized() {
+    if (cameraController != null && cameraController!.value.isInitialized) {
+      return true;
+    }
+
+    return false;
   }
 
   @override
   void initState() {
     super.initState();
+    _initCamera();
     WidgetsBinding.instance.addObserver(this);
 
     _hasOnImage = widget.onImage is Function;
-    _initializeCameraController();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    final CameraController? cameraController = camCon;
-
     // App state changed before we got the chance to initialize.
-    if (cameraController == null || !cameraController.value.isInitialized) {
+    if (cameraController == null || !cameraController!.value.isInitialized) {
       return;
     }
 
     if (state == AppLifecycleState.inactive) {
-      if (_hasOnImage) cameraController.stopImageStream();
-      cameraController.dispose();
+      if (cameraController!.value.isStreamingImages) {
+        cameraController!.stopImageStream();
+      }
+      cameraController?.dispose();
     } else if (state == AppLifecycleState.resumed) {
-      _initializeCameraController();
+      if (cameraController != null) {
+        _initCamera();
+        if (mounted) setState(() {});
+      }
     }
   }
 
   Future<bool> onWillPop() async {
-    if (_hasOnImage) camCon!.stopImageStream();
+    if (cameraController!.value.isStreamingImages) {
+      cameraController!.stopImageStream();
+    }
     return true;
   }
 
   @override
   void dispose() {
-    camCon!.dispose();
+    cameraController!.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
