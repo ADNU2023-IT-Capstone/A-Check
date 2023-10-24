@@ -7,8 +7,9 @@ import 'package:a_check/widgets/ip_camera_view.dart';
 import 'package:flutter/material.dart';
 
 class FaceRecognitionPage extends StatefulWidget {
-  const FaceRecognitionPage({super.key, this.student, this.mClass});
+  const FaceRecognitionPage({super.key, required this.isRealtime, this.student, this.mClass});
 
+  final bool isRealtime;
   final Student? student;
   final Class? mClass;
 
@@ -16,7 +17,8 @@ class FaceRecognitionPage extends StatefulWidget {
   State<FaceRecognitionPage> createState() => FaceRecognitionState();
 }
 
-class FaceRecognitionView extends WidgetView<FaceRecognitionPage, FaceRecognitionState> {
+class FaceRecognitionView
+    extends WidgetView<FaceRecognitionPage, FaceRecognitionState> {
   const FaceRecognitionView(super.state, {super.key});
 
   @override
@@ -25,15 +27,17 @@ class FaceRecognitionView extends WidgetView<FaceRecognitionPage, FaceRecognitio
       onWillPop: state.onWillPop,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.student != null ? "Register face" : "Take attendance"),
+          title: Text(
+              widget.student != null ? "Register face" : "Take attendance"),
         ),
         body: SafeArea(
             child: state.isUsingIPCamera
                 ? IPCameraWidget(onScreenshot: state.captureScreenshot)
                 : CameraViewWidget(
                     onCapture: state.capturePhoto,
-                  )
-                  ),
+                    onImage: state.processOnImage,
+                    customPaint: state.customPaint,
+                  )),
         floatingActionButton: FloatingActionButton(
             heroTag: null,
             onPressed: state.switchCamera,

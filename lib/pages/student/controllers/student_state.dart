@@ -70,7 +70,7 @@ class StudentState extends State<StudentPage> {
     final result = await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => FaceRecognitionPage(student: student)));
+            builder: (context) => FaceRecognitionPage(isRealtime: false, student: student)));
 
     if (result == null) return;
     if (result == true) {

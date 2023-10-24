@@ -27,7 +27,7 @@ class ClassState extends State<ClassPage> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => FaceRecognitionPage(mClass: mClass)));
+            builder: (context) => FaceRecognitionPage(isRealtime: true, mClass: mClass)));
 
     onClassValueChanged();
   }

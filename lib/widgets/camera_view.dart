@@ -10,7 +10,7 @@ class CameraViewWidget extends StatefulWidget {
       : super(key: key);
 
   final Function(InputImage inputImage)? onCapture;
-  final Function(InputImage inputImage)? onImage;
+  final Function(InputImage inputImage, CameraLensDirection lensDirection)? onImage;
   final CustomPaint? customPaint;
 
   @override
@@ -62,9 +62,10 @@ class CameraView extends WidgetView<CameraViewWidget, CameraViewState> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             FloatingActionButton(
-              elevation: 0,
               tooltip: "Capture Image",
               onPressed: state.takingPicture ? null : state.takePicture,
+              backgroundColor: state.takingPicture ? Colors.grey[600] : null,
+              disabledElevation: 0,
               heroTag: null,
               child: const Icon(Icons.camera),
             ),
@@ -72,11 +73,11 @@ class CameraView extends WidgetView<CameraViewWidget, CameraViewState> {
               width: 30,
             ),
             FloatingActionButton(
-              elevation: 0,
               tooltip: "Switch Camera",
-              onPressed: state.switchCamera,
-              backgroundColor: Colors.white,
+              onPressed: state.takingPicture ? null : state.switchCamera,
+              backgroundColor: state.takingPicture ? Colors.grey[600] : Colors.white,
               foregroundColor: Colors.green,
+              disabledElevation: 0,
               heroTag: null,
               child: const Icon(Icons.switch_camera),
             ),
@@ -85,10 +86,13 @@ class CameraView extends WidgetView<CameraViewWidget, CameraViewState> {
       );
     }
 
-    return Scaffold(
-      body: buildBody(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: buildFab(),
+    return WillPopScope(
+      onWillPop: state.onWillPop,
+      child: Scaffold(
+        body: buildBody(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: buildFab(),
+      ),
     );
   }
 }

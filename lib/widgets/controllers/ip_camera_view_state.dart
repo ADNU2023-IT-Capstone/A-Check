@@ -17,9 +17,12 @@ class IPCameraState extends State<IPCameraWidget> {
       configuration:
           const VideoControllerConfiguration(width: 1280, height: 720));
   late Future<void> initializePlayerFuture;
+  bool takingScreenshot = false;
 
   void takeScreenshot() {
+    setState(() => takingScreenshot = true);
     player.screenshot().then((value) {
+      setState(() => takingScreenshot = false);
       if (value != null) widget.onScreenshot!(value);
     });
   }

@@ -56,7 +56,9 @@ class IPCameraView extends WidgetView<IPCameraWidget, IPCameraState> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 FloatingActionButton(
-                  onPressed: state.takeScreenshot,
+                  onPressed: state.takingScreenshot ? null : state.takeScreenshot,
+                  backgroundColor: state.takingScreenshot ? Colors.grey[600] : null,
+                  disabledElevation: 0,
                   heroTag: null,
                   child: const Icon(Icons.camera),
                 ),

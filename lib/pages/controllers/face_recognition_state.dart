@@ -7,8 +7,11 @@ import 'package:a_check/models/student.dart';
 import 'package:a_check/pages/face_detected_page.dart';
 import 'package:a_check/pages/face_recognition_page.dart';
 import 'package:a_check/utils/dialogs.dart';
+import 'package:a_check/utils/face_detector_painter.dart';
 import 'package:a_check/utils/localdb.dart';
 import 'package:a_check/utils/mlservice.dart';
+import 'package:camera/camera.dart';
+import 'package:convert_native_img_stream/convert_native_img_stream.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
@@ -18,29 +21,39 @@ import 'package:path_provider/path_provider.dart';
 
 class FaceRecognitionState extends State<FaceRecognitionPage> {
   final _mlService = MLService();
+  final _convertNative = ConvertNativeImgStream();
   List<Face> _detectedFaces = [];
   List<imglib.Image> _faceImages = [];
   List<Student> _classStudents = [], _studentsWithRegisteredFaces = [];
   KDTree? _faceDataTree;
+  Map<Student, num> recognizedStudents = {};
+  Map<Student, Uint8List> recognizedFaces = {};
+
+  late bool _canRealtimeProcess;
+  bool _isBusy = false;
   bool isUsingIPCamera = false;
+  CustomPaint? customPaint;
 
-  Future<void> processCapturedImage(InputImage inputImage) async {
-    snackbarKey.currentState!.showSnackBar(const SnackBar(
-        content: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [Text("Processing image..."), CircularProgressIndicator()],
-    )));
+  Future<bool> processCapturedImage(InputImage inputImage) async {
+    if (!await _detectFacesFromInputImage(inputImage)) {
+      return false;
+    }
+    if (!await _getFaceImages(inputImage)) {
+      return false;
+    }
 
-    if (!await _detectFacesFromInputImage(inputImage)) return;
-    if (!await _getFaceImages(inputImage)) return;
+    return true;
   }
 
   Future<bool> _detectFacesFromInputImage(InputImage inputImage) async {
     final faces = await _mlService.getFaces(inputImage);
     if (faces.isEmpty) {
-      snackbarKey.currentState!.hideCurrentSnackBar();
-      snackbarKey.currentState!
-          .showSnackBar(const SnackBar(content: Text("No faces detected!")));
+      if (_canRealtimeProcess == false) {
+        snackbarKey.currentState!.hideCurrentSnackBar();
+        snackbarKey.currentState!
+            .showSnackBar(const SnackBar(content: Text("No faces detected!")));
+      }
+
       return false;
     }
 
@@ -56,10 +69,16 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
 
       if (photo == null) return false;
     } else if (inputImage.bytes != null) {
-      photo = imglib.Image.fromBytes(
-          width: inputImage.metadata!.size.width.toInt(),
-          height: inputImage.metadata!.size.height.toInt(),
-          bytes: inputImage.bytes!.buffer);
+      final jpegByte = await _convertNative.convertImgToBytes(
+          inputImage.bytes!,
+          inputImage.metadata!.size.width.toInt(),
+          inputImage.metadata!.size.height.toInt());
+
+      if (jpegByte != null) {
+        photo = imglib.decodeJpg(jpegByte);
+      } else {
+        return false;
+      }
     } else {
       return false;
     }
@@ -101,10 +120,11 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
     }
   }
 
-  Future<void> _takeAttendance() async {
-    // Recognize students
-    Map<Student, num> recognizedStudents = {};
-    Map<Student, Uint8List> recognizedFaces = {};
+  Future<bool> _recognizeFaces() async {
+    recognizedStudents = {};
+    recognizedFaces = {};
+
+    if (_faceImages.isEmpty) return false;
     for (imglib.Image image in _faceImages) {
       List predictedArray = await _mlService.predict(image);
       final neighbor =
@@ -118,6 +138,12 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
         recognizedFaces.addAll({student: imglib.encodeJpg(image)});
       }
     }
+
+    return true;
+  }
+
+  Future<void> _takeAttendance() async {
+    await _recognizeFaces();
 
     if (recognizedStudents.isEmpty) {
       snackbarKey.currentState!.hideCurrentSnackBar();
@@ -179,7 +205,14 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
   }
 
   void capturePhoto(InputImage inputImage) async {
+    snackbarKey.currentState!.showSnackBar(const SnackBar(
+        content: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [Text("Processing image..."), CircularProgressIndicator()],
+    )));
+    _canRealtimeProcess = false;
     await processCapturedImage(inputImage);
+    _canRealtimeProcess = true;
 
     if (widget.student != null) {
       await _registerFace();
@@ -201,6 +234,32 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
 
     snackbarKey.currentState!.hideCurrentSnackBar();
     capturePhoto(inputImage);
+  }
+
+  void processOnImage(
+      InputImage inputImage, CameraLensDirection lensDirection) async {
+    if (!_canRealtimeProcess || _isBusy) return;
+    _isBusy = true;
+
+    if (await _detectFacesFromInputImage(inputImage)) {
+      if (inputImage.metadata?.size != null &&
+          inputImage.metadata?.rotation != null) {
+        final painter = FaceDetectorPainter(
+          _detectedFaces,
+          inputImage.metadata!.size,
+          inputImage.metadata!.rotation,
+          lensDirection,
+        );
+        customPaint = CustomPaint(painter: painter);
+      }
+    } else {
+      customPaint = null;
+    }
+
+    _isBusy = false;
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   Future<bool> onWillPop() async {
@@ -242,6 +301,8 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
     if (widget.mClass != null) {
       _setupClassList();
     }
+
+    _canRealtimeProcess = widget.isRealtime;
   }
 
   @override

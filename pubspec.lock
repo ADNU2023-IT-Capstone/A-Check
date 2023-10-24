@@ -241,6 +241,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
+  convert_native_img_stream:
+    dependency: "direct main"
+    description:
+      name: convert_native_img_stream
+      sha256: cbf8c36a1a720198d873424cdbc99ff9c04d31829650bb9c299683ec203f973a
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1"
   cross_file:
     dependency: transitive
     description:
@@ -425,7 +433,7 @@ packages:
     source: hosted
     version: "6.1.0"
   google_mlkit_commons:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: google_mlkit_commons
       sha256: "42173a8ba89f386486cc5b8249e84da4a4b861daa70498373627d985eb418689"
