@@ -1,3 +1,4 @@
+import 'package:a_check/globals.dart';
 import 'package:a_check/models/class.dart';
 import 'package:a_check/pages/face_recognition_page.dart';
 import 'package:a_check/pages/forms/class_form_page.dart';
@@ -18,6 +19,11 @@ class ClassState extends State<ClassPage> {
   }
 
   void takeAttendance() {
+    if (mClass.studentIds.isEmpty) {
+      snackbarKey.currentState!
+          .showSnackBar(const SnackBar(content: Text("You have no students!")));
+      return;
+    }
     Navigator.push(
         context,
         MaterialPageRoute(

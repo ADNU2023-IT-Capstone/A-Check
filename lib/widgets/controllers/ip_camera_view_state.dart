@@ -13,13 +13,15 @@ class IPCameraState extends State<IPCameraWidget> {
     title: "IP Camera",
     osc: false,
   ));
-  late final videoController = VideoController(player);
+  late final videoController = VideoController(player,
+      configuration:
+          const VideoControllerConfiguration(width: 1280, height: 720));
   late Future<void> initializePlayerFuture;
 
-  void takeScreenshot() async {
-    final screenshot = await player.screenshot();
-
-    if (screenshot != null) widget.onScreenshot!(screenshot);
+  void takeScreenshot() {
+    player.screenshot().then((value) {
+      if (value != null) widget.onScreenshot!(value);
+    });
   }
 
   @override
@@ -27,7 +29,12 @@ class IPCameraState extends State<IPCameraWidget> {
     super.initState();
 
     initializePlayerFuture = _connectToIPCam().then((value) {
-      initializePlayerFuture = player.open(Media(value));
+      initializePlayerFuture = player.open(Media(value)).then((value) {
+        initializePlayerFuture =
+            player.setAudioTrack(AudioTrack.no()).then((value) {
+          initializePlayerFuture = videoController.waitUntilFirstFrameRendered;
+        });
+      });
     }).onError((error, stackTrace) {
       initializePlayerFuture = player.open(Media(
           "https://user-images.githubusercontent.com/28951144/229373695-22f88f13-d18f-4288-9bf1-c3e078d83722.mp4"));

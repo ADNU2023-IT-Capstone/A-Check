@@ -29,7 +29,7 @@ class FaceRecognitionView extends WidgetView<FaceRecognitionPage, FaceRecognitio
         ),
         body: SafeArea(
             child: state.isUsingIPCamera
-                ? IPCameraWidget(onScreenshot: state.processScreenshot)
+                ? IPCameraWidget(onScreenshot: state.captureScreenshot)
                 : CameraViewWidget(
                     onCapture: state.capturePhoto,
                   )
