@@ -59,16 +59,6 @@ class StudentsView extends WidgetView<StudentsPage, StudentsState> {
               label: "Add Student",
               foregroundColor: Colors.green[900],
               onTap: state.addStudent),
-          SpeedDialChild(
-              child: const Icon(Icons.camera_indoor),
-              label: "IP Camera",
-              foregroundColor: Colors.green[900],
-              onTap: state.openIPCam),
-          SpeedDialChild(
-              child: const Icon(Icons.camera_alt),
-              label: "Phone Camera",
-              foregroundColor: Colors.green[900],
-              onTap: state.openPhoneCam),
         ],
       ),
     );

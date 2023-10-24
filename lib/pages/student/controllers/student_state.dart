@@ -12,6 +12,8 @@ class StudentState extends State<StudentPage> {
   late Student student;
   late StudentValueNotifier studentValueNotifier;
 
+  bool _delete = false;
+
   void showSuccessSnackBar() {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Successfully registered ${student.firstName}'s face!")));
@@ -47,7 +49,7 @@ class StudentState extends State<StudentPage> {
     }
 
     if (context.mounted) {
-      studentValueNotifier.removeListener(onStudentValueChanged);
+      _delete = true;
       student.delete().then((_) {
         Navigator.pop(context);
       });
@@ -126,6 +128,7 @@ class StudentState extends State<StudentPage> {
   }
 
   void onStudentValueChanged() {
+    if (_delete) return;
     if (mounted) {
       setState(() {
         student = HiveBoxes.studentsBox().get(widget.studentKey);
