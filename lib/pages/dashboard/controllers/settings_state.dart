@@ -1,9 +1,8 @@
 import 'package:a_check/globals.dart';
 import 'package:a_check/main.dart';
-import 'package:a_check/models/class.dart';
+import 'package:a_check/models/school_class.dart';
 import 'package:a_check/pages/dashboard/settings_page.dart';
 import 'package:a_check/utils/dialogs.dart';
-import 'package:a_check/utils/localdb.dart';
 import 'package:easy_onvif/onvif.dart';
 import 'package:easy_onvif/probe.dart';
 import 'package:flutter/material.dart';
@@ -12,119 +11,100 @@ import 'package:flutter/services.dart';
 // TODO: Bulk Add Students via CSV import
 
 class SettingsState extends State<SettingsPage> {
-  Widget _createConfirmDialog(Widget title, Widget content) {
-    return AlertDialog(
-      title: title,
-      content: content,
-      actions: [
-        ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context, true);
-            },
-            child: const Text("Yes")),
-        ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context, false);
-            },
-            child: const Text("Cancel"))
-      ],
-    );
-  }
+  // void clearAllClasses() {
+  //   showDialog(
+  //           context: context,
+  //           builder: (context) => _createConfirmDialog(
+  //               const Text("Clear All Classes"),
+  //               const Text(
+  //                   "Are you sure you want to delete ALL CLASSES? This is not recoverable!")))
+  //       .then((value) {
+  //     if (value == true) {
+  //       HiveBoxes.classesBox().clear().then((value) {
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //             const SnackBar(content: Text("Cleared all classes.")));
+  //       });
+  //     }
+  //   });
+  // }
 
-  void clearAllClasses() {
-    showDialog(
-            context: context,
-            builder: (context) => _createConfirmDialog(
-                const Text("Clear All Classes"),
-                const Text(
-                    "Are you sure you want to delete ALL CLASSES? This is not recoverable!")))
-        .then((value) {
-      if (value == true) {
-        HiveBoxes.classesBox().clear().then((value) {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Cleared all classes.")));
-        });
-      }
-    });
-  }
+  // void clearAllAttendanceRecords() {
+  //   showDialog(
+  //           context: context,
+  //           builder: (context) => _createConfirmDialog(
+  //               const Text("Clear All Students"),
+  //               const Text(
+  //                   "Are you sure you want to delete ALL ATTENDANCE RECORDS? This is not recoverable!")))
+  //       .then((value) {
+  //     if (value == true) {
+  //       HiveBoxes.attendancesBox().clear().then((value) {
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //             const SnackBar(content: Text("Cleared all attendance records.")));
+  //       });
+  //     }
+  //   });
+  // }
 
-  void clearAllAttendanceRecords() {
-    showDialog(
-            context: context,
-            builder: (context) => _createConfirmDialog(
-                const Text("Clear All Students"),
-                const Text(
-                    "Are you sure you want to delete ALL ATTENDANCE RECORDS? This is not recoverable!")))
-        .then((value) {
-      if (value == true) {
-        HiveBoxes.attendancesBox().clear().then((value) {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Cleared all attendance records.")));
-        });
-      }
-    });
-  }
+  // void clearAllStudents() {
+  //   showDialog(
+  //           context: context,
+  //           builder: (context) => _createConfirmDialog(
+  //               const Text("Clear All Students"),
+  //               const Text(
+  //                   "Are you sure you want to delete ALL STUDENTS? This is not recoverable!")))
+  //       .then((value) {
+  //     if (value == true) {
+  //       HiveBoxes.studentsBox().clear().then((value) {
+  //         HiveBoxes.classesBox().values.forEach((element) {
+  //           final c = element as Class;
+  //           c.studentIds.clear();
+  //           c.save();
+  //         });
 
-  void clearAllStudents() {
-    showDialog(
-            context: context,
-            builder: (context) => _createConfirmDialog(
-                const Text("Clear All Students"),
-                const Text(
-                    "Are you sure you want to delete ALL STUDENTS? This is not recoverable!")))
-        .then((value) {
-      if (value == true) {
-        HiveBoxes.studentsBox().clear().then((value) {
-          HiveBoxes.classesBox().values.forEach((element) {
-            final c = element as Class;
-            c.studentIds.clear();
-            c.save();
-          });
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //             const SnackBar(content: Text("Cleared all students.")));
+  //       });
+  //     }
+  //   });
+  // }
 
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Cleared all students.")));
-        });
-      }
-    });
-  }
+  // void setAbsentWarning() async {
+  //   final result = await Dialogs.showTextInputDialog(
+  //       context, const Text("Enter new absent warning value"),
+  //       content: Text("Current value: ${prefs.getInt('absent_warn')}"),
+  //       formatters: [FilteringTextInputFormatter.digitsOnly],
+  //       keyboardType: TextInputType.number);
 
-  void setAbsentWarning() async {
-    final result = await Dialogs.showTextInputDialog(
-        context, const Text("Enter new absent warning value"),
-        content: Text("Current value: ${prefs.getInt('absent_warn')}"),
-        formatters: [FilteringTextInputFormatter.digitsOnly],
-        keyboardType: TextInputType.number);
+  //   if (result == null || result.isEmpty) return;
 
-    if (result == null || result.isEmpty) return;
+  //   prefs.setInt('absent_warn', int.parse(result)).then((_) {
+  //     snackbarKey.currentState!.showSnackBar(const SnackBar(
+  //         content: Text("Successfully saved new absent warning value!")));
+  //   }).onError((error, stackTrace) {
+  //     snackbarKey.currentState!.showSnackBar(SnackBar(
+  //         content:
+  //             Text("Something went horribly wrong!\n$error: $stackTrace")));
+  //   });
+  // }
 
-    prefs.setInt('absent_warn', int.parse(result)).then((_) {
-      snackbarKey.currentState!.showSnackBar(const SnackBar(
-          content: Text("Successfully saved new absent warning value!")));
-    }).onError((error, stackTrace) {
-      snackbarKey.currentState!.showSnackBar(SnackBar(
-          content:
-              Text("Something went horribly wrong!\n$error: $stackTrace")));
-    });
-  }
+  // void setAbsentLimit() async {
+  //   final result = await Dialogs.showTextInputDialog(
+  //       context, const Text("Enter new absent limit value"),
+  //       content: Text("Current value: ${prefs.getInt('absent_limit')}"),
+  //       formatters: [FilteringTextInputFormatter.digitsOnly],
+  //       keyboardType: TextInputType.number);
 
-  void setAbsentLimit() async {
-    final result = await Dialogs.showTextInputDialog(
-        context, const Text("Enter new absent limit value"),
-        content: Text("Current value: ${prefs.getInt('absent_limit')}"),
-        formatters: [FilteringTextInputFormatter.digitsOnly],
-        keyboardType: TextInputType.number);
+  //   if (result == null || result.isEmpty) return;
 
-    if (result == null || result.isEmpty) return;
-
-    prefs.setInt('absent_limit', int.parse(result)).then((_) {
-      snackbarKey.currentState!.showSnackBar(const SnackBar(
-          content: Text("Successfully saved new absent limit value!")));
-    }).onError((error, stackTrace) {
-      snackbarKey.currentState!.showSnackBar(SnackBar(
-          content:
-              Text("Something went horribly wrong!\n$error: $stackTrace")));
-    });
-  }
+  //   prefs.setInt('absent_limit', int.parse(result)).then((_) {
+  //     snackbarKey.currentState!.showSnackBar(const SnackBar(
+  //         content: Text("Successfully saved new absent limit value!")));
+  //   }).onError((error, stackTrace) {
+  //     snackbarKey.currentState!.showSnackBar(SnackBar(
+  //         content:
+  //             Text("Something went horribly wrong!\n$error: $stackTrace")));
+  //   });
+  // }
 
   void toggleSMSNotifs(bool? value) {}
 

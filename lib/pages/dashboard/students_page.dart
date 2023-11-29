@@ -1,11 +1,10 @@
-import 'package:a_check/models/student.dart';
+import 'package:a_check/models/person.dart';
 import 'package:a_check/pages/dashboard/controllers/students_state.dart';
 import 'package:a_check/utils/abstracts.dart';
-import 'package:a_check/utils/localdb.dart';
 import 'package:a_check/widgets/student_card.dart';
+import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 class StudentsPage extends StatefulWidget {
   const StudentsPage({Key? key}) : super(key: key);
@@ -22,12 +21,12 @@ class StudentsView extends WidgetView<StudentsPage, StudentsState> {
     return Scaffold(
       backgroundColor: const Color(0xffFFF4F4),
       body: SafeArea(
-        child: ValueListenableBuilder(
-            valueListenable: HiveBoxes.studentsBox().listenable(),
-            builder: (context, box, _) {
-              final castedBox = box.values.cast();
-              final studentsList = castedBox.map((e) => e as Student).toList();
-              studentsList.sort(
+        child: FirestoreBuilder(
+          ref: studentsRef,
+          builder: (context, snapshot, child) {
+            if (snapshot.hasData) {
+              final students = snapshot.data!.docs.map((e) => e.data).toList();
+              students.sort(
                 (a, b) => a.firstName[0]
                     .toLowerCase()
                     .compareTo(b.firstName[0].toLowerCase()),
@@ -38,12 +37,19 @@ class StudentsView extends WidgetView<StudentsPage, StudentsState> {
                   padding: EdgeInsets.all(8.0),
                   child: Text(
                     "Students",
-                    style: TextStyle(color: Color(0xff557A46),fontSize: 24, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: Color(0xff557A46),
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
-                for (var student in studentsList) StudentCard(student: student),
+                for (var student in students) StudentCard(student: student),
               ]);
-            }),
+            } else {
+              return const CircularProgressIndicator();
+            }
+          },
+        ),
       ),
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.menu_close,

@@ -1,6 +1,5 @@
-import 'package:a_check/models/class.dart';
+import 'package:a_check/models/school_class.dart';
 import 'package:a_check/pages/dashboard/calendar_page.dart';
-import 'package:a_check/utils/localdb.dart';
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 
@@ -11,22 +10,26 @@ class CalendarState extends State<CalendarPage> {
   DateTime mostRecentWeekday(DateTime date, int weekday) =>
       DateTime(date.year, date.month, date.day - (date.weekday - weekday) % 7);
 
-  void setSchedule() {
-    for (Class c in HiveBoxes.classesBox().values.cast<Class>()) {
+  void setSchedule() async {
+    final classes = (await classesRef.get()).docs.map((e) => e.data).toList();
+
+    for (SchoolClass c in classes) {
       for (ClassSchedule s in c.schedule) {
-        final date = mostRecentWeekday(DateTime.now(), s.day.index);
+        final date = mostRecentWeekday(DateTime.now(), s.weekday);
         final startTime =
             date.copyWith(hour: s.startTimeHour, minute: s.startTimeMinute);
         final endTime =
             date.copyWith(hour: s.endTimeHour, minute: s.endTimeMinute);
         final event = CalendarEventData(
-            title: c.code,
+            title: c.subjectCode,
             description: "${c.name} ${c.section}",
             date: date,
             startTime: startTime,
             endTime: endTime);
         calendarController.add(event);
       }
+
+      setState(() {});
     }
   }
 
@@ -35,14 +38,15 @@ class CalendarState extends State<CalendarPage> {
     super.initState();
 
     calendarController = EventController();
-    setSchedule();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setSchedule());
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    setSchedule();
+    WidgetsBinding.instance.addPostFrameCallback((_) => setSchedule());
   }
 
   @override

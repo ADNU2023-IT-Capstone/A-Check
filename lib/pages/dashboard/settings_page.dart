@@ -39,18 +39,18 @@ class SettingsView extends WidgetView<SettingsPage, SettingsState> {
                   onTap: state.connectIPCam,
                 ),
               ),
-              Card(
-                child: ListTile(
-                  title: const Text("Set absent warning value"),
-                  onTap: state.setAbsentWarning,
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  title: const Text("Set absent limit value"),
-                  onTap: state.setAbsentLimit,
-                ),
-              ),
+              // Card(
+              //   child: ListTile(
+              //     title: const Text("Set absent warning value"),
+              //     onTap: state.setAbsentWarning,
+              //   ),
+              // ),
+              // Card(
+              //   child: ListTile(
+              //     title: const Text("Set absent limit value"),
+              //     onTap: state.setAbsentLimit,
+              //   ),
+              // ),
               // TODO: sms notifs
               Card(
                 child: CheckboxListTile(
@@ -80,24 +80,24 @@ class SettingsView extends WidgetView<SettingsPage, SettingsState> {
                   onTap: state.setDistanceThreshold,
                 ),
               ),
-              Card(
-                child: ListTile(
-                  title: const Text("Clear all classes"),
-                  onTap: state.clearAllClasses,
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  title: const Text("Clear all students"),
-                  onTap: state.clearAllStudents,
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  title: const Text("Clear all attendance records"),
-                  onTap: state.clearAllAttendanceRecords,
-                ),
-              ),
+              // Card(
+              //   child: ListTile(
+              //     title: const Text("Clear all classes"),
+              //     onTap: state.clearAllClasses,
+              //   ),
+              // ),
+              // Card(
+              //   child: ListTile(
+              //     title: const Text("Clear all students"),
+              //     onTap: state.clearAllStudents,
+              //   ),
+              // ),
+              // Card(
+              //   child: ListTile(
+              //     title: const Text("Clear all attendance records"),
+              //     onTap: state.clearAllAttendanceRecords,
+              //   ),
+              // ),
             ],
           )),
     );

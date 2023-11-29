@@ -1,12 +1,11 @@
 import 'package:a_check/main.dart';
-import 'package:a_check/models/class.dart';
+import 'package:a_check/models/school_class.dart';
 import 'package:a_check/pages/dashboard/controllers/home_state.dart';
 import 'package:a_check/utils/abstracts.dart';
-import 'package:a_check/utils/localdb.dart';
 import 'package:a_check/widgets/class_card.dart';
+import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -34,39 +33,50 @@ class HomeView extends WidgetView<HomePage, HomeState> {
                     const Padding(
                       padding: EdgeInsets.only(right: 20.0),
                       child: Image(
-                          image: AssetImage("assets/images/LOGO.png"), height: 56),
+                          image: AssetImage("assets/images/LOGO.png"),
+                          height: 56),
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("A-Check", style: TextStyle(
-                          color: Color(0xff557A46),
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold
-                        ),),
-                        Text(packageInfo.version, style: const TextStyle(
+                        const Text(
+                          "A-Check",
+                          style: TextStyle(
+                              color: Color(0xff557A46),
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          packageInfo.version,
+                          style: const TextStyle(
                             color: Color(0xff8b9094),
                             fontSize: 12,
-                        ),)
+                          ),
+                        )
                       ],
                     )
                   ],
                 ),
               ),
               Expanded(
-                child: ValueListenableBuilder<Box>(
-                  valueListenable: HiveBoxes.classesBox().listenable(),
-                  builder: (context, box, _) {
-                    final castedBox = box.values.cast<Class>();
+                child: FirestoreBuilder(
+                  ref: classesRef,
+                  builder: (context, snapshot, child) {
+                    if (snapshot.hasData) {
+                      final classes =
+                          snapshot.data!.docs.map((e) => e.data).toList();
 
-                    return GridView.count(
-                      crossAxisCount: 2,
-                      padding: const EdgeInsets.all(20),
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 8,
-                      children:
-                          castedBox.map((e) => ClassCard(mClass: e)).toList(),
-                    );
+                      return GridView.count(
+                        crossAxisCount: 2,
+                        padding: const EdgeInsets.all(20),
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 8,
+                        children:
+                            classes.map((e) => ClassCard(mClass: e)).toList(),
+                      );
+                    } else {
+                      return const CircularProgressIndicator();
+                    }
                   },
                 ),
               ),
