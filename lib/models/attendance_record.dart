@@ -1,63 +1,55 @@
-import 'package:a_check/models/student.dart';
-import 'package:a_check/utils/localdb.dart';
-import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:a_check/models/person.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'attendance_record.g.dart';
 
-@HiveType(typeId: 5)
+const firestoreSerializable = JsonSerializable(
+    converters: firestoreJsonConverters,
+    explicitToJson: true,
+    createFieldMap: true,
+    createPerFieldToJson: true);
+
+@Collection<AttendanceRecord>('attendances')
+@firestoreSerializable
+class AttendanceRecord {
+  AttendanceRecord({
+    required this.id,
+    required this.studentId,
+    required this.classId,
+    required this.dateTime,
+    AttendanceStatus? status
+  }) {
+    this.status = status ?? AttendanceStatus.unknown;
+  }
+
+  factory AttendanceRecord.fromJson(Map<String, Object?> json) => _$AttendanceRecordFromJson(json);
+
+  @Id()
+  final String id;
+
+  final String studentId;
+  final String classId;
+  final DateTime dateTime;
+  late AttendanceStatus status;
+
+  Map<String, Object?> toJson() => _$AttendanceRecordToJson(this);
+
+  Future<Student> get student async => (await studentsRef.doc(studentId).get()).data!;
+}
+
 enum AttendanceStatus {
-  @HiveField(0)
-  present,
-  @HiveField(1)
+  @JsonValue(-1)
+  unknown,
+  @JsonValue(0)
   absent,
-  @HiveField(2)
+  @JsonValue(1)
+  present,
+  @JsonValue(2)
   late,
-  @HiveField(3)
+  @JsonValue(3)
   excused;
-
-  @override
-  String toString() {
-    switch (this) {
-      case present:
-        return "Present";
-      case absent:
-        return "Absent";
-      case late:
-        return "Late";
-      case excused:
-        return "Excused";
-      default:
-        return "";
-    }
-  }
 }
 
-@HiveType(typeId: 6)
-class AttendanceRecord extends HiveObject {
-  @HiveField(0)
-  String studentId;
-
-  @HiveField(1)
-  String classKey;
-
-  @HiveField(2)
-  DateTime dateTime;
-
-  @HiveField(3)
-  AttendanceStatus status;
-
-  AttendanceRecord(
-      {required this.studentId,
-      required this.classKey,
-      required this.dateTime,
-      required this.status});
-
-  Student get getStudent {
-    return HiveBoxes.studentsBox().get(studentId) as Student;
-  }
-}
-
-class AttendanceRecordValueNotifier extends ValueNotifier<AttendanceRecord> {
-  AttendanceRecordValueNotifier(AttendanceRecord record) : super(record);
-}
+final attendancesRef = AttendanceRecordCollectionReference();

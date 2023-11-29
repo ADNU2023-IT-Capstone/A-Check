@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "538080918726",
+    "project_id": "a-check-c4182",
+    "storage_bucket": "a-check-c4182.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:538080918726:android:ceaf2ba239a2d577bbebc7",
+        "android_client_info": {
+          "package_name": "com.example.a_check"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLc-LSSVkRwzUg3R6A73C6i3uP2rOfMyQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:538080918726:android:23ca16d870f915babbebc7",
+        "android_client_info": {
+          "package_name": "com.example.a_check_web"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLc-LSSVkRwzUg3R6A73C6i3uP2rOfMyQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

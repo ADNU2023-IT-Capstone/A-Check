@@ -1,10 +1,12 @@
+import 'package:a_check/firebase_options.dart';
 import 'package:a_check/globals.dart';
 import 'package:a_check/splash.dart';
-import 'package:a_check/utils/localdb.dart';
 import 'package:camera/camera.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,10 +17,25 @@ late SharedPreferences prefs;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  MediaKit.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  FirebaseFirestore.instance.settings = const Settings(
+    persistenceEnabled: true,
+    cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED
+  );
 
-  await Hive.initFlutter();
-  await HiveBoxes.initialize();
+  if (kDebugMode) {
+    try {
+      print("Connecting to local Firebase emulator");
+      // !!! CHANGE IP AND PORT TO WHERE THE EMULATOR IS HOSTED !!!
+      FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  MediaKit.ensureInitialized();
   cameras = await availableCameras();
   packageInfo = await PackageInfo.fromPlatform();
   prefs = await SharedPreferences.getInstance();
