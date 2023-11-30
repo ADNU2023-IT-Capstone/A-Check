@@ -1,6 +1,6 @@
 import 'package:a_check/utils/abstracts.dart';
 import 'package:a_check/widgets/controllers/schedule_dialog_state.dart';
-import 'package:a_check/models/class.dart';
+import 'package:a_check/models/school_class.dart';
 import 'package:flutter/material.dart';
 
 class ScheduleDialog extends StatefulWidget {
@@ -18,29 +18,23 @@ class ScheduleDialogView
 
   @override
   Widget build(BuildContext context) {
-    List<DropdownMenuItem<DaysOfTheWeek>> daysList = [
+    List<DropdownMenuItem<int>> daysList = const [
       DropdownMenuItem(
-        value: DaysOfTheWeek.monday,
-        child: Text(DaysOfTheWeek.monday.toString()),
+        value: DateTime.monday,
+        child: Text("Monday"),
       ),
       DropdownMenuItem(
-          value: DaysOfTheWeek.tuesday,
-          child: Text(DaysOfTheWeek.tuesday.toString())),
+        value: DateTime.tuesday,
+        child: Text("Tuesday"),
+      ),
       DropdownMenuItem(
-          value: DaysOfTheWeek.wednesday,
-          child: Text(DaysOfTheWeek.wednesday.toString())),
-      DropdownMenuItem(
-          value: DaysOfTheWeek.thursday,
-          child: Text(DaysOfTheWeek.thursday.toString())),
-      DropdownMenuItem(
-          value: DaysOfTheWeek.friday,
-          child: Text(DaysOfTheWeek.friday.toString())),
-      DropdownMenuItem(
-          value: DaysOfTheWeek.saturday,
-          child: Text(DaysOfTheWeek.saturday.toString())),
-      DropdownMenuItem(
-          value: DaysOfTheWeek.sunday,
-          child: Text(DaysOfTheWeek.sunday.toString())),
+        value: DateTime.wednesday,
+        child: Text("Wednesday"),
+      ),
+      DropdownMenuItem(value: DateTime.thursday, child: Text("Thursday")),
+      DropdownMenuItem(value: DateTime.friday, child: Text("Friday")),
+      DropdownMenuItem(value: DateTime.saturday, child: Text("Saturday")),
+      DropdownMenuItem(value: DateTime.sunday, child: Text("Sunday")),
     ];
 
     String getTime(TimeOfDay? time) {
@@ -56,7 +50,8 @@ class ScheduleDialogView
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
-            child: Text(widget.schedule == null ? "Add Schedule" : "Edit Schedule"),
+            child: Text(
+                widget.schedule == null ? "Add Schedule" : "Edit Schedule"),
           ),
         ],
       ),
@@ -80,13 +75,18 @@ class ScheduleDialogView
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Text("Day",
-                        style: TextStyle(color: Colors.black,
-                        fontSize: 16.00,
-                        fontWeight: FontWeight.w500),),
-                    const Padding(padding: EdgeInsetsDirectional.fromSTEB(0, 0, 90, 0)),
+                    const Text(
+                      "Day",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16.00,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    const Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 90, 0)),
                     DropdownButton(
-                        style: const TextStyle(color: Colors.black, fontSize: 14.00),
+                        style: const TextStyle(
+                            color: Colors.black, fontSize: 14.00),
                         items: daysList,
                         value: state.selectedDay,
                         onChanged: state.onDropdownChanged),
@@ -101,18 +101,19 @@ class ScheduleDialogView
               children: [
                 Column(
                   children: [
-                    const Text("Start Time",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                        ),
+                    const Text(
+                      "Start Time",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     const SizedBox(height: 10),
-                    Text(getTime(state.startTime),
-                      style:
-                        const TextStyle(
-                          color: Colors.black,
-                            fontSize: 14.00,
+                    Text(
+                      getTime(state.startTime),
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 14.00,
                       ),
                     ),
                     TextButton(
@@ -122,7 +123,8 @@ class ScheduleDialogView
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                      child: const Text("Set Start Time", style: TextStyle(color: Colors.green)),
+                      child: const Text("Set Start Time",
+                          style: TextStyle(color: Colors.green)),
                     ),
                     const SizedBox(height: 16),
                   ],
@@ -130,18 +132,19 @@ class ScheduleDialogView
                 const SizedBox(width: 4),
                 Column(
                   children: [
-                    const Text("End Time",
+                    const Text(
+                      "End Time",
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Text(getTime(state.endTime),
-                      style:
-                      const TextStyle(
-                          color: Colors.black,
-                          fontSize: 14.00,
+                    Text(
+                      getTime(state.endTime),
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 14.00,
                       ),
                     ),
                     TextButton(
@@ -151,7 +154,10 @@ class ScheduleDialogView
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                      child: const Text("Set End Time", style: TextStyle(color: Colors.green),),
+                      child: const Text(
+                        "Set End Time",
+                        style: TextStyle(color: Colors.green),
+                      ),
                     ),
                     const SizedBox(height: 16),
                   ],
@@ -163,16 +169,17 @@ class ScheduleDialogView
               child: Container(
                 padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
                 decoration: const BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(32.0),
-                bottomRight: Radius.circular(32.0)),
+                  color: Colors.green,
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(32.0),
+                      bottomRight: Radius.circular(32.0)),
+                ),
+                child: Text(
+                  widget.schedule == null ? "OK" : "EDIT",
+                  style: const TextStyle(color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
               ),
-              child: Text(widget.schedule == null ? "OK" : "EDIT",
-                style: const TextStyle(color: Colors.white),
-                textAlign: TextAlign.center,
-              ),
-            ),
             ),
           ],
         );

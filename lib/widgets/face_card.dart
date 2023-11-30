@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:a_check/models/student.dart';
+import 'package:a_check/models/person.dart';
 import 'package:a_check/utils/abstracts.dart';
 import 'package:a_check/widgets/controllers/face_card_state.dart';
 import 'package:flutter/material.dart';

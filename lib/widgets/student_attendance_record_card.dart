@@ -18,8 +18,8 @@ class SARCView extends WidgetView<StudentAttendanceRecordCard, SARCState> {
 
   Widget radioButton({required AttendanceStatus value}) {
     return Radio<AttendanceStatus>(
-      fillColor: MaterialStateProperty.all(const Color(0xff004225)),
-            visualDensity: const VisualDensity(
+        fillColor: MaterialStateProperty.all(const Color(0xff004225)),
+        visualDensity: const VisualDensity(
             horizontal: VisualDensity.minimumDensity,
             vertical: VisualDensity.minimumDensity),
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -46,18 +46,30 @@ class SARCView extends WidgetView<StudentAttendanceRecordCard, SARCState> {
               fit: FlexFit.tight,
               child: Row(
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.record.getStudent.toString(),
-                        softWrap: false,
-                        overflow: TextOverflow.clip,
-                        maxLines: 2,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Text(widget.record.getStudent.id),
-                    ],
+                  FutureBuilder(
+                    future: widget.record.student,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        final student = snapshot.data!;
+
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              student.toString(),
+                              softWrap: false,
+                              overflow: TextOverflow.clip,
+                              maxLines: 2,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(student.id),
+                          ],
+                        );
+                      } else {
+                        return const CircularProgressIndicator();
+                      }
+                    },
                   ),
                 ],
               ),

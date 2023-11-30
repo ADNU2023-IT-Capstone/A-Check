@@ -1,11 +1,11 @@
-import 'package:a_check/models/class.dart';
+import 'package:a_check/models/school_class.dart';
 import 'package:a_check/pages/class/class_page.dart';
 import 'package:flutter/material.dart';
 
 class ClassCard extends StatelessWidget {
   const ClassCard({Key? key, required this.mClass}) : super(key: key);
 
-  final Class mClass;
+  final SchoolClass mClass;
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class ClassCard extends StatelessWidget {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => ClassPage(classKey: mClass.key)));
+              builder: (context) => ClassPage(classId: mClass.id)));
     }
     return GestureDetector(
       onTap: onTap,
@@ -34,7 +34,7 @@ class ClassCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(mClass.code,
+            Text(mClass.subjectCode,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis, style: const TextStyle(color:Color(0xffFFF4F4),fontSize: 18, fontWeight: FontWeight.w500)),
             const Divider(height: 10,thickness: 0.5, color: Color(0xffF1C376)),

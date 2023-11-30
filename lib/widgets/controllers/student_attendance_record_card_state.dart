@@ -10,8 +10,10 @@ class SARCState extends State<StudentAttendanceRecordCard> {
       status = value;
     });
 
-    if (value != null) widget.record.status = value;
-    await widget.record.save();
+    if (value != null) {
+      widget.record.status = value;
+      await attendancesRef.doc(widget.record.id).update(status: status!);
+    }
   }
 
   @override

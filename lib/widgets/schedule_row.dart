@@ -1,8 +1,14 @@
-import 'package:a_check/models/class.dart';
+import 'package:a_check/models/school_class.dart';
 import 'package:flutter/material.dart';
 
 class ScheduleRow extends StatelessWidget {
-  const ScheduleRow({Key? key, required this.schedule, required this.index, required this.onEdit, required this.onDelete}) : super(key: key);
+  const ScheduleRow(
+      {Key? key,
+      required this.schedule,
+      required this.index,
+      required this.onEdit,
+      required this.onDelete})
+      : super(key: key);
 
   final ClassSchedule schedule;
   final int index;
@@ -30,9 +36,8 @@ class ScheduleRow extends StatelessWidget {
                   ),
                   child: Center(
                       child: Text(
-                    schedule.day.toString(),
-                    style: const TextStyle(
-                        color: Colors.white),
+                    schedule.weekdayName(),
+                    style: const TextStyle(color: Colors.white),
                   ))),
             ),
             Expanded(
@@ -62,11 +67,17 @@ class ScheduleRow extends StatelessWidget {
                       children: [
                         Text(
                           "Start: ${schedule.getStartTime().format(context)}",
-                          style: const TextStyle(color: Colors.black45, fontStyle: FontStyle.italic, fontSize: 13),
+                          style: const TextStyle(
+                              color: Colors.black45,
+                              fontStyle: FontStyle.italic,
+                              fontSize: 13),
                         ),
                         Text(
                           "End: ${schedule.getEndTime().format(context)}",
-                          style: const TextStyle(color: Colors.black45, fontStyle: FontStyle.italic, fontSize: 13),
+                          style: const TextStyle(
+                              color: Colors.black45,
+                              fontStyle: FontStyle.italic,
+                              fontSize: 13),
                         ),
                       ],
                     ),

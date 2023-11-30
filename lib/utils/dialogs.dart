@@ -1,4 +1,4 @@
-import 'package:a_check/models/class.dart';
+import 'package:a_check/models/school_class.dart';
 import 'package:a_check/widgets/schedule_dialog.dart';
 import 'package:a_check/widgets/select_dialog.dart';
 import 'package:flutter/material.dart';
@@ -95,7 +95,8 @@ class Dialogs {
     );
   }
 
-  static Future<dynamic> showSelectDialog(BuildContext context, Map<String, dynamic> map,
+  static Future<dynamic> showSelectDialog(
+      BuildContext context, Map<String, dynamic> map,
       {Widget? title}) async {
     return await showDialog(
       context: context,

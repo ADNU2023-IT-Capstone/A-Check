@@ -1,6 +1,6 @@
 import 'package:a_check/main.dart';
-import 'package:a_check/models/class.dart';
-import 'package:a_check/models/student.dart';
+import 'package:a_check/models/school_class.dart';
+import 'package:a_check/models/person.dart';
 import 'package:a_check/pages/student/student_page.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +9,7 @@ class StudentCard extends StatelessWidget {
       : super(key: key);
 
   final Student student;
-  final Class? studentClass;
+  final SchoolClass? studentClass;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class StudentCard extends StatelessWidget {
           context,
           MaterialPageRoute(
               builder: (context) => StudentPage(
-                    studentKey: student.key,
+                    studentId: student.id,
                     studentClass: studentClass,
                   )));
     }
@@ -27,8 +27,8 @@ class StudentCard extends StatelessWidget {
       if (studentClass == null) {
         return null;
       }
-      
-      final absences = student.getPALEValues(studentClass!.key)['absent']!;
+
+      final absences = student.getPALEValues(studentClass!.id)['absent']!;
       final warning = prefs.getInt('absent_warn')!;
       final limit = prefs.getInt('absent_limit')!;
 
@@ -56,12 +56,14 @@ class StudentCard extends StatelessWidget {
                 children: [
                   Text(
                     student.toString(),
-                    style:
-                      const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.w500),
                   ),
-                  Text(student.id,
-                    style:
-                      const TextStyle(fontSize: 16, fontWeight: FontWeight.w300),)
+                  Text(
+                    student.id,
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w300),
+                  )
                 ],
               ),
             ],

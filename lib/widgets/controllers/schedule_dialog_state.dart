@@ -1,25 +1,26 @@
-import 'package:a_check/models/class.dart';
+import 'package:a_check/models/school_class.dart';
 import 'package:a_check/widgets/schedule_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ScheduleDialogState extends State<ScheduleDialog> {
-  DaysOfTheWeek? selectedDay;
+  int? selectedDay;
   TimeOfDay? startTime, endTime;
 
-  void onDropdownChanged(DaysOfTheWeek? value) =>
-      setState(() => selectedDay = value);
+  void onDropdownChanged(int? value) => setState(() => selectedDay = value);
 
   void setStartTime() async {
-    TimeOfDay? value =
-        await showTimePicker(context: context, initialTime: startTime != null ? startTime! : TimeOfDay.now());
+    TimeOfDay? value = await showTimePicker(
+        context: context,
+        initialTime: startTime != null ? startTime! : TimeOfDay.now());
 
     setState(() => startTime = value);
   }
 
   void setEndTime() async {
-    TimeOfDay? value =
-        await showTimePicker(context: context, initialTime: endTime != null ? endTime! : TimeOfDay.now());
+    TimeOfDay? value = await showTimePicker(
+        context: context,
+        initialTime: endTime != null ? endTime! : TimeOfDay.now());
 
     setState(() => endTime = value);
   }
@@ -31,7 +32,7 @@ class ScheduleDialogState extends State<ScheduleDialog> {
     }
 
     final schedule = ClassSchedule.usingTimeOfDay(
-        day: selectedDay!, startTime: startTime!, endTime: endTime!);
+        weekday: selectedDay!, startTime: startTime!, endTime: endTime!);
 
     Navigator.pop(context, schedule);
   }
@@ -41,7 +42,7 @@ class ScheduleDialogState extends State<ScheduleDialog> {
     super.initState();
 
     if (widget.schedule != null) {
-      selectedDay = widget.schedule!.day;
+      selectedDay = widget.schedule!.weekday;
       startTime = widget.schedule!.getStartTime();
       endTime = widget.schedule!.getEndTime();
     }
