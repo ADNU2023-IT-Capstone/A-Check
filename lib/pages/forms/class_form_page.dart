@@ -1,4 +1,4 @@
-import 'package:a_check/models/class.dart';
+import 'package:a_check/models/school_class.dart';
 import 'package:a_check/pages/forms/controllers/class_form_state.dart';
 import 'package:a_check/utils/abstracts.dart';
 import 'package:a_check/utils/textformatters.dart';
@@ -7,9 +7,9 @@ import 'package:a_check/widgets/schedule_row.dart';
 import 'package:flutter/material.dart';
 
 class ClassFormPage extends StatefulWidget {
-  const ClassFormPage({super.key, this.mClass});
+  const ClassFormPage({super.key, this.schoolClass});
 
-  final Class? mClass;
+  final SchoolClass? schoolClass;
 
   @override
   State<ClassFormPage> createState() => ClassFormState();
@@ -64,7 +64,7 @@ class ClassFormView extends WidgetView<ClassFormPage, ClassFormState> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 0),
           child: TextFormField(
-            enabled: widget.mClass == null,
+            enabled: widget.schoolClass == null,
             validator: Validators.hasValue,
             controller: state.codeTedCon,
             obscureText: false,
@@ -102,7 +102,7 @@ class ClassFormView extends WidgetView<ClassFormPage, ClassFormState> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 0),
           child: TextFormField(
-            enabled: widget.mClass == null,
+            enabled: widget.schoolClass == null,
             validator: Validators.hasValue,
             controller: state.sectionTedCon,
             obscureText: false,

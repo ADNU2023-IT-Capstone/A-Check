@@ -1,7 +1,5 @@
-import 'package:a_check/models/student.dart';
 import 'package:a_check/pages/forms/controllers/students_form_state.dart';
 import 'package:a_check/utils/abstracts.dart';
-import 'package:a_check/utils/localdb.dart';
 import 'package:flutter/material.dart';
 
 class StudentsFormPage extends StatefulWidget {
@@ -41,12 +39,11 @@ class StudentsFormView extends WidgetView<StudentsFormPage, StudentsFormState> {
           Expanded(
             child: ListView(
               padding: const EdgeInsetsDirectional.fromSTEB(15, 20, 20, 0),
-              children: state.students.keys.map((e) {
-                final castedBox = HiveBoxes.studentsBox().values.cast();
-                final name = (castedBox.firstWhere((student) => student.id == e) as Student).toString();
+              children: state.studentsMap.keys.map((e) {
+                final name = state.studentsList.firstWhere((student) => student.id == e).toString();
                 
                 return CheckboxListTile(
-                    value: state.students[e],
+                    value: state.studentsMap[e],
                     tileColor: const Color.fromRGBO(238,238,238, 0.5),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(26.0),

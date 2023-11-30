@@ -1,10 +1,9 @@
-import 'package:a_check/models/student.dart';
+import 'package:a_check/models/person.dart';
 import 'package:a_check/pages/forms/student_form_page.dart';
-import 'package:a_check/utils/localdb.dart';
 import 'package:flutter/material.dart';
 
 class StudentFormState extends State<StudentFormPage> {
-  TextEditingController? idCon,
+  late TextEditingController idCon,
       studentFNameCon,
       studentMNameCon,
       studentLNameCon,
@@ -21,33 +20,34 @@ class StudentFormState extends State<StudentFormPage> {
   void addStudent() {
     if (!formKey.currentState!.validate()) return;
 
-    final guardian = Person(
-        firstName: guardianFNameCon!.text,
-        middleName: guardianMNameCon!.text,
-        lastName: guardianLNameCon!.text,
-        phone: guardianPhoneCon!.text,
-        email: guardianEmailCon!.text);
-    final student = Student(
-        id: idCon!.text,
-        firstName: studentFNameCon!.text,
-        middleName: studentMNameCon!.text,
-        lastName: studentLNameCon!.text,
-        phone: studentPhoneCon!.text,
-        email: studentEmailCon!.text,
-        guardian: hasGuardian ? guardian : null,
-        faceArray: widget.student != null ? widget.student!.faceArray : null,
-        facePhotoBytes: widget.student != null ? widget.student!.facePhotoBytes : null);
+    // TODO: rework form finalization to work with firebase
+    // final guardian = Person(
+    //     firstName: guardianFNameCon!.text,
+    //     middleName: guardianMNameCon!.text,
+    //     lastName: guardianLNameCon!.text,
+    //     phone: guardianPhoneCon!.text,
+    //     email: guardianEmailCon!.text);
+    // final student = Student(
+    //     id: idCon!.text,
+    //     firstName: studentFNameCon!.text,
+    //     middleName: studentMNameCon!.text,
+    //     lastName: studentLNameCon!.text,
+    //     phone: studentPhoneCon!.text,
+    //     email: studentEmailCon!.text,
+    //     guardian: hasGuardian ? guardian : null,
+    //     faceArray: widget.student != null ? widget.student!.faceArray : null,
+    //     facePhotoBytes: widget.student != null ? widget.student!.facePhotoBytes : null);
 
-    HiveBoxes.studentsBox().put(student.id, student).then((value) {
-      if (widget.currentClass != null) widget.currentClass!.addStudents([student.id]);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-              "${widget.student == null ? "Added" : "Edited"} $student! (${student.id})")));
-      Navigator.pop(context);
-    }).onError((error, stackTrace) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Failed to add $student!\n${error.toString()}")));
-    });
+    // HiveBoxes.studentsBox().put(student.id, student).then((value) {
+    //   if (widget.currentClass != null) widget.currentClass!.addStudents([student.id]);
+    //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    //       content: Text(
+    //           "${widget.student == null ? "Added" : "Edited"} $student! (${student.id})")));
+    //   Navigator.pop(context);
+    // }).onError((error, stackTrace) {
+    //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    //       content: Text("Failed to add $student!\n${error.toString()}")));
+    // });
   }
 
   void onHasGuardianChanged(bool? value) {
@@ -56,48 +56,27 @@ class StudentFormState extends State<StudentFormPage> {
 
   @override
   void initState() {
-    List<String?> values = [];
-    if (widget.student != null) {
-      final student = widget.student!;
-      values.addAll([
-        student.id.toString(),
-        student.firstName,
-        student.middleName,
-        student.lastName,
-        student.phone,
-        student.email,
-      ]);
-
-      if (student.guardian == null) {
-        values.addAll([null, null, null, null, null]);
-      } else {
-        setState(() => hasGuardian = true);
-        values.addAll([
-          student.guardian!.firstName,
-          student.guardian!.middleName,
-          student.guardian!.lastName,
-          student.guardian!.phone,
-          student.guardian!.email
-        ]);
-      }
-    } else {
-      values.addAll(
-          [null, null, null, null, null, null, null, null, null, null, null]);
-    }
-
-    idCon = TextEditingController(text: values[0]);
-    studentFNameCon = TextEditingController(text: values[1]);
-    studentMNameCon = TextEditingController(text: values[2]);
-    studentLNameCon = TextEditingController(text: values[3]);
-    studentPhoneCon = TextEditingController(text: values[4]);
-    studentEmailCon = TextEditingController(text: values[5]);
-    guardianFNameCon = TextEditingController(text: values[6]);
-    guardianMNameCon = TextEditingController(text: values[7]);
-    guardianLNameCon = TextEditingController(text: values[8]);
-    guardianPhoneCon = TextEditingController(text: values[9]);
-    guardianEmailCon = TextEditingController(text: values[10]);
-
     super.initState();
+
+    idCon = TextEditingController();
+    studentFNameCon = TextEditingController();
+    studentMNameCon = TextEditingController();
+    studentLNameCon = TextEditingController();
+    studentPhoneCon = TextEditingController();
+    studentEmailCon = TextEditingController();
+    guardianFNameCon = TextEditingController();
+    guardianMNameCon = TextEditingController();
+    guardianLNameCon = TextEditingController();
+    guardianPhoneCon = TextEditingController();
+    guardianEmailCon = TextEditingController();
+
+    if (widget.student != null) {
+      studentFNameCon.text = widget.student!.firstName;
+      studentMNameCon.text = widget.student!.middleName;
+      studentLNameCon.text = widget.student!.lastName;
+      studentPhoneCon.text = widget.student!.phoneNumber ?? "";
+      studentEmailCon.text = widget.student!.email ?? "";
+    }
   }
 
   @override

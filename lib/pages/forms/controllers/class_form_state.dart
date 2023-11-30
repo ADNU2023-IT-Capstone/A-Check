@@ -1,11 +1,10 @@
-import 'package:a_check/models/class.dart';
+import 'package:a_check/models/school_class.dart';
 import 'package:a_check/pages/forms/class_form_page.dart';
-import 'package:a_check/utils/localdb.dart';
 import 'package:a_check/utils/dialogs.dart';
 import 'package:flutter/material.dart';
 
 class ClassFormState extends State<ClassFormPage> {
-  late TextEditingController? nameTedCon, codeTedCon, sectionTedCon;
+  late TextEditingController nameTedCon, codeTedCon, sectionTedCon;
   List<ClassSchedule> schedules = [];
   final formKey = GlobalKey<FormState>();
 
@@ -46,21 +45,19 @@ class ClassFormState extends State<ClassFormPage> {
       return;
     }
 
-    final mClass = Class(
-        code: codeTedCon!.text,
-        name: nameTedCon!.text,
-        section: sectionTedCon!.text,
+    final schoolClass = SchoolClass(
+        id: "${codeTedCon.text}_${sectionTedCon.text}",
+        subjectCode: codeTedCon.text,
+        name: nameTedCon.text,
+        section: sectionTedCon.text,
         schedule: schedules,
-        studentIds: widget.mClass?.studentIds.toList());
+        studentIds: widget.schoolClass?.studentIds);
 
-    HiveBoxes.classesBox().put(mClass.key, mClass).then((value) {
+    classesRef.doc(schoolClass.id).set(schoolClass).then((value) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
-              "${widget.mClass == null ? "Added" : "Edited"} ${mClass.key}!")));
+              "${widget.schoolClass == null ? "Added" : "Edited"} ${schoolClass.id}!")));
       Navigator.pop(context);
-    }).onError((error, stackTrace) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Failed to add ${mClass.code}!\n${error.toString()}")));
     });
   }
 
@@ -68,18 +65,15 @@ class ClassFormState extends State<ClassFormPage> {
   void initState() {
     super.initState();
 
-    List<String?> values = [];
-    if (widget.mClass != null) {
-      final mClass = widget.mClass!;
-      values.addAll([mClass.code, mClass.name, mClass.section]);
-      schedules = mClass.schedule;
-    } else {
-      values.addAll([null, null, null]);
-    }
+    codeTedCon = TextEditingController();
+    nameTedCon = TextEditingController();
+    sectionTedCon = TextEditingController();
 
-    codeTedCon = TextEditingController(text: values[0]);
-    nameTedCon = TextEditingController(text: values[1]);
-    sectionTedCon = TextEditingController(text: values[2]);
+    if (widget.schoolClass != null) {
+      codeTedCon.text = widget.schoolClass!.subjectCode;
+      nameTedCon.text = widget.schoolClass!.name;
+      sectionTedCon.text = widget.schoolClass!.section;
+    }
   }
 
   @override

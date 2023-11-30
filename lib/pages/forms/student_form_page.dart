@@ -1,5 +1,5 @@
-import 'package:a_check/models/class.dart';
-import 'package:a_check/models/student.dart';
+import 'package:a_check/models/school_class.dart';
+import 'package:a_check/models/person.dart';
 import 'package:a_check/pages/forms/controllers/student_form_state.dart';
 import 'package:a_check/utils/abstracts.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ class StudentFormPage extends StatefulWidget {
   const StudentFormPage({Key? key, this.student, this.currentClass}) : super(key: key);
 
   final Student? student;
-  final Class? currentClass;
+  final SchoolClass? currentClass;
 
   @override
   State<StudentFormPage> createState() => StudentFormState();

@@ -1,19 +1,19 @@
-import 'package:a_check/models/student.dart';
+import 'package:a_check/models/person.dart';
 import 'package:a_check/pages/forms/students_form_page.dart';
-import 'package:a_check/utils/localdb.dart';
 import 'package:flutter/material.dart';
 
 class StudentsFormState extends State<StudentsFormPage> {
-  final Map<String, bool> students = {};
+  final Map<String, bool> studentsMap = {};
+  late final List<Student> studentsList;
 
   void checkBoxOnChanged(String key, bool? value) {
-    setState(() => students[key] = value!);
+    setState(() => studentsMap[key] = value!);
   }
 
   void addSelectedStudents() {
     List<String> selectedStudents = [];
 
-    students.forEach((key, value) {
+    studentsMap.forEach((key, value) {
       if (value == true) selectedStudents.add(key);
     });
 
@@ -24,12 +24,16 @@ class StudentsFormState extends State<StudentsFormPage> {
   void initState() {
     super.initState();
 
-    final castedBox = HiveBoxes.studentsBox().values.cast();
-    for (Student student in castedBox) { 
-      students.addAll({student.id: false});
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) => setupStudents());
   }
 
   @override
   Widget build(BuildContext context) => StudentsFormView(this);
+  
+  setupStudents() async {
+    studentsList = (await studentsRef.get()).docs.map((e) => e.data).toList();
+    for (Student student in studentsList) { 
+      studentsMap.addAll({student.id: false});
+    }
+  }
 }
