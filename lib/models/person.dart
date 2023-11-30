@@ -54,14 +54,9 @@ class Student extends Person {
 
   Map<String, Object?> toJson() => _$StudentToJson(this);
 
-    Map<String, int> getPALEValues(String classKey) {
-      return {
-        'present': 0,
-        'absent': 0,
-        'late': 0,
-        'excused': 0
-      };
-      // TODO: fetch PALE values from firebase
+  Map<String, int> getPALEValues(String classKey) {
+    return {'present': 0, 'absent': 0, 'late': 0, 'excused': 0};
+    // TODO: fetch PALE values from firebase
     // final attendances = HiveBoxes.attendancesBox()
     //     .values
     //     .cast<AttendanceRecord>()
@@ -94,6 +89,13 @@ class Student extends Person {
     //   'late': late,
     //   'excused': excused
     // };
+  }
+
+  // TODO: register face for firebase
+  Future<void> registerFace(List faceArray, dynamic facePhotoBytes) {
+    this.faceArray = faceArray;
+    // this.facePhotoBytes = facePhotoBytes;
+    return Future.delayed(Duration.zero);
   }
 }
 

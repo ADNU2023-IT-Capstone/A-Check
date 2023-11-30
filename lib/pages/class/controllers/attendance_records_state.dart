@@ -1,5 +1,5 @@
+import 'package:a_check/models/attendance_record.dart';
 import 'package:a_check/pages/class/attendance_records_page.dart';
-import 'package:a_check/utils/localdb.dart';
 import 'package:a_check/utils/dialogs.dart';
 import 'package:flutter/material.dart';
 
@@ -10,8 +10,10 @@ class AttendanceRecordsState extends State<AttendanceRecordsPage> {
         const Text("Delete Record"),
         const Text("This action will delete this record. Continue?"));
     if (result != null && result) {
-      final keys = widget.records.map((e) => e.key);
-      HiveBoxes.attendancesBox().deleteAll(keys);
+      final ids = widget.records.map((e) => e.id);
+      for (var id in ids) {
+        await attendancesRef.doc(id).delete();
+      }
 
       if (context.mounted) {
         ScaffoldMessenger.of(context)

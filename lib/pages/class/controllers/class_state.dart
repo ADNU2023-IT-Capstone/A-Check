@@ -1,27 +1,25 @@
 import 'package:a_check/globals.dart';
-import 'package:a_check/models/class.dart';
+import 'package:a_check/models/attendance_record.dart';
+import 'package:a_check/models/person.dart';
+import 'package:a_check/models/school_class.dart';
 import 'package:a_check/pages/face_recognition_page.dart';
 import 'package:a_check/pages/forms/class_form_page.dart';
 import 'package:a_check/pages/class/class_page.dart';
 import 'package:a_check/pages/forms/student_form_page.dart';
 import 'package:a_check/pages/forms/students_form_page.dart';
-import 'package:a_check/utils/localdb.dart';
 import 'package:a_check/utils/dialogs.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 class ClassState extends State<ClassPage> {
-  late Class mClass;
-  late ClassValueNotifier classValueNotifier;
-
-  bool _delete = false;
+  late SchoolClass schoolClass;
+  late List<Student> classStudents;
 
   void backButtonPressed() {
     Navigator.pop(context);
   }
 
   void takeAttendance() {
-    if (mClass.studentIds.isEmpty) {
+    if (schoolClass.studentIds.isEmpty) {
       snackbarKey.currentState!
           .showSnackBar(const SnackBar(content: Text("You have no students!")));
       return;
@@ -29,9 +27,8 @@ class ClassState extends State<ClassPage> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => FaceRecognitionPage(mClass: mClass)));
-
-    onClassValueChanged();
+            builder: (context) =>
+                FaceRecognitionPage(schoolClass: schoolClass)));
   }
 
   void addNewStudent() {
@@ -39,7 +36,7 @@ class ClassState extends State<ClassPage> {
         context,
         MaterialPageRoute(
             builder: (context) => StudentFormPage(
-                  currentClass: mClass,
+                  currentClass: schoolClass,
                 )));
   }
 
@@ -49,7 +46,10 @@ class ClassState extends State<ClassPage> {
 
     if (result == null || result.isEmpty) return;
 
-    await mClass.addStudents(result);
+    final newStudentIds = schoolClass.studentIds;
+    newStudentIds.addAll(result);
+
+    classesRef.doc(schoolClass.id).update(studentIds: newStudentIds);
   }
 
   void editClass() {
@@ -57,7 +57,7 @@ class ClassState extends State<ClassPage> {
         context,
         MaterialPageRoute(
           builder: (context) => ClassFormPage(
-            mClass: mClass,
+            schoolClass: schoolClass,
           ),
         ));
   }
@@ -72,15 +72,17 @@ class ClassState extends State<ClassPage> {
       return;
     }
 
-    if (context.mounted) {
-      _delete = true;
-      mClass.getAttendanceRecords().forEach((_, value) async {
-        for (var record in value) {
-          await record.delete();
-        }
-      });
+    (await schoolClass.getAttendanceRecords())
+        .forEach((_, attendanceRecords) async {
+      for (var record in attendanceRecords) {
+        await attendancesRef.doc(record.id).delete();
+      }
+    });
 
-      mClass.delete().then((_) {
+    if (context.mounted) {
+      classesRef.doc(schoolClass.id).delete().then((_) {
+        snackbarKey.currentState!.showSnackBar(
+            SnackBar(content: Text("Deleted ${schoolClass.id}.")));
         Navigator.pop(context);
       });
     }
@@ -90,27 +92,10 @@ class ClassState extends State<ClassPage> {
   void initState() {
     super.initState();
 
-    mClass = HiveBoxes.classesBox().get(widget.classKey);
-    classValueNotifier = ClassValueNotifier(mClass);
-
-    HiveBoxes.classesBox()
-        .listenable(keys: [mClass.key]).addListener(onClassValueChanged);
-  }
-
-  void onClassValueChanged() {
-    if (_delete) return;
-    if (mounted) {
-      setState(() {
-        mClass = HiveBoxes.classesBox().get(widget.classKey);
-        classValueNotifier.value = mClass;
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    classValueNotifier.dispose();
-    super.dispose();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      schoolClass = (await classesRef.doc(widget.classId).get()).data!;
+      classStudents = await schoolClass.getStudents();
+    });
   }
 
   @override

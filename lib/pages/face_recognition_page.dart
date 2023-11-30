@@ -1,5 +1,5 @@
-import 'package:a_check/models/class.dart';
-import 'package:a_check/models/student.dart';
+import 'package:a_check/models/school_class.dart';
+import 'package:a_check/models/person.dart';
 import 'package:a_check/pages/controllers/face_recognition_state.dart';
 import 'package:a_check/utils/abstracts.dart';
 import 'package:a_check/widgets/camera_view.dart';
@@ -7,10 +7,10 @@ import 'package:a_check/widgets/ip_camera_view.dart';
 import 'package:flutter/material.dart';
 
 class FaceRecognitionPage extends StatefulWidget {
-  const FaceRecognitionPage({super.key, this.student, this.mClass});
+  const FaceRecognitionPage({super.key, this.student, this.schoolClass});
 
   final Student? student;
-  final Class? mClass;
+  final SchoolClass? schoolClass;
 
   @override
   State<FaceRecognitionPage> createState() => FaceRecognitionState();

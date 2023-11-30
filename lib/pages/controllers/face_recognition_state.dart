@@ -3,11 +3,10 @@ import 'dart:io';
 import 'package:a_check/globals.dart';
 import 'package:a_check/main.dart';
 import 'package:a_check/models/attendance_record.dart';
-import 'package:a_check/models/student.dart';
+import 'package:a_check/models/person.dart';
 import 'package:a_check/pages/face_detected_page.dart';
 import 'package:a_check/pages/face_recognition_page.dart';
 import 'package:a_check/utils/dialogs.dart';
-import 'package:a_check/utils/localdb.dart';
 import 'package:a_check/utils/mlservice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -130,21 +129,24 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
     final currentDateTime = DateTime.now();
     for (Student student in _classStudents) {
       AttendanceRecord record;
+      String id = attendancesRef.doc().id;
       if (recognizedStudents[student] != null) {
         record = AttendanceRecord(
+            id: id,
             studentId: student.id,
-            classKey: widget.mClass!.key,
+            classId: widget.schoolClass!.id,
             dateTime: currentDateTime,
             status: AttendanceStatus.present);
       } else {
         record = AttendanceRecord(
+            id: id,
             studentId: student.id,
-            classKey: widget.mClass!.key,
+            classId: widget.schoolClass!.id,
             dateTime: currentDateTime,
             status: AttendanceStatus.absent);
       }
 
-      HiveBoxes.attendancesBox().add(record);
+      attendancesRef.doc(id).set(record);
     }
 
     // Display recognized students
@@ -154,12 +156,12 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
       //   context,
       //   const Text("Recognized students"),
       //   Text(recognizedStudents.entries
-      //       .map((e) => "${e.key.toString()} (${e.value.toStringAsFixed(3)})")
+      //       .map((e) => "${e.id.toString()} (${e.value.toStringAsFixed(3)})")
       //       .cast<String>()
       //       .toList()
       //       .join('\n')),
       // );
-      final result = await Navigator.push(
+      await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => DetectedFacesPage(
@@ -214,23 +216,23 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
     return true;
   }
 
-  _setupClassList() {
-    _classStudents = widget.mClass!.getStudents();
+  _setupClassList() async {
+    _classStudents = await widget.schoolClass!.getStudents();
     _studentsWithRegisteredFaces = [
       for (var student in _classStudents)
-        if (student.faceArray != null) student
+        if (student.faceArray.isNotEmpty) student
     ];
 
     if (_studentsWithRegisteredFaces.isEmpty) {
       snackbarKey.currentState!.showSnackBar(const SnackBar(
           content: Text(
               "You do not have at least a student with a registered face!")));
-      Navigator.pop(context);
+      if (context.mounted) Navigator.pop(context);
     }
 
     List<List<num>> embeddings = [
       for (Student student in _studentsWithRegisteredFaces)
-        student.faceArray!.cast<num>()
+        student.faceArray.cast<num>()
     ];
     _faceDataTree = KDTree.fromIterable(embeddings);
   }
@@ -239,8 +241,8 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
   void initState() {
     super.initState();
 
-    if (widget.mClass != null) {
-      _setupClassList();
+    if (widget.schoolClass != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _setupClassList());
     }
   }
 
