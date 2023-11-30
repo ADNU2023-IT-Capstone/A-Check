@@ -37,8 +37,10 @@ class Student extends Person {
     super.email,
     super.phoneNumber,
     List<String>? guardianIds,
+    List? faceArray,
   }) {
     this.guardianIds = guardianIds ?? List.empty();
+    this.faceArray = faceArray ?? List.empty();
   }
 
   factory Student.fromJson(Map<String, Object?> json) =>
@@ -47,9 +49,52 @@ class Student extends Person {
   @Id()
   final String id;
 
-  late final List<String>? guardianIds;
+  late final List<String> guardianIds;
+  late final List faceArray;
 
   Map<String, Object?> toJson() => _$StudentToJson(this);
+
+    Map<String, int> getPALEValues(String classKey) {
+      return {
+        'present': 0,
+        'absent': 0,
+        'late': 0,
+        'excused': 0
+      };
+      // TODO: fetch PALE values from firebase
+    // final attendances = HiveBoxes.attendancesBox()
+    //     .values
+    //     .cast<AttendanceRecord>()
+    //     .where((element) =>
+    //         element.classKey == classKey && element.studentId == id);
+
+    // int present = 0, absent = 0, late = 0, excused = 0;
+    // for (AttendanceRecord record in attendances) {
+    //   switch (record.status) {
+    //     case AttendanceStatus.present:
+    //       present++;
+    //       break;
+    //     case AttendanceStatus.absent:
+    //       absent++;
+    //       break;
+    //     case AttendanceStatus.late:
+    //       late++;
+    //       break;
+    //     case AttendanceStatus.excused:
+    //       excused++;
+    //       break;
+    //     default:
+    //       break;
+    //   }
+    // }
+
+    // return {
+    //   'present': present,
+    //   'absent': absent,
+    //   'late': late,
+    //   'excused': excused
+    // };
+  }
 }
 
 @Collection<Guardian>('guardians')

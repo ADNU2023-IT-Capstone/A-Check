@@ -129,8 +129,10 @@ abstract class StudentDocumentReference
   ///
   /// If no document exists yet, the update will fail.
   Future<void> update({
-    List<String>? guardianIds,
+    List<String> guardianIds,
     FieldValue guardianIdsFieldValue,
+    List<dynamic> faceArray,
+    FieldValue faceArrayFieldValue,
     String firstName,
     FieldValue firstNameFieldValue,
     String middleName,
@@ -148,8 +150,10 @@ abstract class StudentDocumentReference
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
-    List<String>? guardianIds,
+    List<String> guardianIds,
     FieldValue guardianIdsFieldValue,
+    List<dynamic> faceArray,
+    FieldValue faceArrayFieldValue,
     String firstName,
     FieldValue firstNameFieldValue,
     String middleName,
@@ -194,6 +198,8 @@ class _$StudentDocumentReference
   Future<void> update({
     Object? guardianIds = _sentinel,
     FieldValue? guardianIdsFieldValue,
+    Object? faceArray = _sentinel,
+    FieldValue? faceArrayFieldValue,
     Object? firstName = _sentinel,
     FieldValue? firstNameFieldValue,
     Object? middleName = _sentinel,
@@ -208,6 +214,10 @@ class _$StudentDocumentReference
     assert(
       guardianIds == _sentinel || guardianIdsFieldValue == null,
       "Cannot specify both guardianIds and guardianIdsFieldValue",
+    );
+    assert(
+      faceArray == _sentinel || faceArrayFieldValue == null,
+      "Cannot specify both faceArray and faceArrayFieldValue",
     );
     assert(
       firstName == _sentinel || firstNameFieldValue == null,
@@ -232,9 +242,14 @@ class _$StudentDocumentReference
     final json = {
       if (guardianIds != _sentinel)
         _$StudentFieldMap['guardianIds']!:
-            _$StudentPerFieldToJson.guardianIds(guardianIds as List<String>?),
+            _$StudentPerFieldToJson.guardianIds(guardianIds as List<String>),
       if (guardianIdsFieldValue != null)
         _$StudentFieldMap['guardianIds']!: guardianIdsFieldValue,
+      if (faceArray != _sentinel)
+        _$StudentFieldMap['faceArray']!:
+            _$StudentPerFieldToJson.faceArray(faceArray as List<dynamic>),
+      if (faceArrayFieldValue != null)
+        _$StudentFieldMap['faceArray']!: faceArrayFieldValue,
       if (firstName != _sentinel)
         _$StudentFieldMap['firstName']!:
             _$StudentPerFieldToJson.firstName(firstName as String),
@@ -268,6 +283,8 @@ class _$StudentDocumentReference
     Transaction transaction, {
     Object? guardianIds = _sentinel,
     FieldValue? guardianIdsFieldValue,
+    Object? faceArray = _sentinel,
+    FieldValue? faceArrayFieldValue,
     Object? firstName = _sentinel,
     FieldValue? firstNameFieldValue,
     Object? middleName = _sentinel,
@@ -282,6 +299,10 @@ class _$StudentDocumentReference
     assert(
       guardianIds == _sentinel || guardianIdsFieldValue == null,
       "Cannot specify both guardianIds and guardianIdsFieldValue",
+    );
+    assert(
+      faceArray == _sentinel || faceArrayFieldValue == null,
+      "Cannot specify both faceArray and faceArrayFieldValue",
     );
     assert(
       firstName == _sentinel || firstNameFieldValue == null,
@@ -306,9 +327,14 @@ class _$StudentDocumentReference
     final json = {
       if (guardianIds != _sentinel)
         _$StudentFieldMap['guardianIds']!:
-            _$StudentPerFieldToJson.guardianIds(guardianIds as List<String>?),
+            _$StudentPerFieldToJson.guardianIds(guardianIds as List<String>),
       if (guardianIdsFieldValue != null)
         _$StudentFieldMap['guardianIds']!: guardianIdsFieldValue,
+      if (faceArray != _sentinel)
+        _$StudentFieldMap['faceArray']!:
+            _$StudentPerFieldToJson.faceArray(faceArray as List<dynamic>),
+      if (faceArrayFieldValue != null)
+        _$StudentFieldMap['faceArray']!: faceArrayFieldValue,
       if (firstName != _sentinel)
         _$StudentFieldMap['firstName']!:
             _$StudentPerFieldToJson.firstName(firstName as String),
@@ -445,6 +471,17 @@ abstract class StudentQuery
     String? arrayContains,
     List<String>? arrayContainsAny,
   });
+  StudentQuery whereFaceArray({
+    List<dynamic>? isEqualTo,
+    List<dynamic>? isNotEqualTo,
+    List<dynamic>? isLessThan,
+    List<dynamic>? isLessThanOrEqualTo,
+    List<dynamic>? isGreaterThan,
+    List<dynamic>? isGreaterThanOrEqualTo,
+    bool? isNull,
+    dynamic arrayContains,
+    List<dynamic>? arrayContainsAny,
+  });
   StudentQuery whereFirstName({
     String? isEqualTo,
     String? isNotEqualTo,
@@ -515,10 +552,22 @@ abstract class StudentQuery
 
   StudentQuery orderByGuardianIds({
     bool descending = false,
-    List<String>? startAt,
-    List<String>? startAfter,
-    List<String>? endAt,
-    List<String>? endBefore,
+    List<String> startAt,
+    List<String> startAfter,
+    List<String> endAt,
+    List<String> endBefore,
+    StudentDocumentSnapshot? startAtDocument,
+    StudentDocumentSnapshot? endAtDocument,
+    StudentDocumentSnapshot? endBeforeDocument,
+    StudentDocumentSnapshot? startAfterDocument,
+  });
+
+  StudentQuery orderByFaceArray({
+    bool descending = false,
+    List<dynamic> startAt,
+    List<dynamic> startAfter,
+    List<dynamic> endAt,
+    List<dynamic> endBefore,
     StudentDocumentSnapshot? startAtDocument,
     StudentDocumentSnapshot? endAtDocument,
     StudentDocumentSnapshot? endBeforeDocument,
@@ -778,25 +827,24 @@ class _$StudentQuery extends QueryReference<Student, StudentQuerySnapshot>
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$StudentFieldMap['guardianIds']!,
         isEqualTo: isEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson.guardianIds(isEqualTo as List<String>?)
+            ? _$StudentPerFieldToJson.guardianIds(isEqualTo as List<String>)
             : notSetQueryParam,
         isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson.guardianIds(isNotEqualTo as List<String>?)
+            ? _$StudentPerFieldToJson.guardianIds(isNotEqualTo as List<String>)
             : notSetQueryParam,
         isLessThan: isLessThan != notSetQueryParam
-            ? _$StudentPerFieldToJson.guardianIds(isLessThan as List<String>?)
+            ? _$StudentPerFieldToJson.guardianIds(isLessThan as List<String>)
             : notSetQueryParam,
         isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
             ? _$StudentPerFieldToJson
-                .guardianIds(isLessThanOrEqualTo as List<String>?)
+                .guardianIds(isLessThanOrEqualTo as List<String>)
             : notSetQueryParam,
         isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$StudentPerFieldToJson
-                .guardianIds(isGreaterThan as List<String>?)
+            ? _$StudentPerFieldToJson.guardianIds(isGreaterThan as List<String>)
             : notSetQueryParam,
         isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
             ? _$StudentPerFieldToJson
-                .guardianIds(isGreaterThanOrEqualTo as List<String>?)
+                .guardianIds(isGreaterThanOrEqualTo as List<String>)
             : notSetQueryParam,
         isNull: isNull,
         arrayContains: arrayContains != notSetQueryParam
@@ -806,6 +854,56 @@ class _$StudentQuery extends QueryReference<Student, StudentQuerySnapshot>
             : notSetQueryParam,
         arrayContainsAny: arrayContainsAny != null
             ? _$StudentPerFieldToJson.guardianIds(arrayContainsAny)
+                as Iterable<Object>?
+            : null,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  StudentQuery whereFaceArray({
+    Object? isEqualTo = notSetQueryParam,
+    Object? isNotEqualTo = notSetQueryParam,
+    Object? isLessThan = notSetQueryParam,
+    Object? isLessThanOrEqualTo = notSetQueryParam,
+    Object? isGreaterThan = notSetQueryParam,
+    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    bool? isNull,
+    Object? arrayContains = notSetQueryParam,
+    List<dynamic>? arrayContainsAny,
+  }) {
+    return _$StudentQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$StudentFieldMap['faceArray']!,
+        isEqualTo: isEqualTo != notSetQueryParam
+            ? _$StudentPerFieldToJson.faceArray(isEqualTo as List<dynamic>)
+            : notSetQueryParam,
+        isNotEqualTo: isNotEqualTo != notSetQueryParam
+            ? _$StudentPerFieldToJson.faceArray(isNotEqualTo as List<dynamic>)
+            : notSetQueryParam,
+        isLessThan: isLessThan != notSetQueryParam
+            ? _$StudentPerFieldToJson.faceArray(isLessThan as List<dynamic>)
+            : notSetQueryParam,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
+            ? _$StudentPerFieldToJson
+                .faceArray(isLessThanOrEqualTo as List<dynamic>)
+            : notSetQueryParam,
+        isGreaterThan: isGreaterThan != notSetQueryParam
+            ? _$StudentPerFieldToJson.faceArray(isGreaterThan as List<dynamic>)
+            : notSetQueryParam,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
+            ? _$StudentPerFieldToJson
+                .faceArray(isGreaterThanOrEqualTo as List<dynamic>)
+            : notSetQueryParam,
+        isNull: isNull,
+        arrayContains: arrayContains != notSetQueryParam
+            ? (_$StudentPerFieldToJson.faceArray([arrayContains as dynamic])
+                    as List?)!
+                .single
+            : notSetQueryParam,
+        arrayContainsAny: arrayContainsAny != null
+            ? _$StudentPerFieldToJson.faceArray(arrayContainsAny)
                 as Iterable<Object>?
             : null,
       ),
@@ -1110,6 +1208,78 @@ class _$StudentQuery extends QueryReference<Student, StudentQuerySnapshot>
   }) {
     final query = $referenceWithoutCursor
         .orderBy(_$StudentFieldMap['guardianIds']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$StudentQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  StudentQuery orderByFaceArray({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    StudentDocumentSnapshot? startAtDocument,
+    StudentDocumentSnapshot? endAtDocument,
+    StudentDocumentSnapshot? endBeforeDocument,
+    StudentDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$StudentFieldMap['faceArray']!, descending: descending);
     var queryCursor = $queryCursor;
 
     if (startAtDocument != null) {
@@ -4698,6 +4868,7 @@ Student _$StudentFromJson(Map<String, dynamic> json) => Student(
       guardianIds: (json['guardianIds'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
+      faceArray: json['faceArray'] as List<dynamic>?,
     );
 
 const _$StudentFieldMap = <String, String>{
@@ -4708,6 +4879,7 @@ const _$StudentFieldMap = <String, String>{
   'phoneNumber': 'phoneNumber',
   'id': 'id',
   'guardianIds': 'guardianIds',
+  'faceArray': 'faceArray',
 };
 
 // ignore: unused_element
@@ -4725,7 +4897,9 @@ abstract class _$StudentPerFieldToJson {
   // ignore: unused_element
   static Object? id(String instance) => instance;
   // ignore: unused_element
-  static Object? guardianIds(List<String>? instance) => instance;
+  static Object? guardianIds(List<String> instance) => instance;
+  // ignore: unused_element
+  static Object? faceArray(List<dynamic> instance) => instance;
 }
 
 Map<String, dynamic> _$StudentToJson(Student instance) => <String, dynamic>{
@@ -4736,6 +4910,7 @@ Map<String, dynamic> _$StudentToJson(Student instance) => <String, dynamic>{
       'phoneNumber': instance.phoneNumber,
       'id': instance.id,
       'guardianIds': instance.guardianIds,
+      'faceArray': instance.faceArray,
     };
 
 Guardian _$GuardianFromJson(Map<String, dynamic> json) => Guardian(

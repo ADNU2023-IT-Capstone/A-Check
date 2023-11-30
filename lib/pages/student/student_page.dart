@@ -1,15 +1,16 @@
-import 'package:a_check/models/class.dart';
-import 'package:a_check/models/student.dart';
+import 'package:a_check/models/school_class.dart';
+import 'package:a_check/models/person.dart';
 import 'package:a_check/pages/student/controllers/student_state.dart';
 import 'package:a_check/utils/abstracts.dart';
+import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:flutter/material.dart';
 
 class StudentPage extends StatefulWidget {
-  const StudentPage({Key? key, required this.studentKey, this.studentClass})
+  const StudentPage({Key? key, required this.studentId, this.studentClass})
       : super(key: key);
 
-  final String studentKey;
-  final Class? studentClass;
+  final String studentId;
+  final SchoolClass? studentClass;
 
   @override
   State<StudentPage> createState() => StudentState();
@@ -55,9 +56,11 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
                     borderRadius: BorderRadius.all(Radius.circular(35.0)),
                     border: Border.fromBorderSide(BorderSide()),
                   ),
-                  child: state.student.facePhotoBytes != null
-                      ? Image.memory(state.student.facePhotoBytes!)
-                      : const Icon(Icons.person_add_alt),
+                  // TODO: display image of student from firebase
+                  child: const Placeholder(),
+                  // child: state.student.facePhotoBytes != null
+                  //     ? Image.memory(state.student.facePhotoBytes!)
+                  //     : const Icon(Icons.person_add_alt),
                 ),
                 Container(
                     padding: const EdgeInsets.all(4),
@@ -173,7 +176,7 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
             enabled: false,
             decoration: const InputDecoration(
                 labelText: "Contact Number", isDense: true),
-            controller: TextEditingController(text: student.phone),
+            controller: TextEditingController(text: student.phoneNumber),
           ),
           TextField(
             enabled: false,
@@ -187,38 +190,40 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
   }
 
   Widget buildGuardianInfo(Student student) {
-    return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(10, 0, 10, 30),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Text(
-            "Guardian Information",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          Text(
-            student.guardian.toString(),
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          TextField(
-            enabled: false,
-            decoration: const InputDecoration(
-                labelText: "Contact Number", isDense: true),
-            controller: TextEditingController(text: student.guardian?.phone),
-          ),
-          TextField(
-            enabled: false,
-            decoration:
-                const InputDecoration(labelText: "E-mail", isDense: true),
-            controller: TextEditingController(text: student.guardian?.email),
-          )
-        ],
-      ),
-    );
+    return Placeholder();
+    // TODO: guardian information using firebase stuff
+    // return Padding(
+    //   padding: const EdgeInsetsDirectional.fromSTEB(10, 0, 10, 30),
+    //   child: Column(
+    //     crossAxisAlignment: CrossAxisAlignment.center,
+    //     children: [
+    //       const Text(
+    //         "Guardian Information",
+    //         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    //       ),
+    //       Text(
+    //         student.guardian.toString(),
+    //         style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+    //       ),
+    //       TextField(
+    //         enabled: false,
+    //         decoration: const InputDecoration(
+    //             labelText: "Contact Number", isDense: true),
+    //         controller: TextEditingController(text: student.guardian?.phone),
+    //       ),
+    //       TextField(
+    //         enabled: false,
+    //         decoration:
+    //             const InputDecoration(labelText: "E-mail", isDense: true),
+    //         controller: TextEditingController(text: student.guardian?.email),
+    //       )
+    //     ],
+    //   ),
+    // );
   }
 
   Widget buildClassInfo(Student student) {
-    final paleMap = student.getPALEValues(widget.studentClass!.key);
+    final paleMap = student.getPALEValues(widget.studentClass!.id);
     return Column(
       children: [
         Text("Present: ${paleMap['present']}"),
@@ -231,54 +236,112 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: state.studentValueNotifier,
-      builder: (context, student, _) => Scaffold(
-        backgroundColor: const Color(0xffFFF4F4),
-        appBar: AppBar(
-          backgroundColor: const Color(0xffD7E5CA),
-          foregroundColor: Colors.white,
-          elevation: 0,
-          actions: [
-            PopupMenuButton(
-              itemBuilder: (context) => [
-                if (widget.studentClass != null)
-                  PopupMenuItem(
-                      onTap: state.removeFromClass,
-                      child: const Text("Remove from class")),
-                PopupMenuItem(
-                  onTap: state.editStudent,
-                  child: const Text("Edit student"),
-                ),
-                PopupMenuItem(
-                  onTap: state.deleteStudent,
-                  child: const Text("Delete student"),
+    return FirestoreBuilder(
+      ref: studentsRef.doc(widget.studentId),
+      builder: (context, snapshot, child) {
+        if (snapshot.hasData) {
+          final student = snapshot.data!.data!;
+
+          return Scaffold(
+            backgroundColor: const Color(0xffFFF4F4),
+            appBar: AppBar(
+              backgroundColor: const Color(0xffD7E5CA),
+              foregroundColor: Colors.white,
+              elevation: 0,
+              actions: [
+                PopupMenuButton(
+                  itemBuilder: (context) => [
+                    if (widget.studentClass != null)
+                      PopupMenuItem(
+                          onTap: state.removeFromClass,
+                          child: const Text("Remove from class")),
+                    PopupMenuItem(
+                      onTap: state.editStudent,
+                      child: const Text("Edit student"),
+                    ),
+                    PopupMenuItem(
+                      onTap: state.deleteStudent,
+                      child: const Text("Delete student"),
+                    )
+                  ],
                 )
               ],
-            )
-          ],
-        ),
-        body: SafeArea(
-            child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            buildHeader(student),
-            Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            ),
+            body: SafeArea(
                 child: Column(
-                  children: [
-                    buildStudentInfo(student),
-                    const SizedBox(height: 24),
-                    student.guardian != null
-                        ? buildGuardianInfo(student)
-                        : const Text("No guardian!"),
-                    if (widget.studentClass != null) buildClassInfo(student),
-                  ],
-                )),
-          ],
-        )),
-      ),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                buildHeader(student),
+                Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 16),
+                    child: Column(
+                      children: [
+                        buildStudentInfo(student),
+                        const SizedBox(height: 24),
+                        // student.guardian != null
+                        //     ? buildGuardianInfo(student)
+                        //     : const Text("No guardian!"),
+                        if (widget.studentClass != null)
+                          buildClassInfo(student),
+                      ],
+                    )),
+              ],
+            )),
+          );
+        } else {
+          return const CircularProgressIndicator();
+        }
+      },
     );
+    // return ValueListenableBuilder(
+    //   valueListenable: state.studentValueNotifier,
+    //   builder: (context, student, _) => Scaffold(
+    //     backgroundColor: const Color(0xffFFF4F4),
+    //     appBar: AppBar(
+    //       backgroundColor: const Color(0xffD7E5CA),
+    //       foregroundColor: Colors.white,
+    //       elevation: 0,
+    //       actions: [
+    //         PopupMenuButton(
+    //           itemBuilder: (context) => [
+    //             if (widget.studentClass != null)
+    //               PopupMenuItem(
+    //                   onTap: state.removeFromClass,
+    //                   child: const Text("Remove from class")),
+    //             PopupMenuItem(
+    //               onTap: state.editStudent,
+    //               child: const Text("Edit student"),
+    //             ),
+    //             PopupMenuItem(
+    //               onTap: state.deleteStudent,
+    //               child: const Text("Delete student"),
+    //             )
+    //           ],
+    //         )
+    //       ],
+    //     ),
+    //     body: SafeArea(
+    //         child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.start,
+    //       children: [
+    //         buildHeader(student),
+    //         Padding(
+    //             padding:
+    //                 const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+    //             child: Column(
+    //               children: [
+    //                 buildStudentInfo(student),
+    //                 const SizedBox(height: 24),
+    //                 student.guardian != null
+    //                     ? buildGuardianInfo(student)
+    //                     : const Text("No guardian!"),
+    //                 if (widget.studentClass != null) buildClassInfo(student),
+    //               ],
+    //             )),
+    //       ],
+    //     )),
+    //   ),
+    // );
   }
 }

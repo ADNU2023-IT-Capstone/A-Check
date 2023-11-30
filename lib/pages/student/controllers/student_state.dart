@@ -1,18 +1,14 @@
 import 'package:a_check/globals.dart';
-import 'package:a_check/models/student.dart';
+import 'package:a_check/models/person.dart';
+import 'package:a_check/models/school_class.dart';
 import 'package:a_check/pages/face_recognition_page.dart';
 import 'package:a_check/pages/forms/student_form_page.dart';
 import 'package:a_check/pages/student/student_page.dart';
-import 'package:a_check/utils/localdb.dart';
 import 'package:a_check/utils/dialogs.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 class StudentState extends State<StudentPage> {
   late Student student;
-  late StudentValueNotifier studentValueNotifier;
-
-  bool _delete = false;
 
   void showSuccessSnackBar() {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -44,20 +40,21 @@ class StudentState extends State<StudentPage> {
     }
 
     if (widget.studentClass != null) {
-      widget.studentClass!.studentIds.remove(student.id);
-      widget.studentClass!.save();
+      final newStudentIds = widget.studentClass!.studentIds;
+      newStudentIds.remove(student.id);
+
+      classesRef.doc(widget.studentClass!.id).update(studentIds: newStudentIds);
     }
 
     if (context.mounted) {
-      _delete = true;
-      student.delete().then((_) {
+      studentsRef.doc(student.id).delete().then((_) {
         Navigator.pop(context);
       });
     }
   }
 
   void registerFace() async {
-    if (student.hasRegisteredFace()) {
+    if (student.faceArray.isNotEmpty) {
       final result = await Dialogs.showConfirmDialog(
           context,
           const Text("Warning"),
@@ -83,7 +80,7 @@ class StudentState extends State<StudentPage> {
   }
 
   void removeFace() async {
-    if (student.hasRegisteredFace()) {
+    if (student.faceArray.isNotEmpty) {
       final result = await Dialogs.showConfirmDialog(
           context,
           const Text("Warning"),
@@ -91,9 +88,10 @@ class StudentState extends State<StudentPage> {
       if (result == null || !result) {
         return;
       } else {
-        student.deleteFace();
-        snackbarKey.currentState!.showSnackBar(SnackBar(
-            content: Text("Deleted ${student.firstName}'s face data.")));
+        studentsRef.doc(student.id).update(faceArray: List.empty()).then((_) {
+          snackbarKey.currentState!.showSnackBar(SnackBar(
+              content: Text("Deleted ${student.firstName}'s face data.")));
+        });
       }
     } else {
       return;
@@ -105,42 +103,29 @@ class StudentState extends State<StudentPage> {
         context,
         const Text("Warning"),
         Text(
-            "${student.firstName} will be removed to class ${widget.studentClass!.code}. Continue?"));
+            "${student.firstName} will be removed to class ${widget.studentClass!.id}. Continue?"));
     if (result == null || !result) {
       return;
     }
 
-    widget.studentClass!.studentIds.remove(student.id);
-    widget.studentClass!.save();
+    final newStudentIds = widget.studentClass!.studentIds;
+    newStudentIds.remove(student.id);
 
-    if (context.mounted) Navigator.pop(context);
+    classesRef
+        .doc(widget.studentClass!.id)
+        .update(studentIds: newStudentIds)
+        .then((_) {
+      Navigator.pop(context);
+    });
   }
 
   @override
   void initState() {
     super.initState();
 
-    student = HiveBoxes.studentsBox().get(widget.studentKey);
-    studentValueNotifier = StudentValueNotifier(student);
-
-    HiveBoxes.studentsBox()
-        .listenable(keys: [student.key]).addListener(onStudentValueChanged);
-  }
-
-  void onStudentValueChanged() {
-    if (_delete) return;
-    if (mounted) {
-      setState(() {
-        student = HiveBoxes.studentsBox().get(widget.studentKey);
-        studentValueNotifier.value = student;
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    studentValueNotifier.dispose();
-    super.dispose();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      student = (await studentsRef.doc(widget.studentId).get()).data!;
+    });
   }
 
   @override
