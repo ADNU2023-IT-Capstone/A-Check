@@ -83,8 +83,9 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
       final result = await Dialogs.showConfirmDialog(
           context, const Text("Register face"), Image.memory(encodedImage));
       if (result != null && result) {
-        widget.student!
-            .registerFace(await _mlService.predict(faceImage), encodedImage)
+        studentsRef
+            .doc(widget.student!.id)
+            .update(faceArray: await _mlService.predict(faceImage))
             .catchError((e) {
           if (context.mounted) {
             snackbarKey.currentState!.hideCurrentSnackBar();
@@ -222,13 +223,6 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
       for (var student in _classStudents)
         if (student.faceArray.isNotEmpty) student
     ];
-
-    if (_studentsWithRegisteredFaces.isEmpty) {
-      snackbarKey.currentState!.showSnackBar(const SnackBar(
-          content: Text(
-              "You do not have at least a student with a registered face!")));
-      if (context.mounted) Navigator.pop(context);
-    }
 
     List<List<num>> embeddings = [
       for (Student student in _studentsWithRegisteredFaces)

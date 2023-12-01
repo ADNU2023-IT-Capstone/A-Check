@@ -75,7 +75,7 @@ class HomeView extends WidgetView<HomePage, HomeState> {
                             classes.map((e) => ClassCard(mClass: e)).toList(),
                       );
                     } else {
-                      return const CircularProgressIndicator();
+                      return const Center(child: CircularProgressIndicator());
                     }
                   },
                 ),

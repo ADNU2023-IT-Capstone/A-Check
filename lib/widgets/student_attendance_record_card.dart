@@ -56,7 +56,7 @@ class SARCView extends WidgetView<StudentAttendanceRecordCard, SARCState> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              student.toString(),
+                              student.fullName,
                               softWrap: false,
                               overflow: TextOverflow.clip,
                               maxLines: 2,

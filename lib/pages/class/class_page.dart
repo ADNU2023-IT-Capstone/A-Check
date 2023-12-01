@@ -124,15 +124,18 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
   }
 
   Widget buildStudentsListView(SchoolClass schoolClass) {
-    return ListView(
-      shrinkWrap: true,
-      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      children: state.classStudents
-          .map((e) => StudentCard(
-                student: e,
-                studentClass: state.schoolClass,
-              ))
-          .toList(),
+    return FutureBuilder(
+      future: schoolClass.getStudents(),
+      builder: (context, snapshot) => ListView(
+        shrinkWrap: true,
+        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+        children: snapshot.hasData ? snapshot.data!
+            .map((e) => StudentCard(
+                  student: e,
+                  studentClass: schoolClass,
+                ))
+            .toList() : [const CircularProgressIndicator()],
+      ),
     );
   }
 

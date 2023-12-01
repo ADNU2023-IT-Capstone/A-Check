@@ -1,3 +1,4 @@
+import 'package:a_check/models/attendance_record.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -54,41 +55,40 @@ class Student extends Person {
 
   Map<String, Object?> toJson() => _$StudentToJson(this);
 
-  Map<String, int> getPALEValues(String classKey) {
-    return {'present': 0, 'absent': 0, 'late': 0, 'excused': 0};
-    // TODO: fetch PALE values from firebase
-    // final attendances = HiveBoxes.attendancesBox()
-    //     .values
-    //     .cast<AttendanceRecord>()
-    //     .where((element) =>
-    //         element.classKey == classKey && element.studentId == id);
+  Future<Map<String, int>> getPALEValues(String classId) async {
+    final attendances = (await attendancesRef.get())
+        .docs
+        .map((e) => e.data)
+        .where(
+            (element) => element.classId == classId && element.studentId == id)
+        .toList();
 
-    // int present = 0, absent = 0, late = 0, excused = 0;
-    // for (AttendanceRecord record in attendances) {
-    //   switch (record.status) {
-    //     case AttendanceStatus.present:
-    //       present++;
-    //       break;
-    //     case AttendanceStatus.absent:
-    //       absent++;
-    //       break;
-    //     case AttendanceStatus.late:
-    //       late++;
-    //       break;
-    //     case AttendanceStatus.excused:
-    //       excused++;
-    //       break;
-    //     default:
-    //       break;
-    //   }
-    // }
+    int present = 0, absent = 0, late = 0, excused = 0;
+    for (var record in attendances) {
+      switch (record.status) {
+        case AttendanceStatus.present:
+          present++;
+          break;
+        case AttendanceStatus.absent:
+          absent++;
+          break;
+        case AttendanceStatus.late:
+          late++;
+          break;
+        case AttendanceStatus.excused:
+          excused++;
+          break;
+        default:
+          break;
+      }
+    }
 
-    // return {
-    //   'present': present,
-    //   'absent': absent,
-    //   'late': late,
-    //   'excused': excused
-    // };
+    return {
+      'present': present,
+      'absent': absent,
+      'late': late,
+      'excused': excused
+    };
   }
 
   // TODO: register face for firebase

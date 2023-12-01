@@ -1,6 +1,5 @@
 import 'package:a_check/globals.dart';
 import 'package:a_check/models/attendance_record.dart';
-import 'package:a_check/models/person.dart';
 import 'package:a_check/models/school_class.dart';
 import 'package:a_check/pages/face_recognition_page.dart';
 import 'package:a_check/pages/forms/class_form_page.dart';
@@ -12,23 +11,40 @@ import 'package:flutter/material.dart';
 
 class ClassState extends State<ClassPage> {
   late SchoolClass schoolClass;
-  late List<Student> classStudents;
 
   void backButtonPressed() {
     Navigator.pop(context);
   }
 
-  void takeAttendance() {
+  void takeAttendance() async {
     if (schoolClass.studentIds.isEmpty) {
       snackbarKey.currentState!
           .showSnackBar(const SnackBar(content: Text("You have no students!")));
       return;
     }
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                FaceRecognitionPage(schoolClass: schoolClass)));
+
+    final students = await schoolClass.getStudents();
+    bool hasRegisteredFaces = false;
+    for (var student in students) {
+      if (student.faceArray.isNotEmpty) {
+        hasRegisteredFaces = true;
+        break;
+      }
+    }
+
+    if (hasRegisteredFaces) {
+      if (context.mounted) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    FaceRecognitionPage(schoolClass: schoolClass)));
+      }
+    } else {
+      snackbarKey.currentState!.showSnackBar(const SnackBar(
+          content: Text(
+              "You do not have at least a student with a registered face!")));
+    }
   }
 
   void addNewStudent() {
@@ -49,7 +65,10 @@ class ClassState extends State<ClassPage> {
     final newStudentIds = schoolClass.studentIds;
     newStudentIds.addAll(result);
 
-    classesRef.doc(schoolClass.id).update(studentIds: newStudentIds);
+    classesRef
+        .doc(schoolClass.id)
+        .update(studentIds: newStudentIds)
+        .whenComplete(() => setState(() {}));
   }
 
   void editClass() {
@@ -92,9 +111,8 @@ class ClassState extends State<ClassPage> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       schoolClass = (await classesRef.doc(widget.classId).get()).data!;
-      classStudents = await schoolClass.getStudents();
     });
   }
 

@@ -55,7 +55,7 @@ class SchoolClass {
   }
 
   Future<List<Student>> getStudents() async {
-    List<Student> studentsList = List.empty();
+    List<Student> studentsList = [];
     for (var id in studentIds) {
       final student = (await studentsRef.doc(id).get()).data!;
       studentsList.add(student);

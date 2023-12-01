@@ -77,6 +77,8 @@ class StudentState extends State<StudentPage> {
     } else if (result['result'] == false) {
       showFailedSnackBar(result['error']);
     }
+
+    _initStudent();
   }
 
   void removeFace() async {
@@ -92,6 +94,7 @@ class StudentState extends State<StudentPage> {
           snackbarKey.currentState!.showSnackBar(SnackBar(
               content: Text("Deleted ${student.firstName}'s face data.")));
         });
+        _initStudent();
       }
     } else {
       return;
@@ -123,8 +126,12 @@ class StudentState extends State<StudentPage> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      student = (await studentsRef.doc(widget.studentId).get()).data!;
+    _initStudent();
+  }
+
+  void _initStudent() {
+    studentsRef.doc(widget.studentId).get().then((value) {
+      setState(() => student = value.data!);
     });
   }
 

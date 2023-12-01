@@ -27,9 +27,9 @@ void main() async {
 
   if (kDebugMode) {
     try {
-      print("Connecting to local Firebase emulator");
+      print("Using local Firebase emulator");
       // !!! CHANGE IP AND PORT TO WHERE THE EMULATOR IS HOSTED !!!
-      FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
+      FirebaseFirestore.instance.useFirestoreEmulator('192.168.1.10', 8080);
     } catch (e) {
       print(e);
     }

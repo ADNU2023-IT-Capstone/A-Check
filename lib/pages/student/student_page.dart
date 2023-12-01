@@ -94,7 +94,7 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
                         child: Text(
-                          student.toString(),
+                          student.fullName.toString(),
                           textAlign: TextAlign.center,
                           maxLines: 2,
                           overflow: TextOverflow.clip,
@@ -224,13 +224,22 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
 
   Widget buildClassInfo(Student student) {
     final paleMap = student.getPALEValues(widget.studentClass!.id);
-    return Column(
-      children: [
-        Text("Present: ${paleMap['present']}"),
-        Text("Absent: ${paleMap['absent']}"),
-        Text("Late: ${paleMap['late']}"),
-        Text("Excused: ${paleMap['excused']}"),
-      ],
+    return FutureBuilder(
+      future: paleMap,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Column(
+            children: [
+              Text("Present: ${snapshot.data!['present']}"),
+              Text("Absent: ${snapshot.data!['absent']}"),
+              Text("Late: ${snapshot.data!['late']}"),
+              Text("Excused: ${snapshot.data!['excused']}"),
+            ],
+          );
+        } else {
+          return const CircularProgressIndicator();
+        }
+      },
     );
   }
 
