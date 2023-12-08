@@ -1,4 +1,4 @@
-import 'package:a_check/models/school_class.dart';
+import 'package:a_check/models/school.dart';
 import 'package:a_check/pages/dashboard/controllers/home_state.dart';
 import 'package:a_check/themes.dart';
 import 'package:a_check/utils/abstracts.dart';
@@ -98,6 +98,7 @@ class HomeView extends WidgetView<HomePage, HomeState> {
           const Spacer(),
           PopupMenuButton(
             icon: const Icon(Icons.account_box),
+            tooltip: "Account",
             itemBuilder: (context) => [
               PopupMenuItem(
                 onTap: state.logOut,

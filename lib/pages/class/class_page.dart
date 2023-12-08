@@ -1,4 +1,4 @@
-import 'package:a_check/models/school_class.dart';
+import 'package:a_check/models/school.dart';
 import 'package:a_check/pages/class/controllers/class_state.dart';
 import 'package:a_check/themes.dart';
 import 'package:a_check/utils/abstracts.dart';

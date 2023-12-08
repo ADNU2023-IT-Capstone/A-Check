@@ -1,5 +1,5 @@
-import 'package:a_check/models/school_class.dart';
-import 'package:a_check/models/person.dart';
+import 'package:a_check/models/school.dart';
+import 'package:a_check/models/school.dart';
 import 'package:a_check/pages/student/student_page.dart';
 import 'package:a_check/themes.dart';
 import 'package:flutter/material.dart';

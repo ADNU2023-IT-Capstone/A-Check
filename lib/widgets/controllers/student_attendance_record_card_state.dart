@@ -1,4 +1,4 @@
-import 'package:a_check/models/attendance_record.dart';
+import 'package:a_check/models/school.dart';
 import 'package:a_check/widgets/student_attendance_record_card.dart';
 import 'package:flutter/material.dart';
 

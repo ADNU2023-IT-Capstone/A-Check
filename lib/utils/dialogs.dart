@@ -1,4 +1,4 @@
-import 'package:a_check/models/school_class.dart';
+import 'package:a_check/models/school.dart';
 import 'package:a_check/widgets/schedule_dialog.dart';
 import 'package:a_check/widgets/select_dialog.dart';
 import 'package:flutter/material.dart';

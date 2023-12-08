@@ -1,4 +1,4 @@
-import 'package:a_check/models/school_class.dart';
+import 'package:a_check/models/school.dart';
 import 'package:flutter/material.dart';
 
 class ScheduleRow extends StatelessWidget {

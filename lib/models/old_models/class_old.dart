@@ -1,5 +1,5 @@
-// import 'package:a_check/models/attendance_record_old.dart';
-// import 'package:a_check/models/student_old.dart';
+// import 'package:a_check/models/school.dart';
+// import 'package:a_check/models/school.dart';
 // import 'package:a_check/utils/localdb.dart';
 // import 'package:flutter/material.dart';
 // import 'package:hive/hive.dart';

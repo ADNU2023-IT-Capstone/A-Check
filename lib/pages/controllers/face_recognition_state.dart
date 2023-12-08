@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:a_check/globals.dart';
 import 'package:a_check/main.dart';
-import 'package:a_check/models/attendance_record.dart';
-import 'package:a_check/models/person.dart';
+import 'package:a_check/models/school.dart';
+import 'package:a_check/models/school.dart';
 import 'package:a_check/pages/face_detected_page.dart';
 import 'package:a_check/pages/face_recognition_page.dart';
 import 'package:a_check/utils/dialogs.dart';

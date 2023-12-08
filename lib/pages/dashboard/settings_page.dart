@@ -52,7 +52,7 @@ class SettingsView extends WidgetView<SettingsPage, SettingsState> {
           subtitle: const Text(
               "If enabled, will notify the student and its guardian when absent warning and limit value is met through SMS"),
           trailing: Checkbox(
-            value: true,
+            value: false,
             onChanged: state.toggleSMSNotifs,
           ),
         ),

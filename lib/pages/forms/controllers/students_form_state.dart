@@ -1,4 +1,4 @@
-import 'package:a_check/models/person.dart';
+import 'package:a_check/models/school.dart';
 import 'package:a_check/pages/forms/students_form_page.dart';
 import 'package:flutter/material.dart';
 

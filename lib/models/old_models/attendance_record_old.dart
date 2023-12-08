@@ -1,4 +1,4 @@
-// import 'package:a_check/models/student_old.dart';
+// import 'package:a_check/models/school.dart';
 // import 'package:a_check/utils/localdb.dart';
 // import 'package:flutter/material.dart';
 // import 'package:hive_flutter/hive_flutter.dart';

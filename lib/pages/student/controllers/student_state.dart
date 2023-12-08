@@ -1,6 +1,6 @@
 import 'package:a_check/globals.dart';
-import 'package:a_check/models/person.dart';
-import 'package:a_check/models/school_class.dart';
+import 'package:a_check/models/school.dart';
+import 'package:a_check/models/school.dart';
 import 'package:a_check/pages/face_recognition_page.dart';
 import 'package:a_check/pages/forms/student_form_page.dart';
 import 'package:a_check/pages/student/student_page.dart';

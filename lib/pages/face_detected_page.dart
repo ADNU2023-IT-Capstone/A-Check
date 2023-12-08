@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:a_check/models/person.dart';
+import 'package:a_check/models/school.dart';
 import 'package:a_check/pages/controllers/face_detected_page.dart';
 import 'package:a_check/utils/abstracts.dart';
 import 'package:a_check/widgets/face_card.dart';

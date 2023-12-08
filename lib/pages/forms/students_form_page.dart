@@ -1,4 +1,4 @@
-import 'package:a_check/models/person.dart';
+import 'package:a_check/models/school.dart';
 import 'package:a_check/pages/forms/controllers/students_form_state.dart';
 import 'package:a_check/utils/abstracts.dart';
 import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
