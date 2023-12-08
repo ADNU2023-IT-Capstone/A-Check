@@ -9,7 +9,6 @@ part of 'school_class.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, require_trailing_commas, prefer_single_quotes, prefer_double_quotes, use_super_parameters, duplicate_ignore
 // ignore_for_file: type=lint
-// ignore_for_file: invalid_use_of_internal_member
 
 class _Sentinel {
   const _Sentinel();
@@ -145,6 +144,10 @@ abstract class SchoolClassDocumentReference extends FirestoreDocumentReference<
     FieldValue sectionFieldValue,
     List<ClassSchedule> schedule,
     FieldValue scheduleFieldValue,
+    String teacherId,
+    FieldValue teacherIdFieldValue,
+    int maxAbsences,
+    FieldValue maxAbsencesFieldValue,
     Set<String> studentIds,
     FieldValue studentIdsFieldValue,
   });
@@ -162,6 +165,10 @@ abstract class SchoolClassDocumentReference extends FirestoreDocumentReference<
     FieldValue sectionFieldValue,
     List<ClassSchedule> schedule,
     FieldValue scheduleFieldValue,
+    String teacherId,
+    FieldValue teacherIdFieldValue,
+    int maxAbsences,
+    FieldValue maxAbsencesFieldValue,
     Set<String> studentIds,
     FieldValue studentIdsFieldValue,
   });
@@ -209,6 +216,10 @@ class _$SchoolClassDocumentReference
     FieldValue? sectionFieldValue,
     Object? schedule = _sentinel,
     FieldValue? scheduleFieldValue,
+    Object? teacherId = _sentinel,
+    FieldValue? teacherIdFieldValue,
+    Object? maxAbsences = _sentinel,
+    FieldValue? maxAbsencesFieldValue,
     Object? studentIds = _sentinel,
     FieldValue? studentIdsFieldValue,
   }) async {
@@ -229,6 +240,14 @@ class _$SchoolClassDocumentReference
       "Cannot specify both schedule and scheduleFieldValue",
     );
     assert(
+      teacherId == _sentinel || teacherIdFieldValue == null,
+      "Cannot specify both teacherId and teacherIdFieldValue",
+    );
+    assert(
+      maxAbsences == _sentinel || maxAbsencesFieldValue == null,
+      "Cannot specify both maxAbsences and maxAbsencesFieldValue",
+    );
+    assert(
       studentIds == _sentinel || studentIdsFieldValue == null,
       "Cannot specify both studentIds and studentIdsFieldValue",
     );
@@ -253,6 +272,16 @@ class _$SchoolClassDocumentReference
             .schedule(schedule as List<ClassSchedule>),
       if (scheduleFieldValue != null)
         _$SchoolClassFieldMap['schedule']!: scheduleFieldValue,
+      if (teacherId != _sentinel)
+        _$SchoolClassFieldMap['teacherId']!:
+            _$SchoolClassPerFieldToJson.teacherId(teacherId as String),
+      if (teacherIdFieldValue != null)
+        _$SchoolClassFieldMap['teacherId']!: teacherIdFieldValue,
+      if (maxAbsences != _sentinel)
+        _$SchoolClassFieldMap['maxAbsences']!:
+            _$SchoolClassPerFieldToJson.maxAbsences(maxAbsences as int),
+      if (maxAbsencesFieldValue != null)
+        _$SchoolClassFieldMap['maxAbsences']!: maxAbsencesFieldValue,
       if (studentIds != _sentinel)
         _$SchoolClassFieldMap['studentIds']!:
             _$SchoolClassPerFieldToJson.studentIds(studentIds as Set<String>),
@@ -273,6 +302,10 @@ class _$SchoolClassDocumentReference
     FieldValue? sectionFieldValue,
     Object? schedule = _sentinel,
     FieldValue? scheduleFieldValue,
+    Object? teacherId = _sentinel,
+    FieldValue? teacherIdFieldValue,
+    Object? maxAbsences = _sentinel,
+    FieldValue? maxAbsencesFieldValue,
     Object? studentIds = _sentinel,
     FieldValue? studentIdsFieldValue,
   }) {
@@ -291,6 +324,14 @@ class _$SchoolClassDocumentReference
     assert(
       schedule == _sentinel || scheduleFieldValue == null,
       "Cannot specify both schedule and scheduleFieldValue",
+    );
+    assert(
+      teacherId == _sentinel || teacherIdFieldValue == null,
+      "Cannot specify both teacherId and teacherIdFieldValue",
+    );
+    assert(
+      maxAbsences == _sentinel || maxAbsencesFieldValue == null,
+      "Cannot specify both maxAbsences and maxAbsencesFieldValue",
     );
     assert(
       studentIds == _sentinel || studentIdsFieldValue == null,
@@ -317,6 +358,16 @@ class _$SchoolClassDocumentReference
             .schedule(schedule as List<ClassSchedule>),
       if (scheduleFieldValue != null)
         _$SchoolClassFieldMap['schedule']!: scheduleFieldValue,
+      if (teacherId != _sentinel)
+        _$SchoolClassFieldMap['teacherId']!:
+            _$SchoolClassPerFieldToJson.teacherId(teacherId as String),
+      if (teacherIdFieldValue != null)
+        _$SchoolClassFieldMap['teacherId']!: teacherIdFieldValue,
+      if (maxAbsences != _sentinel)
+        _$SchoolClassFieldMap['maxAbsences']!:
+            _$SchoolClassPerFieldToJson.maxAbsences(maxAbsences as int),
+      if (maxAbsencesFieldValue != null)
+        _$SchoolClassFieldMap['maxAbsences']!: maxAbsencesFieldValue,
       if (studentIds != _sentinel)
         _$SchoolClassFieldMap['studentIds']!:
             _$SchoolClassPerFieldToJson.studentIds(studentIds as Set<String>),
@@ -467,6 +518,28 @@ abstract class SchoolClassQuery
     ClassSchedule? arrayContains,
     List<ClassSchedule>? arrayContainsAny,
   });
+  SchoolClassQuery whereTeacherId({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  });
+  SchoolClassQuery whereMaxAbsences({
+    int? isEqualTo,
+    int? isNotEqualTo,
+    int? isLessThan,
+    int? isLessThanOrEqualTo,
+    int? isGreaterThan,
+    int? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<int>? whereIn,
+    List<int>? whereNotIn,
+  });
   SchoolClassQuery whereStudentIds({
     Set<String>? isEqualTo,
     Set<String>? isNotEqualTo,
@@ -533,6 +606,30 @@ abstract class SchoolClassQuery
     List<ClassSchedule> startAfter,
     List<ClassSchedule> endAt,
     List<ClassSchedule> endBefore,
+    SchoolClassDocumentSnapshot? startAtDocument,
+    SchoolClassDocumentSnapshot? endAtDocument,
+    SchoolClassDocumentSnapshot? endBeforeDocument,
+    SchoolClassDocumentSnapshot? startAfterDocument,
+  });
+
+  SchoolClassQuery orderByTeacherId({
+    bool descending = false,
+    String startAt,
+    String startAfter,
+    String endAt,
+    String endBefore,
+    SchoolClassDocumentSnapshot? startAtDocument,
+    SchoolClassDocumentSnapshot? endAtDocument,
+    SchoolClassDocumentSnapshot? endBeforeDocument,
+    SchoolClassDocumentSnapshot? startAfterDocument,
+  });
+
+  SchoolClassQuery orderByMaxAbsences({
+    bool descending = false,
+    int startAt,
+    int startAfter,
+    int endAt,
+    int endBefore,
     SchoolClassDocumentSnapshot? startAtDocument,
     SchoolClassDocumentSnapshot? endAtDocument,
     SchoolClassDocumentSnapshot? endBeforeDocument,
@@ -672,13 +769,13 @@ class _$SchoolClassQuery
 
   SchoolClassQuery whereFieldPath(
     FieldPath fieldPath, {
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
-    Object? arrayContains = notSetQueryParam,
+    Object? isEqualTo,
+    Object? isNotEqualTo,
+    Object? isLessThan,
+    Object? isLessThanOrEqualTo,
+    Object? isGreaterThan,
+    Object? isGreaterThanOrEqualTo,
+    Object? arrayContains,
     List<Object?>? arrayContainsAny,
     List<Object?>? whereIn,
     List<Object?>? whereNotIn,
@@ -705,12 +802,12 @@ class _$SchoolClassQuery
   }
 
   SchoolClassQuery whereDocumentId({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String>? whereIn,
     List<String>? whereNotIn,
@@ -734,12 +831,12 @@ class _$SchoolClassQuery
   }
 
   SchoolClassQuery whereSubjectCode({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String>? whereIn,
     List<String>? whereNotIn,
@@ -748,26 +845,24 @@ class _$SchoolClassQuery
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$SchoolClassFieldMap['subjectCode']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson.subjectCode(isEqualTo as String)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson.subjectCode(isNotEqualTo as String)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson.subjectCode(isLessThan as String)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson
-                .subjectCode(isLessThanOrEqualTo as String)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson.subjectCode(isGreaterThan as String)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson
-                .subjectCode(isGreaterThanOrEqualTo as String)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$SchoolClassPerFieldToJson.subjectCode(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$SchoolClassPerFieldToJson.subjectCode(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$SchoolClassPerFieldToJson.subjectCode(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$SchoolClassPerFieldToJson.subjectCode(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$SchoolClassPerFieldToJson.subjectCode(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$SchoolClassPerFieldToJson.subjectCode(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn:
             whereIn?.map((e) => _$SchoolClassPerFieldToJson.subjectCode(e)),
@@ -779,12 +874,12 @@ class _$SchoolClassQuery
   }
 
   SchoolClassQuery whereName({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String>? whereIn,
     List<String>? whereNotIn,
@@ -793,24 +888,24 @@ class _$SchoolClassQuery
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$SchoolClassFieldMap['name']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson.name(isEqualTo as String)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson.name(isNotEqualTo as String)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson.name(isLessThan as String)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson.name(isLessThanOrEqualTo as String)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson.name(isGreaterThan as String)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson.name(isGreaterThanOrEqualTo as String)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$SchoolClassPerFieldToJson.name(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$SchoolClassPerFieldToJson.name(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$SchoolClassPerFieldToJson.name(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$SchoolClassPerFieldToJson.name(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$SchoolClassPerFieldToJson.name(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$SchoolClassPerFieldToJson.name(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn: whereIn?.map((e) => _$SchoolClassPerFieldToJson.name(e)),
         whereNotIn: whereNotIn?.map((e) => _$SchoolClassPerFieldToJson.name(e)),
@@ -820,12 +915,12 @@ class _$SchoolClassQuery
   }
 
   SchoolClassQuery whereSection({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String>? whereIn,
     List<String>? whereNotIn,
@@ -834,25 +929,24 @@ class _$SchoolClassQuery
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$SchoolClassFieldMap['section']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson.section(isEqualTo as String)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson.section(isNotEqualTo as String)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson.section(isLessThan as String)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson.section(isLessThanOrEqualTo as String)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson.section(isGreaterThan as String)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson
-                .section(isGreaterThanOrEqualTo as String)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$SchoolClassPerFieldToJson.section(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$SchoolClassPerFieldToJson.section(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$SchoolClassPerFieldToJson.section(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$SchoolClassPerFieldToJson.section(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$SchoolClassPerFieldToJson.section(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$SchoolClassPerFieldToJson.section(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn: whereIn?.map((e) => _$SchoolClassPerFieldToJson.section(e)),
         whereNotIn:
@@ -863,50 +957,43 @@ class _$SchoolClassQuery
   }
 
   SchoolClassQuery whereSchedule({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    List<ClassSchedule>? isEqualTo,
+    List<ClassSchedule>? isNotEqualTo,
+    List<ClassSchedule>? isLessThan,
+    List<ClassSchedule>? isLessThanOrEqualTo,
+    List<ClassSchedule>? isGreaterThan,
+    List<ClassSchedule>? isGreaterThanOrEqualTo,
     bool? isNull,
-    Object? arrayContains = notSetQueryParam,
+    ClassSchedule? arrayContains,
     List<ClassSchedule>? arrayContainsAny,
   }) {
     return _$SchoolClassQuery(
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$SchoolClassFieldMap['schedule']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson
-                .schedule(isEqualTo as List<ClassSchedule>)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson
-                .schedule(isNotEqualTo as List<ClassSchedule>)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson
-                .schedule(isLessThan as List<ClassSchedule>)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson
-                .schedule(isLessThanOrEqualTo as List<ClassSchedule>)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson
-                .schedule(isGreaterThan as List<ClassSchedule>)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson
-                .schedule(isGreaterThanOrEqualTo as List<ClassSchedule>)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$SchoolClassPerFieldToJson.schedule(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$SchoolClassPerFieldToJson.schedule(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$SchoolClassPerFieldToJson.schedule(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$SchoolClassPerFieldToJson.schedule(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$SchoolClassPerFieldToJson.schedule(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$SchoolClassPerFieldToJson.schedule(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
-        arrayContains: arrayContains != notSetQueryParam
-            ? (_$SchoolClassPerFieldToJson
-                    .schedule([arrayContains as ClassSchedule]) as List?)!
+        arrayContains: arrayContains != null
+            ? (_$SchoolClassPerFieldToJson.schedule([arrayContains]) as List?)!
                 .single
-            : notSetQueryParam,
+            : null,
         arrayContainsAny: arrayContainsAny != null
             ? _$SchoolClassPerFieldToJson.schedule(arrayContainsAny)
                 as Iterable<Object>?
@@ -916,49 +1003,130 @@ class _$SchoolClassQuery
     );
   }
 
-  SchoolClassQuery whereStudentIds({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+  SchoolClassQuery whereTeacherId({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
-    Object? arrayContains = notSetQueryParam,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  }) {
+    return _$SchoolClassQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$SchoolClassFieldMap['teacherId']!,
+        isEqualTo: isEqualTo != null
+            ? _$SchoolClassPerFieldToJson.teacherId(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$SchoolClassPerFieldToJson.teacherId(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$SchoolClassPerFieldToJson.teacherId(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$SchoolClassPerFieldToJson.teacherId(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$SchoolClassPerFieldToJson.teacherId(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$SchoolClassPerFieldToJson.teacherId(isGreaterThanOrEqualTo)
+            : null,
+        isNull: isNull,
+        whereIn: whereIn?.map((e) => _$SchoolClassPerFieldToJson.teacherId(e)),
+        whereNotIn:
+            whereNotIn?.map((e) => _$SchoolClassPerFieldToJson.teacherId(e)),
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  SchoolClassQuery whereMaxAbsences({
+    int? isEqualTo,
+    int? isNotEqualTo,
+    int? isLessThan,
+    int? isLessThanOrEqualTo,
+    int? isGreaterThan,
+    int? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<int>? whereIn,
+    List<int>? whereNotIn,
+  }) {
+    return _$SchoolClassQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$SchoolClassFieldMap['maxAbsences']!,
+        isEqualTo: isEqualTo != null
+            ? _$SchoolClassPerFieldToJson.maxAbsences(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$SchoolClassPerFieldToJson.maxAbsences(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$SchoolClassPerFieldToJson.maxAbsences(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$SchoolClassPerFieldToJson.maxAbsences(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$SchoolClassPerFieldToJson.maxAbsences(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$SchoolClassPerFieldToJson.maxAbsences(isGreaterThanOrEqualTo)
+            : null,
+        isNull: isNull,
+        whereIn:
+            whereIn?.map((e) => _$SchoolClassPerFieldToJson.maxAbsences(e)),
+        whereNotIn:
+            whereNotIn?.map((e) => _$SchoolClassPerFieldToJson.maxAbsences(e)),
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  SchoolClassQuery whereStudentIds({
+    Set<String>? isEqualTo,
+    Set<String>? isNotEqualTo,
+    Set<String>? isLessThan,
+    Set<String>? isLessThanOrEqualTo,
+    Set<String>? isGreaterThan,
+    Set<String>? isGreaterThanOrEqualTo,
+    bool? isNull,
+    String? arrayContains,
     Set<String>? arrayContainsAny,
   }) {
     return _$SchoolClassQuery(
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$SchoolClassFieldMap['studentIds']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson.studentIds(isEqualTo as Set<String>)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson
-                .studentIds(isNotEqualTo as Set<String>)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson.studentIds(isLessThan as Set<String>)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson
-                .studentIds(isLessThanOrEqualTo as Set<String>)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson
-                .studentIds(isGreaterThan as Set<String>)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$SchoolClassPerFieldToJson
-                .studentIds(isGreaterThanOrEqualTo as Set<String>)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$SchoolClassPerFieldToJson.studentIds(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$SchoolClassPerFieldToJson.studentIds(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$SchoolClassPerFieldToJson.studentIds(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$SchoolClassPerFieldToJson.studentIds(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$SchoolClassPerFieldToJson.studentIds(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$SchoolClassPerFieldToJson.studentIds(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
-        arrayContains: arrayContains != notSetQueryParam
-            ? (_$SchoolClassPerFieldToJson.studentIds({arrayContains as String})
+        arrayContains: arrayContains != null
+            ? (_$SchoolClassPerFieldToJson.studentIds({arrayContains})
                     as List?)!
                 .single
-            : notSetQueryParam,
+            : null,
         arrayContainsAny: arrayContainsAny != null
             ? _$SchoolClassPerFieldToJson.studentIds(arrayContainsAny)
                 as Iterable<Object>?
@@ -1269,6 +1437,150 @@ class _$SchoolClassQuery
   }) {
     final query = $referenceWithoutCursor
         .orderBy(_$SchoolClassFieldMap['schedule']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$SchoolClassQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  SchoolClassQuery orderByTeacherId({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    SchoolClassDocumentSnapshot? startAtDocument,
+    SchoolClassDocumentSnapshot? endAtDocument,
+    SchoolClassDocumentSnapshot? endBeforeDocument,
+    SchoolClassDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$SchoolClassFieldMap['teacherId']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$SchoolClassQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  SchoolClassQuery orderByMaxAbsences({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    SchoolClassDocumentSnapshot? startAtDocument,
+    SchoolClassDocumentSnapshot? endAtDocument,
+    SchoolClassDocumentSnapshot? endBeforeDocument,
+    SchoolClassDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$SchoolClassFieldMap['maxAbsences']!, descending: descending);
     var queryCursor = $queryCursor;
 
     if (startAtDocument != null) {
@@ -2163,13 +2475,13 @@ class _$ClassScheduleQuery
 
   ClassScheduleQuery whereFieldPath(
     FieldPath fieldPath, {
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
-    Object? arrayContains = notSetQueryParam,
+    Object? isEqualTo,
+    Object? isNotEqualTo,
+    Object? isLessThan,
+    Object? isLessThanOrEqualTo,
+    Object? isGreaterThan,
+    Object? isGreaterThanOrEqualTo,
+    Object? arrayContains,
     List<Object?>? arrayContainsAny,
     List<Object?>? whereIn,
     List<Object?>? whereNotIn,
@@ -2196,12 +2508,12 @@ class _$ClassScheduleQuery
   }
 
   ClassScheduleQuery whereDocumentId({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String>? whereIn,
     List<String>? whereNotIn,
@@ -2225,12 +2537,12 @@ class _$ClassScheduleQuery
   }
 
   ClassScheduleQuery whereWeekday({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    int? isEqualTo,
+    int? isNotEqualTo,
+    int? isLessThan,
+    int? isLessThanOrEqualTo,
+    int? isGreaterThan,
+    int? isGreaterThanOrEqualTo,
     bool? isNull,
     List<int>? whereIn,
     List<int>? whereNotIn,
@@ -2239,25 +2551,24 @@ class _$ClassScheduleQuery
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$ClassScheduleFieldMap['weekday']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson.weekday(isEqualTo as int)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson.weekday(isNotEqualTo as int)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson.weekday(isLessThan as int)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson.weekday(isLessThanOrEqualTo as int)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson.weekday(isGreaterThan as int)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson
-                .weekday(isGreaterThanOrEqualTo as int)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$ClassSchedulePerFieldToJson.weekday(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$ClassSchedulePerFieldToJson.weekday(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$ClassSchedulePerFieldToJson.weekday(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$ClassSchedulePerFieldToJson.weekday(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$ClassSchedulePerFieldToJson.weekday(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$ClassSchedulePerFieldToJson.weekday(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn: whereIn?.map((e) => _$ClassSchedulePerFieldToJson.weekday(e)),
         whereNotIn:
@@ -2268,12 +2579,12 @@ class _$ClassScheduleQuery
   }
 
   ClassScheduleQuery whereStartTimeHour({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    int? isEqualTo,
+    int? isNotEqualTo,
+    int? isLessThan,
+    int? isLessThanOrEqualTo,
+    int? isGreaterThan,
+    int? isGreaterThanOrEqualTo,
     bool? isNull,
     List<int>? whereIn,
     List<int>? whereNotIn,
@@ -2282,26 +2593,25 @@ class _$ClassScheduleQuery
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$ClassScheduleFieldMap['startTimeHour']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson.startTimeHour(isEqualTo as int)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson.startTimeHour(isNotEqualTo as int)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson.startTimeHour(isLessThan as int)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
+        isEqualTo: isEqualTo != null
+            ? _$ClassSchedulePerFieldToJson.startTimeHour(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$ClassSchedulePerFieldToJson.startTimeHour(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$ClassSchedulePerFieldToJson.startTimeHour(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$ClassSchedulePerFieldToJson.startTimeHour(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$ClassSchedulePerFieldToJson.startTimeHour(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
             ? _$ClassSchedulePerFieldToJson
-                .startTimeHour(isLessThanOrEqualTo as int)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson.startTimeHour(isGreaterThan as int)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson
-                .startTimeHour(isGreaterThanOrEqualTo as int)
-            : notSetQueryParam,
+                .startTimeHour(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn:
             whereIn?.map((e) => _$ClassSchedulePerFieldToJson.startTimeHour(e)),
@@ -2313,12 +2623,12 @@ class _$ClassScheduleQuery
   }
 
   ClassScheduleQuery whereStartTimeMinute({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    int? isEqualTo,
+    int? isNotEqualTo,
+    int? isLessThan,
+    int? isLessThanOrEqualTo,
+    int? isGreaterThan,
+    int? isGreaterThanOrEqualTo,
     bool? isNull,
     List<int>? whereIn,
     List<int>? whereNotIn,
@@ -2327,27 +2637,25 @@ class _$ClassScheduleQuery
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$ClassScheduleFieldMap['startTimeMinute']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson.startTimeMinute(isEqualTo as int)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson.startTimeMinute(isNotEqualTo as int)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson.startTimeMinute(isLessThan as int)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
+        isEqualTo: isEqualTo != null
+            ? _$ClassSchedulePerFieldToJson.startTimeMinute(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$ClassSchedulePerFieldToJson.startTimeMinute(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$ClassSchedulePerFieldToJson.startTimeMinute(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$ClassSchedulePerFieldToJson.startTimeMinute(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$ClassSchedulePerFieldToJson.startTimeMinute(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
             ? _$ClassSchedulePerFieldToJson
-                .startTimeMinute(isLessThanOrEqualTo as int)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson
-                .startTimeMinute(isGreaterThan as int)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson
-                .startTimeMinute(isGreaterThanOrEqualTo as int)
-            : notSetQueryParam,
+                .startTimeMinute(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn: whereIn
             ?.map((e) => _$ClassSchedulePerFieldToJson.startTimeMinute(e)),
@@ -2359,12 +2667,12 @@ class _$ClassScheduleQuery
   }
 
   ClassScheduleQuery whereEndTimeHour({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    int? isEqualTo,
+    int? isNotEqualTo,
+    int? isLessThan,
+    int? isLessThanOrEqualTo,
+    int? isGreaterThan,
+    int? isGreaterThanOrEqualTo,
     bool? isNull,
     List<int>? whereIn,
     List<int>? whereNotIn,
@@ -2373,26 +2681,24 @@ class _$ClassScheduleQuery
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$ClassScheduleFieldMap['endTimeHour']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson.endTimeHour(isEqualTo as int)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson.endTimeHour(isNotEqualTo as int)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson.endTimeHour(isLessThan as int)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson
-                .endTimeHour(isLessThanOrEqualTo as int)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson.endTimeHour(isGreaterThan as int)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson
-                .endTimeHour(isGreaterThanOrEqualTo as int)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$ClassSchedulePerFieldToJson.endTimeHour(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$ClassSchedulePerFieldToJson.endTimeHour(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$ClassSchedulePerFieldToJson.endTimeHour(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$ClassSchedulePerFieldToJson.endTimeHour(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$ClassSchedulePerFieldToJson.endTimeHour(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$ClassSchedulePerFieldToJson.endTimeHour(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn:
             whereIn?.map((e) => _$ClassSchedulePerFieldToJson.endTimeHour(e)),
@@ -2404,12 +2710,12 @@ class _$ClassScheduleQuery
   }
 
   ClassScheduleQuery whereEndTimeMinute({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    int? isEqualTo,
+    int? isNotEqualTo,
+    int? isLessThan,
+    int? isLessThanOrEqualTo,
+    int? isGreaterThan,
+    int? isGreaterThanOrEqualTo,
     bool? isNull,
     List<int>? whereIn,
     List<int>? whereNotIn,
@@ -2418,26 +2724,25 @@ class _$ClassScheduleQuery
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$ClassScheduleFieldMap['endTimeMinute']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson.endTimeMinute(isEqualTo as int)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson.endTimeMinute(isNotEqualTo as int)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson.endTimeMinute(isLessThan as int)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
+        isEqualTo: isEqualTo != null
+            ? _$ClassSchedulePerFieldToJson.endTimeMinute(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$ClassSchedulePerFieldToJson.endTimeMinute(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$ClassSchedulePerFieldToJson.endTimeMinute(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$ClassSchedulePerFieldToJson.endTimeMinute(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$ClassSchedulePerFieldToJson.endTimeMinute(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
             ? _$ClassSchedulePerFieldToJson
-                .endTimeMinute(isLessThanOrEqualTo as int)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson.endTimeMinute(isGreaterThan as int)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$ClassSchedulePerFieldToJson
-                .endTimeMinute(isGreaterThanOrEqualTo as int)
-            : notSetQueryParam,
+                .endTimeMinute(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn:
             whereIn?.map((e) => _$ClassSchedulePerFieldToJson.endTimeMinute(e)),
@@ -2992,9 +3297,11 @@ SchoolClass _$SchoolClassFromJson(Map<String, dynamic> json) => SchoolClass(
       schedule: (json['schedule'] as List<dynamic>)
           .map((e) => ClassSchedule.fromJson(e as Map<String, dynamic>))
           .toList(),
+      teacherId: json['teacherId'] as String,
       studentIds: (json['studentIds'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toSet(),
+      maxAbsences: json['maxAbsences'] as int?,
     );
 
 const _$SchoolClassFieldMap = <String, String>{
@@ -3003,6 +3310,8 @@ const _$SchoolClassFieldMap = <String, String>{
   'name': 'name',
   'section': 'section',
   'schedule': 'schedule',
+  'teacherId': 'teacherId',
+  'maxAbsences': 'maxAbsences',
   'studentIds': 'studentIds',
 };
 
@@ -3020,6 +3329,10 @@ abstract class _$SchoolClassPerFieldToJson {
   static Object? schedule(List<ClassSchedule> instance) =>
       instance.map((e) => e.toJson()).toList();
   // ignore: unused_element
+  static Object? teacherId(String instance) => instance;
+  // ignore: unused_element
+  static Object? maxAbsences(int instance) => instance;
+  // ignore: unused_element
   static Object? studentIds(Set<String> instance) => instance.toList();
 }
 
@@ -3030,6 +3343,8 @@ Map<String, dynamic> _$SchoolClassToJson(SchoolClass instance) =>
       'name': instance.name,
       'section': instance.section,
       'schedule': instance.schedule.map((e) => e.toJson()).toList(),
+      'teacherId': instance.teacherId,
+      'maxAbsences': instance.maxAbsences,
       'studentIds': instance.studentIds.toList(),
     };
 

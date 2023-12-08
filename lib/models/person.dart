@@ -1,4 +1,5 @@
 import 'package:a_check/models/attendance_record.dart';
+import 'package:a_check/models/school_class.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -30,18 +31,19 @@ class Person {
 @Collection<Student>('students')
 @firestoreSerializable
 class Student extends Person {
-  Student({
-    required this.id,
-    required super.firstName,
-    required super.middleName,
-    required super.lastName,
-    super.email,
-    super.phoneNumber,
-    List<String>? guardianIds,
-    List? faceArray,
-  }) {
+  Student(
+      {required this.id,
+      required super.firstName,
+      required super.middleName,
+      required super.lastName,
+      super.email,
+      super.phoneNumber,
+      List<String>? guardianIds,
+      List? faceArray,
+      String? photoPath}) {
     this.guardianIds = guardianIds ?? List.empty();
     this.faceArray = faceArray ?? List.empty();
+    this.photoPath = photoPath ?? "";
   }
 
   factory Student.fromJson(Map<String, Object?> json) =>
@@ -50,10 +52,18 @@ class Student extends Person {
   @Id()
   final String id;
 
+  late final String photoPath;
   late final List<String> guardianIds;
   late final List faceArray;
 
   Map<String, Object?> toJson() => _$StudentToJson(this);
+
+  Future<String> getPhotoUrl() async {
+    if (photoPath.isEmpty) return "";
+
+    final url = await storage.ref().child(photoPath).getDownloadURL();
+    return url;
+  }
 
   Future<Map<String, int>> getPALEValues(String classId) async {
     final attendances = (await attendancesRef.get())
@@ -66,16 +76,16 @@ class Student extends Person {
     int present = 0, absent = 0, late = 0, excused = 0;
     for (var record in attendances) {
       switch (record.status) {
-        case AttendanceStatus.present:
+        case AttendanceStatus.Present:
           present++;
           break;
-        case AttendanceStatus.absent:
+        case AttendanceStatus.Absent:
           absent++;
           break;
-        case AttendanceStatus.late:
+        case AttendanceStatus.Late:
           late++;
           break;
-        case AttendanceStatus.excused:
+        case AttendanceStatus.Excused:
           excused++;
           break;
         default:
@@ -89,13 +99,6 @@ class Student extends Person {
       'late': late,
       'excused': excused
     };
-  }
-
-  // TODO: register face for firebase
-  Future<void> registerFace(List faceArray, dynamic facePhotoBytes) {
-    this.faceArray = faceArray;
-    // this.facePhotoBytes = facePhotoBytes;
-    return Future.delayed(Duration.zero);
   }
 }
 
@@ -130,9 +133,9 @@ class Teacher extends Person {
       required super.lastName,
       super.email,
       super.phoneNumber,
-      List<String>? classIds}) {
-    this.classIds = classIds ?? List.empty();
-  }
+      String? photoPath}) {
+        this.photoPath = photoPath ?? "";
+      }
 
   factory Teacher.fromJson(Map<String, Object?> json) =>
       _$TeacherFromJson(json);
@@ -140,9 +143,20 @@ class Teacher extends Person {
   @Id()
   final String id;
 
-  late final List<String>? classIds;
+  late final String photoPath;
 
   Map<String, Object?> toJson() => _$TeacherToJson(this);
+
+  Future<String> getPhotoUrl() async {
+    if (photoPath.isEmpty) return "";
+
+    final url = await storage.ref().child(photoPath).getDownloadURL();
+    return url;
+  }
+
+  Future<int> get totalClasses async {
+    return (await classesRef.whereTeacherId(isEqualTo: id).get()).docs.length;
+  }
 }
 
 final studentsRef = StudentCollectionReference();

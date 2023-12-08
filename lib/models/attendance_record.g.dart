@@ -9,7 +9,6 @@ part of 'attendance_record.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, require_trailing_commas, prefer_single_quotes, prefer_double_quotes, use_super_parameters, duplicate_ignore
 // ignore_for_file: type=lint
-// ignore_for_file: invalid_use_of_internal_member
 
 class _Sentinel {
   const _Sentinel();
@@ -617,13 +616,13 @@ class _$AttendanceRecordQuery
 
   AttendanceRecordQuery whereFieldPath(
     FieldPath fieldPath, {
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
-    Object? arrayContains = notSetQueryParam,
+    Object? isEqualTo,
+    Object? isNotEqualTo,
+    Object? isLessThan,
+    Object? isLessThanOrEqualTo,
+    Object? isGreaterThan,
+    Object? isGreaterThanOrEqualTo,
+    Object? arrayContains,
     List<Object?>? arrayContainsAny,
     List<Object?>? whereIn,
     List<Object?>? whereNotIn,
@@ -650,12 +649,12 @@ class _$AttendanceRecordQuery
   }
 
   AttendanceRecordQuery whereDocumentId({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String>? whereIn,
     List<String>? whereNotIn,
@@ -679,12 +678,12 @@ class _$AttendanceRecordQuery
   }
 
   AttendanceRecordQuery whereStudentId({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String>? whereIn,
     List<String>? whereNotIn,
@@ -693,27 +692,24 @@ class _$AttendanceRecordQuery
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$AttendanceRecordFieldMap['studentId']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$AttendanceRecordPerFieldToJson.studentId(isEqualTo as String)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$AttendanceRecordPerFieldToJson.studentId(isNotEqualTo as String)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$AttendanceRecordPerFieldToJson.studentId(isLessThan as String)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$AttendanceRecordPerFieldToJson
-                .studentId(isLessThanOrEqualTo as String)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$AttendanceRecordPerFieldToJson
-                .studentId(isGreaterThan as String)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$AttendanceRecordPerFieldToJson
-                .studentId(isGreaterThanOrEqualTo as String)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$AttendanceRecordPerFieldToJson.studentId(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$AttendanceRecordPerFieldToJson.studentId(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$AttendanceRecordPerFieldToJson.studentId(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$AttendanceRecordPerFieldToJson.studentId(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$AttendanceRecordPerFieldToJson.studentId(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$AttendanceRecordPerFieldToJson.studentId(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn:
             whereIn?.map((e) => _$AttendanceRecordPerFieldToJson.studentId(e)),
@@ -725,12 +721,12 @@ class _$AttendanceRecordQuery
   }
 
   AttendanceRecordQuery whereClassId({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String>? whereIn,
     List<String>? whereNotIn,
@@ -739,26 +735,24 @@ class _$AttendanceRecordQuery
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$AttendanceRecordFieldMap['classId']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$AttendanceRecordPerFieldToJson.classId(isEqualTo as String)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$AttendanceRecordPerFieldToJson.classId(isNotEqualTo as String)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$AttendanceRecordPerFieldToJson.classId(isLessThan as String)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$AttendanceRecordPerFieldToJson
-                .classId(isLessThanOrEqualTo as String)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$AttendanceRecordPerFieldToJson.classId(isGreaterThan as String)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$AttendanceRecordPerFieldToJson
-                .classId(isGreaterThanOrEqualTo as String)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$AttendanceRecordPerFieldToJson.classId(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$AttendanceRecordPerFieldToJson.classId(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$AttendanceRecordPerFieldToJson.classId(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$AttendanceRecordPerFieldToJson.classId(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$AttendanceRecordPerFieldToJson.classId(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$AttendanceRecordPerFieldToJson.classId(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn:
             whereIn?.map((e) => _$AttendanceRecordPerFieldToJson.classId(e)),
@@ -770,12 +764,12 @@ class _$AttendanceRecordQuery
   }
 
   AttendanceRecordQuery whereDateTime({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    DateTime? isEqualTo,
+    DateTime? isNotEqualTo,
+    DateTime? isLessThan,
+    DateTime? isLessThanOrEqualTo,
+    DateTime? isGreaterThan,
+    DateTime? isGreaterThanOrEqualTo,
     bool? isNull,
     List<DateTime>? whereIn,
     List<DateTime>? whereNotIn,
@@ -784,28 +778,24 @@ class _$AttendanceRecordQuery
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$AttendanceRecordFieldMap['dateTime']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$AttendanceRecordPerFieldToJson.dateTime(isEqualTo as DateTime)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$AttendanceRecordPerFieldToJson
-                .dateTime(isNotEqualTo as DateTime)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$AttendanceRecordPerFieldToJson.dateTime(isLessThan as DateTime)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$AttendanceRecordPerFieldToJson
-                .dateTime(isLessThanOrEqualTo as DateTime)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$AttendanceRecordPerFieldToJson
-                .dateTime(isGreaterThan as DateTime)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$AttendanceRecordPerFieldToJson
-                .dateTime(isGreaterThanOrEqualTo as DateTime)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$AttendanceRecordPerFieldToJson.dateTime(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$AttendanceRecordPerFieldToJson.dateTime(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$AttendanceRecordPerFieldToJson.dateTime(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$AttendanceRecordPerFieldToJson.dateTime(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$AttendanceRecordPerFieldToJson.dateTime(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$AttendanceRecordPerFieldToJson.dateTime(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn:
             whereIn?.map((e) => _$AttendanceRecordPerFieldToJson.dateTime(e)),
@@ -817,12 +807,12 @@ class _$AttendanceRecordQuery
   }
 
   AttendanceRecordQuery whereStatus({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    AttendanceStatus? isEqualTo,
+    AttendanceStatus? isNotEqualTo,
+    AttendanceStatus? isLessThan,
+    AttendanceStatus? isLessThanOrEqualTo,
+    AttendanceStatus? isGreaterThan,
+    AttendanceStatus? isGreaterThanOrEqualTo,
     bool? isNull,
     List<AttendanceStatus>? whereIn,
     List<AttendanceStatus>? whereNotIn,
@@ -831,30 +821,24 @@ class _$AttendanceRecordQuery
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$AttendanceRecordFieldMap['status']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$AttendanceRecordPerFieldToJson
-                .status(isEqualTo as AttendanceStatus)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$AttendanceRecordPerFieldToJson
-                .status(isNotEqualTo as AttendanceStatus)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$AttendanceRecordPerFieldToJson
-                .status(isLessThan as AttendanceStatus)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$AttendanceRecordPerFieldToJson
-                .status(isLessThanOrEqualTo as AttendanceStatus)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$AttendanceRecordPerFieldToJson
-                .status(isGreaterThan as AttendanceStatus)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$AttendanceRecordPerFieldToJson
-                .status(isGreaterThanOrEqualTo as AttendanceStatus)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$AttendanceRecordPerFieldToJson.status(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$AttendanceRecordPerFieldToJson.status(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$AttendanceRecordPerFieldToJson.status(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$AttendanceRecordPerFieldToJson.status(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$AttendanceRecordPerFieldToJson.status(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$AttendanceRecordPerFieldToJson.status(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn:
             whereIn?.map((e) => _$AttendanceRecordPerFieldToJson.status(e)),
@@ -1376,8 +1360,8 @@ Map<String, dynamic> _$AttendanceRecordToJson(AttendanceRecord instance) =>
 
 const _$AttendanceStatusEnumMap = {
   AttendanceStatus.unknown: -1,
-  AttendanceStatus.absent: 0,
-  AttendanceStatus.present: 1,
-  AttendanceStatus.late: 2,
-  AttendanceStatus.excused: 3,
+  AttendanceStatus.Absent: 0,
+  AttendanceStatus.Present: 1,
+  AttendanceStatus.Late: 2,
+  AttendanceStatus.Excused: 3,
 };

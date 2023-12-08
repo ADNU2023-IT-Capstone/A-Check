@@ -24,8 +24,11 @@ class SchoolClass {
       required this.name,
       required this.section,
       required this.schedule,
-      Set<String>? studentIds}) {
+      required this.teacherId,
+      Set<String>? studentIds,
+      int? maxAbsences}) {
     this.studentIds = studentIds ?? List.empty().toSet().cast();
+    this.maxAbsences = maxAbsences ?? 3;
   }
 
   factory SchoolClass.fromJson(Map<String, Object?> json) =>
@@ -38,9 +41,15 @@ class SchoolClass {
   final String name;
   final String section;
   final List<ClassSchedule> schedule;
+  final String teacherId;
+  late final int maxAbsences;
   late final Set<String> studentIds;
 
   Map<String, Object?> toJson() => _$SchoolClassToJson(this);
+
+  Future<Teacher> get teacher async {
+    return (await teachersRef.doc(teacherId).get()).data!;
+  }
 
   @override
   String toString() {
@@ -70,8 +79,12 @@ class SchoolClass {
 
   String getSchedule() {
     StringBuffer buffer = StringBuffer();
-    for (ClassSchedule s in schedule) {
-      buffer.writeln(s.toString());
+    for (var i = 0; i < schedule.length; i++) {
+      buffer.write(schedule[i].toString());
+
+      if (i != schedule.length - 1) {
+        buffer.writeln();
+      }
     }
 
     return buffer.toString();
@@ -86,11 +99,13 @@ class SchoolClass {
 
     final Map<DateTime, List<AttendanceRecord>> map = {};
     for (var record in attendanceRecords) {
-      if (!map.containsKey(record.dateTime)) {
-        map[record.dateTime] = [];
+      final date = DateTime(
+          record.dateTime.year, record.dateTime.month, record.dateTime.day);
+      if (!map.containsKey(date)) {
+        map[date] = [];
       }
 
-      map[record.dateTime]!.add(record);
+      map[date]!.add(record);
     }
 
     return map;

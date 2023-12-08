@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:a_check/models/person.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
@@ -43,13 +45,13 @@ enum AttendanceStatus {
   @JsonValue(-1)
   unknown,
   @JsonValue(0)
-  absent,
+  Absent,
   @JsonValue(1)
-  present,
+  Present,
   @JsonValue(2)
-  late,
+  Late,
   @JsonValue(3)
-  excused;
+  Excused;
 }
 
 final attendancesRef = AttendanceRecordCollectionReference();

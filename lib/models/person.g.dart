@@ -9,7 +9,6 @@ part of 'person.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, require_trailing_commas, prefer_single_quotes, prefer_double_quotes, use_super_parameters, duplicate_ignore
 // ignore_for_file: type=lint
-// ignore_for_file: invalid_use_of_internal_member
 
 class _Sentinel {
   const _Sentinel();
@@ -129,6 +128,8 @@ abstract class StudentDocumentReference
   ///
   /// If no document exists yet, the update will fail.
   Future<void> update({
+    String photoPath,
+    FieldValue photoPathFieldValue,
     List<String> guardianIds,
     FieldValue guardianIdsFieldValue,
     List<dynamic> faceArray,
@@ -150,6 +151,8 @@ abstract class StudentDocumentReference
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
+    String photoPath,
+    FieldValue photoPathFieldValue,
     List<String> guardianIds,
     FieldValue guardianIdsFieldValue,
     List<dynamic> faceArray,
@@ -196,6 +199,8 @@ class _$StudentDocumentReference
   }
 
   Future<void> update({
+    Object? photoPath = _sentinel,
+    FieldValue? photoPathFieldValue,
     Object? guardianIds = _sentinel,
     FieldValue? guardianIdsFieldValue,
     Object? faceArray = _sentinel,
@@ -211,6 +216,10 @@ class _$StudentDocumentReference
     Object? phoneNumber = _sentinel,
     FieldValue? phoneNumberFieldValue,
   }) async {
+    assert(
+      photoPath == _sentinel || photoPathFieldValue == null,
+      "Cannot specify both photoPath and photoPathFieldValue",
+    );
     assert(
       guardianIds == _sentinel || guardianIdsFieldValue == null,
       "Cannot specify both guardianIds and guardianIdsFieldValue",
@@ -240,6 +249,11 @@ class _$StudentDocumentReference
       "Cannot specify both phoneNumber and phoneNumberFieldValue",
     );
     final json = {
+      if (photoPath != _sentinel)
+        _$StudentFieldMap['photoPath']!:
+            _$StudentPerFieldToJson.photoPath(photoPath as String),
+      if (photoPathFieldValue != null)
+        _$StudentFieldMap['photoPath']!: photoPathFieldValue,
       if (guardianIds != _sentinel)
         _$StudentFieldMap['guardianIds']!:
             _$StudentPerFieldToJson.guardianIds(guardianIds as List<String>),
@@ -281,6 +295,8 @@ class _$StudentDocumentReference
 
   void transactionUpdate(
     Transaction transaction, {
+    Object? photoPath = _sentinel,
+    FieldValue? photoPathFieldValue,
     Object? guardianIds = _sentinel,
     FieldValue? guardianIdsFieldValue,
     Object? faceArray = _sentinel,
@@ -296,6 +312,10 @@ class _$StudentDocumentReference
     Object? phoneNumber = _sentinel,
     FieldValue? phoneNumberFieldValue,
   }) {
+    assert(
+      photoPath == _sentinel || photoPathFieldValue == null,
+      "Cannot specify both photoPath and photoPathFieldValue",
+    );
     assert(
       guardianIds == _sentinel || guardianIdsFieldValue == null,
       "Cannot specify both guardianIds and guardianIdsFieldValue",
@@ -325,6 +345,11 @@ class _$StudentDocumentReference
       "Cannot specify both phoneNumber and phoneNumberFieldValue",
     );
     final json = {
+      if (photoPath != _sentinel)
+        _$StudentFieldMap['photoPath']!:
+            _$StudentPerFieldToJson.photoPath(photoPath as String),
+      if (photoPathFieldValue != null)
+        _$StudentFieldMap['photoPath']!: photoPathFieldValue,
       if (guardianIds != _sentinel)
         _$StudentFieldMap['guardianIds']!:
             _$StudentPerFieldToJson.guardianIds(guardianIds as List<String>),
@@ -460,6 +485,17 @@ abstract class StudentQuery
     List<String>? whereIn,
     List<String>? whereNotIn,
   });
+  StudentQuery wherePhotoPath({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  });
   StudentQuery whereGuardianIds({
     List<String>? isEqualTo,
     List<String>? isNotEqualTo,
@@ -539,6 +575,18 @@ abstract class StudentQuery
   });
 
   StudentQuery orderByDocumentId({
+    bool descending = false,
+    String startAt,
+    String startAfter,
+    String endAt,
+    String endBefore,
+    StudentDocumentSnapshot? startAtDocument,
+    StudentDocumentSnapshot? endAtDocument,
+    StudentDocumentSnapshot? endBeforeDocument,
+    StudentDocumentSnapshot? startAfterDocument,
+  });
+
+  StudentQuery orderByPhotoPath({
     bool descending = false,
     String startAt,
     String startAfter,
@@ -750,13 +798,13 @@ class _$StudentQuery extends QueryReference<Student, StudentQuerySnapshot>
 
   StudentQuery whereFieldPath(
     FieldPath fieldPath, {
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
-    Object? arrayContains = notSetQueryParam,
+    Object? isEqualTo,
+    Object? isNotEqualTo,
+    Object? isLessThan,
+    Object? isLessThanOrEqualTo,
+    Object? isGreaterThan,
+    Object? isGreaterThanOrEqualTo,
+    Object? arrayContains,
     List<Object?>? arrayContainsAny,
     List<Object?>? whereIn,
     List<Object?>? whereNotIn,
@@ -783,12 +831,12 @@ class _$StudentQuery extends QueryReference<Student, StudentQuerySnapshot>
   }
 
   StudentQuery whereDocumentId({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String>? whereIn,
     List<String>? whereNotIn,
@@ -811,47 +859,86 @@ class _$StudentQuery extends QueryReference<Student, StudentQuerySnapshot>
     );
   }
 
-  StudentQuery whereGuardianIds({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+  StudentQuery wherePhotoPath({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
-    Object? arrayContains = notSetQueryParam,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  }) {
+    return _$StudentQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$StudentFieldMap['photoPath']!,
+        isEqualTo: isEqualTo != null
+            ? _$StudentPerFieldToJson.photoPath(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$StudentPerFieldToJson.photoPath(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$StudentPerFieldToJson.photoPath(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$StudentPerFieldToJson.photoPath(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$StudentPerFieldToJson.photoPath(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$StudentPerFieldToJson.photoPath(isGreaterThanOrEqualTo)
+            : null,
+        isNull: isNull,
+        whereIn: whereIn?.map((e) => _$StudentPerFieldToJson.photoPath(e)),
+        whereNotIn:
+            whereNotIn?.map((e) => _$StudentPerFieldToJson.photoPath(e)),
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  StudentQuery whereGuardianIds({
+    List<String>? isEqualTo,
+    List<String>? isNotEqualTo,
+    List<String>? isLessThan,
+    List<String>? isLessThanOrEqualTo,
+    List<String>? isGreaterThan,
+    List<String>? isGreaterThanOrEqualTo,
+    bool? isNull,
+    String? arrayContains,
     List<String>? arrayContainsAny,
   }) {
     return _$StudentQuery(
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$StudentFieldMap['guardianIds']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson.guardianIds(isEqualTo as List<String>)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson.guardianIds(isNotEqualTo as List<String>)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$StudentPerFieldToJson.guardianIds(isLessThan as List<String>)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson
-                .guardianIds(isLessThanOrEqualTo as List<String>)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$StudentPerFieldToJson.guardianIds(isGreaterThan as List<String>)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson
-                .guardianIds(isGreaterThanOrEqualTo as List<String>)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$StudentPerFieldToJson.guardianIds(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$StudentPerFieldToJson.guardianIds(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$StudentPerFieldToJson.guardianIds(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$StudentPerFieldToJson.guardianIds(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$StudentPerFieldToJson.guardianIds(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$StudentPerFieldToJson.guardianIds(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
-        arrayContains: arrayContains != notSetQueryParam
-            ? (_$StudentPerFieldToJson.guardianIds([arrayContains as String])
-                    as List?)!
+        arrayContains: arrayContains != null
+            ? (_$StudentPerFieldToJson.guardianIds([arrayContains]) as List?)!
                 .single
-            : notSetQueryParam,
+            : null,
         arrayContainsAny: arrayContainsAny != null
             ? _$StudentPerFieldToJson.guardianIds(arrayContainsAny)
                 as Iterable<Object>?
@@ -862,46 +949,43 @@ class _$StudentQuery extends QueryReference<Student, StudentQuerySnapshot>
   }
 
   StudentQuery whereFaceArray({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    List<dynamic>? isEqualTo,
+    List<dynamic>? isNotEqualTo,
+    List<dynamic>? isLessThan,
+    List<dynamic>? isLessThanOrEqualTo,
+    List<dynamic>? isGreaterThan,
+    List<dynamic>? isGreaterThanOrEqualTo,
     bool? isNull,
-    Object? arrayContains = notSetQueryParam,
+    dynamic arrayContains,
     List<dynamic>? arrayContainsAny,
   }) {
     return _$StudentQuery(
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$StudentFieldMap['faceArray']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson.faceArray(isEqualTo as List<dynamic>)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson.faceArray(isNotEqualTo as List<dynamic>)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$StudentPerFieldToJson.faceArray(isLessThan as List<dynamic>)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson
-                .faceArray(isLessThanOrEqualTo as List<dynamic>)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$StudentPerFieldToJson.faceArray(isGreaterThan as List<dynamic>)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson
-                .faceArray(isGreaterThanOrEqualTo as List<dynamic>)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$StudentPerFieldToJson.faceArray(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$StudentPerFieldToJson.faceArray(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$StudentPerFieldToJson.faceArray(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$StudentPerFieldToJson.faceArray(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$StudentPerFieldToJson.faceArray(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$StudentPerFieldToJson.faceArray(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
-        arrayContains: arrayContains != notSetQueryParam
-            ? (_$StudentPerFieldToJson.faceArray([arrayContains as dynamic])
-                    as List?)!
+        arrayContains: arrayContains != null
+            ? (_$StudentPerFieldToJson.faceArray([arrayContains]) as List?)!
                 .single
-            : notSetQueryParam,
+            : null,
         arrayContainsAny: arrayContainsAny != null
             ? _$StudentPerFieldToJson.faceArray(arrayContainsAny)
                 as Iterable<Object>?
@@ -912,12 +996,12 @@ class _$StudentQuery extends QueryReference<Student, StudentQuerySnapshot>
   }
 
   StudentQuery whereFirstName({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String>? whereIn,
     List<String>? whereNotIn,
@@ -926,25 +1010,24 @@ class _$StudentQuery extends QueryReference<Student, StudentQuerySnapshot>
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$StudentFieldMap['firstName']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson.firstName(isEqualTo as String)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson.firstName(isNotEqualTo as String)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$StudentPerFieldToJson.firstName(isLessThan as String)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson.firstName(isLessThanOrEqualTo as String)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$StudentPerFieldToJson.firstName(isGreaterThan as String)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson
-                .firstName(isGreaterThanOrEqualTo as String)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$StudentPerFieldToJson.firstName(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$StudentPerFieldToJson.firstName(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$StudentPerFieldToJson.firstName(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$StudentPerFieldToJson.firstName(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$StudentPerFieldToJson.firstName(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$StudentPerFieldToJson.firstName(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn: whereIn?.map((e) => _$StudentPerFieldToJson.firstName(e)),
         whereNotIn:
@@ -955,12 +1038,12 @@ class _$StudentQuery extends QueryReference<Student, StudentQuerySnapshot>
   }
 
   StudentQuery whereMiddleName({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String>? whereIn,
     List<String>? whereNotIn,
@@ -969,25 +1052,24 @@ class _$StudentQuery extends QueryReference<Student, StudentQuerySnapshot>
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$StudentFieldMap['middleName']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson.middleName(isEqualTo as String)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson.middleName(isNotEqualTo as String)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$StudentPerFieldToJson.middleName(isLessThan as String)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson.middleName(isLessThanOrEqualTo as String)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$StudentPerFieldToJson.middleName(isGreaterThan as String)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson
-                .middleName(isGreaterThanOrEqualTo as String)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$StudentPerFieldToJson.middleName(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$StudentPerFieldToJson.middleName(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$StudentPerFieldToJson.middleName(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$StudentPerFieldToJson.middleName(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$StudentPerFieldToJson.middleName(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$StudentPerFieldToJson.middleName(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn: whereIn?.map((e) => _$StudentPerFieldToJson.middleName(e)),
         whereNotIn:
@@ -998,12 +1080,12 @@ class _$StudentQuery extends QueryReference<Student, StudentQuerySnapshot>
   }
 
   StudentQuery whereLastName({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String>? whereIn,
     List<String>? whereNotIn,
@@ -1012,24 +1094,24 @@ class _$StudentQuery extends QueryReference<Student, StudentQuerySnapshot>
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$StudentFieldMap['lastName']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson.lastName(isEqualTo as String)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson.lastName(isNotEqualTo as String)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$StudentPerFieldToJson.lastName(isLessThan as String)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson.lastName(isLessThanOrEqualTo as String)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$StudentPerFieldToJson.lastName(isGreaterThan as String)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson.lastName(isGreaterThanOrEqualTo as String)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$StudentPerFieldToJson.lastName(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$StudentPerFieldToJson.lastName(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$StudentPerFieldToJson.lastName(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$StudentPerFieldToJson.lastName(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$StudentPerFieldToJson.lastName(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$StudentPerFieldToJson.lastName(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn: whereIn?.map((e) => _$StudentPerFieldToJson.lastName(e)),
         whereNotIn: whereNotIn?.map((e) => _$StudentPerFieldToJson.lastName(e)),
@@ -1039,12 +1121,12 @@ class _$StudentQuery extends QueryReference<Student, StudentQuerySnapshot>
   }
 
   StudentQuery whereEmail({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String?>? whereIn,
     List<String?>? whereNotIn,
@@ -1053,24 +1135,23 @@ class _$StudentQuery extends QueryReference<Student, StudentQuerySnapshot>
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$StudentFieldMap['email']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson.email(isEqualTo as String?)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson.email(isNotEqualTo as String?)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$StudentPerFieldToJson.email(isLessThan as String?)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson.email(isLessThanOrEqualTo as String?)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$StudentPerFieldToJson.email(isGreaterThan as String?)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson.email(isGreaterThanOrEqualTo as String?)
-            : notSetQueryParam,
+        isEqualTo:
+            isEqualTo != null ? _$StudentPerFieldToJson.email(isEqualTo) : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$StudentPerFieldToJson.email(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$StudentPerFieldToJson.email(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$StudentPerFieldToJson.email(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$StudentPerFieldToJson.email(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$StudentPerFieldToJson.email(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn: whereIn?.map((e) => _$StudentPerFieldToJson.email(e)),
         whereNotIn: whereNotIn?.map((e) => _$StudentPerFieldToJson.email(e)),
@@ -1080,12 +1161,12 @@ class _$StudentQuery extends QueryReference<Student, StudentQuerySnapshot>
   }
 
   StudentQuery wherePhoneNumber({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String?>? whereIn,
     List<String?>? whereNotIn,
@@ -1094,26 +1175,24 @@ class _$StudentQuery extends QueryReference<Student, StudentQuerySnapshot>
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$StudentFieldMap['phoneNumber']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson.phoneNumber(isEqualTo as String?)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson.phoneNumber(isNotEqualTo as String?)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$StudentPerFieldToJson.phoneNumber(isLessThan as String?)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson
-                .phoneNumber(isLessThanOrEqualTo as String?)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$StudentPerFieldToJson.phoneNumber(isGreaterThan as String?)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson
-                .phoneNumber(isGreaterThanOrEqualTo as String?)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$StudentPerFieldToJson.phoneNumber(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$StudentPerFieldToJson.phoneNumber(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$StudentPerFieldToJson.phoneNumber(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$StudentPerFieldToJson.phoneNumber(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$StudentPerFieldToJson.phoneNumber(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$StudentPerFieldToJson.phoneNumber(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn: whereIn?.map((e) => _$StudentPerFieldToJson.phoneNumber(e)),
         whereNotIn:
@@ -1136,6 +1215,78 @@ class _$StudentQuery extends QueryReference<Student, StudentQuerySnapshot>
   }) {
     final query = $referenceWithoutCursor.orderBy(FieldPath.documentId,
         descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$StudentQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  StudentQuery orderByPhotoPath({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    StudentDocumentSnapshot? startAtDocument,
+    StudentDocumentSnapshot? endAtDocument,
+    StudentDocumentSnapshot? endBeforeDocument,
+    StudentDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$StudentFieldMap['photoPath']!, descending: descending);
     var queryCursor = $queryCursor;
 
     if (startAtDocument != null) {
@@ -2432,13 +2583,13 @@ class _$GuardianQuery extends QueryReference<Guardian, GuardianQuerySnapshot>
 
   GuardianQuery whereFieldPath(
     FieldPath fieldPath, {
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
-    Object? arrayContains = notSetQueryParam,
+    Object? isEqualTo,
+    Object? isNotEqualTo,
+    Object? isLessThan,
+    Object? isLessThanOrEqualTo,
+    Object? isGreaterThan,
+    Object? isGreaterThanOrEqualTo,
+    Object? arrayContains,
     List<Object?>? arrayContainsAny,
     List<Object?>? whereIn,
     List<Object?>? whereNotIn,
@@ -2465,12 +2616,12 @@ class _$GuardianQuery extends QueryReference<Guardian, GuardianQuerySnapshot>
   }
 
   GuardianQuery whereDocumentId({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String>? whereIn,
     List<String>? whereNotIn,
@@ -2494,12 +2645,12 @@ class _$GuardianQuery extends QueryReference<Guardian, GuardianQuerySnapshot>
   }
 
   GuardianQuery whereFirstName({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String>? whereIn,
     List<String>? whereNotIn,
@@ -2508,25 +2659,24 @@ class _$GuardianQuery extends QueryReference<Guardian, GuardianQuerySnapshot>
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$GuardianFieldMap['firstName']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$GuardianPerFieldToJson.firstName(isEqualTo as String)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$GuardianPerFieldToJson.firstName(isNotEqualTo as String)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$GuardianPerFieldToJson.firstName(isLessThan as String)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$GuardianPerFieldToJson.firstName(isLessThanOrEqualTo as String)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$GuardianPerFieldToJson.firstName(isGreaterThan as String)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$GuardianPerFieldToJson
-                .firstName(isGreaterThanOrEqualTo as String)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$GuardianPerFieldToJson.firstName(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$GuardianPerFieldToJson.firstName(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$GuardianPerFieldToJson.firstName(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$GuardianPerFieldToJson.firstName(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$GuardianPerFieldToJson.firstName(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$GuardianPerFieldToJson.firstName(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn: whereIn?.map((e) => _$GuardianPerFieldToJson.firstName(e)),
         whereNotIn:
@@ -2537,12 +2687,12 @@ class _$GuardianQuery extends QueryReference<Guardian, GuardianQuerySnapshot>
   }
 
   GuardianQuery whereMiddleName({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String>? whereIn,
     List<String>? whereNotIn,
@@ -2551,25 +2701,24 @@ class _$GuardianQuery extends QueryReference<Guardian, GuardianQuerySnapshot>
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$GuardianFieldMap['middleName']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$GuardianPerFieldToJson.middleName(isEqualTo as String)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$GuardianPerFieldToJson.middleName(isNotEqualTo as String)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$GuardianPerFieldToJson.middleName(isLessThan as String)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$GuardianPerFieldToJson.middleName(isLessThanOrEqualTo as String)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$GuardianPerFieldToJson.middleName(isGreaterThan as String)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$GuardianPerFieldToJson
-                .middleName(isGreaterThanOrEqualTo as String)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$GuardianPerFieldToJson.middleName(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$GuardianPerFieldToJson.middleName(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$GuardianPerFieldToJson.middleName(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$GuardianPerFieldToJson.middleName(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$GuardianPerFieldToJson.middleName(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$GuardianPerFieldToJson.middleName(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn: whereIn?.map((e) => _$GuardianPerFieldToJson.middleName(e)),
         whereNotIn:
@@ -2580,12 +2729,12 @@ class _$GuardianQuery extends QueryReference<Guardian, GuardianQuerySnapshot>
   }
 
   GuardianQuery whereLastName({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String>? whereIn,
     List<String>? whereNotIn,
@@ -2594,25 +2743,24 @@ class _$GuardianQuery extends QueryReference<Guardian, GuardianQuerySnapshot>
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$GuardianFieldMap['lastName']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$GuardianPerFieldToJson.lastName(isEqualTo as String)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$GuardianPerFieldToJson.lastName(isNotEqualTo as String)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$GuardianPerFieldToJson.lastName(isLessThan as String)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$GuardianPerFieldToJson.lastName(isLessThanOrEqualTo as String)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$GuardianPerFieldToJson.lastName(isGreaterThan as String)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$GuardianPerFieldToJson
-                .lastName(isGreaterThanOrEqualTo as String)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$GuardianPerFieldToJson.lastName(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$GuardianPerFieldToJson.lastName(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$GuardianPerFieldToJson.lastName(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$GuardianPerFieldToJson.lastName(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$GuardianPerFieldToJson.lastName(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$GuardianPerFieldToJson.lastName(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn: whereIn?.map((e) => _$GuardianPerFieldToJson.lastName(e)),
         whereNotIn:
@@ -2623,12 +2771,12 @@ class _$GuardianQuery extends QueryReference<Guardian, GuardianQuerySnapshot>
   }
 
   GuardianQuery whereEmail({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String?>? whereIn,
     List<String?>? whereNotIn,
@@ -2637,24 +2785,24 @@ class _$GuardianQuery extends QueryReference<Guardian, GuardianQuerySnapshot>
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$GuardianFieldMap['email']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$GuardianPerFieldToJson.email(isEqualTo as String?)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$GuardianPerFieldToJson.email(isNotEqualTo as String?)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$GuardianPerFieldToJson.email(isLessThan as String?)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$GuardianPerFieldToJson.email(isLessThanOrEqualTo as String?)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$GuardianPerFieldToJson.email(isGreaterThan as String?)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$GuardianPerFieldToJson.email(isGreaterThanOrEqualTo as String?)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$GuardianPerFieldToJson.email(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$GuardianPerFieldToJson.email(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$GuardianPerFieldToJson.email(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$GuardianPerFieldToJson.email(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$GuardianPerFieldToJson.email(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$GuardianPerFieldToJson.email(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn: whereIn?.map((e) => _$GuardianPerFieldToJson.email(e)),
         whereNotIn: whereNotIn?.map((e) => _$GuardianPerFieldToJson.email(e)),
@@ -2664,12 +2812,12 @@ class _$GuardianQuery extends QueryReference<Guardian, GuardianQuerySnapshot>
   }
 
   GuardianQuery wherePhoneNumber({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String?>? whereIn,
     List<String?>? whereNotIn,
@@ -2678,26 +2826,24 @@ class _$GuardianQuery extends QueryReference<Guardian, GuardianQuerySnapshot>
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$GuardianFieldMap['phoneNumber']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$GuardianPerFieldToJson.phoneNumber(isEqualTo as String?)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$GuardianPerFieldToJson.phoneNumber(isNotEqualTo as String?)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$GuardianPerFieldToJson.phoneNumber(isLessThan as String?)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$GuardianPerFieldToJson
-                .phoneNumber(isLessThanOrEqualTo as String?)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$GuardianPerFieldToJson.phoneNumber(isGreaterThan as String?)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$GuardianPerFieldToJson
-                .phoneNumber(isGreaterThanOrEqualTo as String?)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$GuardianPerFieldToJson.phoneNumber(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$GuardianPerFieldToJson.phoneNumber(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$GuardianPerFieldToJson.phoneNumber(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$GuardianPerFieldToJson.phoneNumber(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$GuardianPerFieldToJson.phoneNumber(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$GuardianPerFieldToJson.phoneNumber(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn: whereIn?.map((e) => _$GuardianPerFieldToJson.phoneNumber(e)),
         whereNotIn:
@@ -3345,8 +3491,8 @@ abstract class TeacherDocumentReference
   ///
   /// If no document exists yet, the update will fail.
   Future<void> update({
-    List<String>? classIds,
-    FieldValue classIdsFieldValue,
+    String photoPath,
+    FieldValue photoPathFieldValue,
     String firstName,
     FieldValue firstNameFieldValue,
     String middleName,
@@ -3364,8 +3510,8 @@ abstract class TeacherDocumentReference
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
-    List<String>? classIds,
-    FieldValue classIdsFieldValue,
+    String photoPath,
+    FieldValue photoPathFieldValue,
     String firstName,
     FieldValue firstNameFieldValue,
     String middleName,
@@ -3408,8 +3554,8 @@ class _$TeacherDocumentReference
   }
 
   Future<void> update({
-    Object? classIds = _sentinel,
-    FieldValue? classIdsFieldValue,
+    Object? photoPath = _sentinel,
+    FieldValue? photoPathFieldValue,
     Object? firstName = _sentinel,
     FieldValue? firstNameFieldValue,
     Object? middleName = _sentinel,
@@ -3422,8 +3568,8 @@ class _$TeacherDocumentReference
     FieldValue? phoneNumberFieldValue,
   }) async {
     assert(
-      classIds == _sentinel || classIdsFieldValue == null,
-      "Cannot specify both classIds and classIdsFieldValue",
+      photoPath == _sentinel || photoPathFieldValue == null,
+      "Cannot specify both photoPath and photoPathFieldValue",
     );
     assert(
       firstName == _sentinel || firstNameFieldValue == null,
@@ -3446,11 +3592,11 @@ class _$TeacherDocumentReference
       "Cannot specify both phoneNumber and phoneNumberFieldValue",
     );
     final json = {
-      if (classIds != _sentinel)
-        _$TeacherFieldMap['classIds']!:
-            _$TeacherPerFieldToJson.classIds(classIds as List<String>?),
-      if (classIdsFieldValue != null)
-        _$TeacherFieldMap['classIds']!: classIdsFieldValue,
+      if (photoPath != _sentinel)
+        _$TeacherFieldMap['photoPath']!:
+            _$TeacherPerFieldToJson.photoPath(photoPath as String),
+      if (photoPathFieldValue != null)
+        _$TeacherFieldMap['photoPath']!: photoPathFieldValue,
       if (firstName != _sentinel)
         _$TeacherFieldMap['firstName']!:
             _$TeacherPerFieldToJson.firstName(firstName as String),
@@ -3482,8 +3628,8 @@ class _$TeacherDocumentReference
 
   void transactionUpdate(
     Transaction transaction, {
-    Object? classIds = _sentinel,
-    FieldValue? classIdsFieldValue,
+    Object? photoPath = _sentinel,
+    FieldValue? photoPathFieldValue,
     Object? firstName = _sentinel,
     FieldValue? firstNameFieldValue,
     Object? middleName = _sentinel,
@@ -3496,8 +3642,8 @@ class _$TeacherDocumentReference
     FieldValue? phoneNumberFieldValue,
   }) {
     assert(
-      classIds == _sentinel || classIdsFieldValue == null,
-      "Cannot specify both classIds and classIdsFieldValue",
+      photoPath == _sentinel || photoPathFieldValue == null,
+      "Cannot specify both photoPath and photoPathFieldValue",
     );
     assert(
       firstName == _sentinel || firstNameFieldValue == null,
@@ -3520,11 +3666,11 @@ class _$TeacherDocumentReference
       "Cannot specify both phoneNumber and phoneNumberFieldValue",
     );
     final json = {
-      if (classIds != _sentinel)
-        _$TeacherFieldMap['classIds']!:
-            _$TeacherPerFieldToJson.classIds(classIds as List<String>?),
-      if (classIdsFieldValue != null)
-        _$TeacherFieldMap['classIds']!: classIdsFieldValue,
+      if (photoPath != _sentinel)
+        _$TeacherFieldMap['photoPath']!:
+            _$TeacherPerFieldToJson.photoPath(photoPath as String),
+      if (photoPathFieldValue != null)
+        _$TeacherFieldMap['photoPath']!: photoPathFieldValue,
       if (firstName != _sentinel)
         _$TeacherFieldMap['firstName']!:
             _$TeacherPerFieldToJson.firstName(firstName as String),
@@ -3650,16 +3796,16 @@ abstract class TeacherQuery
     List<String>? whereIn,
     List<String>? whereNotIn,
   });
-  TeacherQuery whereClassIds({
-    List<String>? isEqualTo,
-    List<String>? isNotEqualTo,
-    List<String>? isLessThan,
-    List<String>? isLessThanOrEqualTo,
-    List<String>? isGreaterThan,
-    List<String>? isGreaterThanOrEqualTo,
+  TeacherQuery wherePhotoPath({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
-    String? arrayContains,
-    List<String>? arrayContainsAny,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
   });
   TeacherQuery whereFirstName({
     String? isEqualTo,
@@ -3729,12 +3875,12 @@ abstract class TeacherQuery
     TeacherDocumentSnapshot? startAfterDocument,
   });
 
-  TeacherQuery orderByClassIds({
+  TeacherQuery orderByPhotoPath({
     bool descending = false,
-    List<String>? startAt,
-    List<String>? startAfter,
-    List<String>? endAt,
-    List<String>? endBefore,
+    String startAt,
+    String startAfter,
+    String endAt,
+    String endBefore,
     TeacherDocumentSnapshot? startAtDocument,
     TeacherDocumentSnapshot? endAtDocument,
     TeacherDocumentSnapshot? endBeforeDocument,
@@ -3917,13 +4063,13 @@ class _$TeacherQuery extends QueryReference<Teacher, TeacherQuerySnapshot>
 
   TeacherQuery whereFieldPath(
     FieldPath fieldPath, {
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
-    Object? arrayContains = notSetQueryParam,
+    Object? isEqualTo,
+    Object? isNotEqualTo,
+    Object? isLessThan,
+    Object? isLessThanOrEqualTo,
+    Object? isGreaterThan,
+    Object? isGreaterThanOrEqualTo,
+    Object? arrayContains,
     List<Object?>? arrayContainsAny,
     List<Object?>? whereIn,
     List<Object?>? whereNotIn,
@@ -3950,12 +4096,12 @@ class _$TeacherQuery extends QueryReference<Teacher, TeacherQuerySnapshot>
   }
 
   TeacherQuery whereDocumentId({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String>? whereIn,
     List<String>? whereNotIn,
@@ -3978,63 +4124,55 @@ class _$TeacherQuery extends QueryReference<Teacher, TeacherQuerySnapshot>
     );
   }
 
-  TeacherQuery whereClassIds({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+  TeacherQuery wherePhotoPath({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
-    Object? arrayContains = notSetQueryParam,
-    List<String>? arrayContainsAny,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
   }) {
     return _$TeacherQuery(
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
-        _$TeacherFieldMap['classIds']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$TeacherPerFieldToJson.classIds(isEqualTo as List<String>?)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$TeacherPerFieldToJson.classIds(isNotEqualTo as List<String>?)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$TeacherPerFieldToJson.classIds(isLessThan as List<String>?)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$TeacherPerFieldToJson
-                .classIds(isLessThanOrEqualTo as List<String>?)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$TeacherPerFieldToJson.classIds(isGreaterThan as List<String>?)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$TeacherPerFieldToJson
-                .classIds(isGreaterThanOrEqualTo as List<String>?)
-            : notSetQueryParam,
-        isNull: isNull,
-        arrayContains: arrayContains != notSetQueryParam
-            ? (_$TeacherPerFieldToJson.classIds([arrayContains as String])
-                    as List?)!
-                .single
-            : notSetQueryParam,
-        arrayContainsAny: arrayContainsAny != null
-            ? _$TeacherPerFieldToJson.classIds(arrayContainsAny)
-                as Iterable<Object>?
+        _$TeacherFieldMap['photoPath']!,
+        isEqualTo: isEqualTo != null
+            ? _$TeacherPerFieldToJson.photoPath(isEqualTo)
             : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$TeacherPerFieldToJson.photoPath(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$TeacherPerFieldToJson.photoPath(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$TeacherPerFieldToJson.photoPath(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$TeacherPerFieldToJson.photoPath(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$TeacherPerFieldToJson.photoPath(isGreaterThanOrEqualTo)
+            : null,
+        isNull: isNull,
+        whereIn: whereIn?.map((e) => _$TeacherPerFieldToJson.photoPath(e)),
+        whereNotIn:
+            whereNotIn?.map((e) => _$TeacherPerFieldToJson.photoPath(e)),
       ),
       $queryCursor: $queryCursor,
     );
   }
 
   TeacherQuery whereFirstName({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String>? whereIn,
     List<String>? whereNotIn,
@@ -4043,25 +4181,24 @@ class _$TeacherQuery extends QueryReference<Teacher, TeacherQuerySnapshot>
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$TeacherFieldMap['firstName']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$TeacherPerFieldToJson.firstName(isEqualTo as String)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$TeacherPerFieldToJson.firstName(isNotEqualTo as String)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$TeacherPerFieldToJson.firstName(isLessThan as String)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$TeacherPerFieldToJson.firstName(isLessThanOrEqualTo as String)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$TeacherPerFieldToJson.firstName(isGreaterThan as String)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$TeacherPerFieldToJson
-                .firstName(isGreaterThanOrEqualTo as String)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$TeacherPerFieldToJson.firstName(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$TeacherPerFieldToJson.firstName(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$TeacherPerFieldToJson.firstName(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$TeacherPerFieldToJson.firstName(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$TeacherPerFieldToJson.firstName(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$TeacherPerFieldToJson.firstName(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn: whereIn?.map((e) => _$TeacherPerFieldToJson.firstName(e)),
         whereNotIn:
@@ -4072,12 +4209,12 @@ class _$TeacherQuery extends QueryReference<Teacher, TeacherQuerySnapshot>
   }
 
   TeacherQuery whereMiddleName({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String>? whereIn,
     List<String>? whereNotIn,
@@ -4086,25 +4223,24 @@ class _$TeacherQuery extends QueryReference<Teacher, TeacherQuerySnapshot>
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$TeacherFieldMap['middleName']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$TeacherPerFieldToJson.middleName(isEqualTo as String)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$TeacherPerFieldToJson.middleName(isNotEqualTo as String)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$TeacherPerFieldToJson.middleName(isLessThan as String)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$TeacherPerFieldToJson.middleName(isLessThanOrEqualTo as String)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$TeacherPerFieldToJson.middleName(isGreaterThan as String)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$TeacherPerFieldToJson
-                .middleName(isGreaterThanOrEqualTo as String)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$TeacherPerFieldToJson.middleName(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$TeacherPerFieldToJson.middleName(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$TeacherPerFieldToJson.middleName(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$TeacherPerFieldToJson.middleName(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$TeacherPerFieldToJson.middleName(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$TeacherPerFieldToJson.middleName(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn: whereIn?.map((e) => _$TeacherPerFieldToJson.middleName(e)),
         whereNotIn:
@@ -4115,12 +4251,12 @@ class _$TeacherQuery extends QueryReference<Teacher, TeacherQuerySnapshot>
   }
 
   TeacherQuery whereLastName({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String>? whereIn,
     List<String>? whereNotIn,
@@ -4129,24 +4265,24 @@ class _$TeacherQuery extends QueryReference<Teacher, TeacherQuerySnapshot>
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$TeacherFieldMap['lastName']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$TeacherPerFieldToJson.lastName(isEqualTo as String)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$TeacherPerFieldToJson.lastName(isNotEqualTo as String)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$TeacherPerFieldToJson.lastName(isLessThan as String)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$TeacherPerFieldToJson.lastName(isLessThanOrEqualTo as String)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$TeacherPerFieldToJson.lastName(isGreaterThan as String)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$TeacherPerFieldToJson.lastName(isGreaterThanOrEqualTo as String)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$TeacherPerFieldToJson.lastName(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$TeacherPerFieldToJson.lastName(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$TeacherPerFieldToJson.lastName(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$TeacherPerFieldToJson.lastName(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$TeacherPerFieldToJson.lastName(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$TeacherPerFieldToJson.lastName(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn: whereIn?.map((e) => _$TeacherPerFieldToJson.lastName(e)),
         whereNotIn: whereNotIn?.map((e) => _$TeacherPerFieldToJson.lastName(e)),
@@ -4156,12 +4292,12 @@ class _$TeacherQuery extends QueryReference<Teacher, TeacherQuerySnapshot>
   }
 
   TeacherQuery whereEmail({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String?>? whereIn,
     List<String?>? whereNotIn,
@@ -4170,24 +4306,23 @@ class _$TeacherQuery extends QueryReference<Teacher, TeacherQuerySnapshot>
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$TeacherFieldMap['email']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$TeacherPerFieldToJson.email(isEqualTo as String?)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$TeacherPerFieldToJson.email(isNotEqualTo as String?)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$TeacherPerFieldToJson.email(isLessThan as String?)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$TeacherPerFieldToJson.email(isLessThanOrEqualTo as String?)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$TeacherPerFieldToJson.email(isGreaterThan as String?)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$TeacherPerFieldToJson.email(isGreaterThanOrEqualTo as String?)
-            : notSetQueryParam,
+        isEqualTo:
+            isEqualTo != null ? _$TeacherPerFieldToJson.email(isEqualTo) : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$TeacherPerFieldToJson.email(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$TeacherPerFieldToJson.email(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$TeacherPerFieldToJson.email(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$TeacherPerFieldToJson.email(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$TeacherPerFieldToJson.email(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn: whereIn?.map((e) => _$TeacherPerFieldToJson.email(e)),
         whereNotIn: whereNotIn?.map((e) => _$TeacherPerFieldToJson.email(e)),
@@ -4197,12 +4332,12 @@ class _$TeacherQuery extends QueryReference<Teacher, TeacherQuerySnapshot>
   }
 
   TeacherQuery wherePhoneNumber({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
     bool? isNull,
     List<String?>? whereIn,
     List<String?>? whereNotIn,
@@ -4211,26 +4346,24 @@ class _$TeacherQuery extends QueryReference<Teacher, TeacherQuerySnapshot>
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$TeacherFieldMap['phoneNumber']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$TeacherPerFieldToJson.phoneNumber(isEqualTo as String?)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$TeacherPerFieldToJson.phoneNumber(isNotEqualTo as String?)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$TeacherPerFieldToJson.phoneNumber(isLessThan as String?)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$TeacherPerFieldToJson
-                .phoneNumber(isLessThanOrEqualTo as String?)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$TeacherPerFieldToJson.phoneNumber(isGreaterThan as String?)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$TeacherPerFieldToJson
-                .phoneNumber(isGreaterThanOrEqualTo as String?)
-            : notSetQueryParam,
+        isEqualTo: isEqualTo != null
+            ? _$TeacherPerFieldToJson.phoneNumber(isEqualTo)
+            : null,
+        isNotEqualTo: isNotEqualTo != null
+            ? _$TeacherPerFieldToJson.phoneNumber(isNotEqualTo)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$TeacherPerFieldToJson.phoneNumber(isLessThan)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$TeacherPerFieldToJson.phoneNumber(isLessThanOrEqualTo)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$TeacherPerFieldToJson.phoneNumber(isGreaterThan)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$TeacherPerFieldToJson.phoneNumber(isGreaterThanOrEqualTo)
+            : null,
         isNull: isNull,
         whereIn: whereIn?.map((e) => _$TeacherPerFieldToJson.phoneNumber(e)),
         whereNotIn:
@@ -4312,7 +4445,7 @@ class _$TeacherQuery extends QueryReference<Teacher, TeacherQuerySnapshot>
     );
   }
 
-  TeacherQuery orderByClassIds({
+  TeacherQuery orderByPhotoPath({
     bool descending = false,
     Object? startAt = _sentinel,
     Object? startAfter = _sentinel,
@@ -4324,7 +4457,7 @@ class _$TeacherQuery extends QueryReference<Teacher, TeacherQuerySnapshot>
     TeacherDocumentSnapshot? startAfterDocument,
   }) {
     final query = $referenceWithoutCursor
-        .orderBy(_$TeacherFieldMap['classIds']!, descending: descending);
+        .orderBy(_$TeacherFieldMap['photoPath']!, descending: descending);
     var queryCursor = $queryCursor;
 
     if (startAtDocument != null) {
@@ -4850,6 +4983,28 @@ Person _$PersonFromJson(Map<String, dynamic> json) => Person(
       phoneNumber: json['phoneNumber'] as String?,
     );
 
+const _$PersonFieldMap = <String, String>{
+  'firstName': 'firstName',
+  'middleName': 'middleName',
+  'lastName': 'lastName',
+  'email': 'email',
+  'phoneNumber': 'phoneNumber',
+};
+
+// ignore: unused_element
+abstract class _$PersonPerFieldToJson {
+  // ignore: unused_element
+  static Object? firstName(String instance) => instance;
+  // ignore: unused_element
+  static Object? middleName(String instance) => instance;
+  // ignore: unused_element
+  static Object? lastName(String instance) => instance;
+  // ignore: unused_element
+  static Object? email(String? instance) => instance;
+  // ignore: unused_element
+  static Object? phoneNumber(String? instance) => instance;
+}
+
 Map<String, dynamic> _$PersonToJson(Person instance) => <String, dynamic>{
       'firstName': instance.firstName,
       'middleName': instance.middleName,
@@ -4869,6 +5024,7 @@ Student _$StudentFromJson(Map<String, dynamic> json) => Student(
           ?.map((e) => e as String)
           .toList(),
       faceArray: json['faceArray'] as List<dynamic>?,
+      photoPath: json['photoPath'] as String?,
     );
 
 const _$StudentFieldMap = <String, String>{
@@ -4878,6 +5034,7 @@ const _$StudentFieldMap = <String, String>{
   'email': 'email',
   'phoneNumber': 'phoneNumber',
   'id': 'id',
+  'photoPath': 'photoPath',
   'guardianIds': 'guardianIds',
   'faceArray': 'faceArray',
 };
@@ -4897,6 +5054,8 @@ abstract class _$StudentPerFieldToJson {
   // ignore: unused_element
   static Object? id(String instance) => instance;
   // ignore: unused_element
+  static Object? photoPath(String instance) => instance;
+  // ignore: unused_element
   static Object? guardianIds(List<String> instance) => instance;
   // ignore: unused_element
   static Object? faceArray(List<dynamic> instance) => instance;
@@ -4909,6 +5068,7 @@ Map<String, dynamic> _$StudentToJson(Student instance) => <String, dynamic>{
       'email': instance.email,
       'phoneNumber': instance.phoneNumber,
       'id': instance.id,
+      'photoPath': instance.photoPath,
       'guardianIds': instance.guardianIds,
       'faceArray': instance.faceArray,
     };
@@ -4963,9 +5123,7 @@ Teacher _$TeacherFromJson(Map<String, dynamic> json) => Teacher(
       lastName: json['lastName'] as String,
       email: json['email'] as String?,
       phoneNumber: json['phoneNumber'] as String?,
-      classIds: (json['classIds'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
+      photoPath: json['photoPath'] as String?,
     );
 
 const _$TeacherFieldMap = <String, String>{
@@ -4975,7 +5133,7 @@ const _$TeacherFieldMap = <String, String>{
   'email': 'email',
   'phoneNumber': 'phoneNumber',
   'id': 'id',
-  'classIds': 'classIds',
+  'photoPath': 'photoPath',
 };
 
 // ignore: unused_element
@@ -4993,7 +5151,7 @@ abstract class _$TeacherPerFieldToJson {
   // ignore: unused_element
   static Object? id(String instance) => instance;
   // ignore: unused_element
-  static Object? classIds(List<String>? instance) => instance;
+  static Object? photoPath(String instance) => instance;
 }
 
 Map<String, dynamic> _$TeacherToJson(Teacher instance) => <String, dynamic>{
@@ -5003,5 +5161,5 @@ Map<String, dynamic> _$TeacherToJson(Teacher instance) => <String, dynamic>{
       'email': instance.email,
       'phoneNumber': instance.phoneNumber,
       'id': instance.id,
-      'classIds': instance.classIds,
+      'photoPath': instance.photoPath,
     };

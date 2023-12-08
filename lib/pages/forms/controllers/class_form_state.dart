@@ -51,7 +51,8 @@ class ClassFormState extends State<ClassFormPage> {
         name: nameTedCon.text,
         section: sectionTedCon.text,
         schedule: schedules,
-        studentIds: widget.schoolClass?.studentIds);
+        studentIds: widget.schoolClass?.studentIds,
+        teacherId: '');
 
     classesRef.doc(schoolClass.id).set(schoolClass).then((value) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

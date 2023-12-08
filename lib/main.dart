@@ -29,7 +29,7 @@ void main() async {
     try {
       print("Using local Firebase emulator");
       // !!! CHANGE IP AND PORT TO WHERE THE EMULATOR IS HOSTED !!!
-      FirebaseFirestore.instance.useFirestoreEmulator('192.168.1.10', 8080);
+      FirebaseFirestore.instance.useFirestoreEmulator('192.168.1.3', 8080);
     } catch (e) {
       print(e);
     }

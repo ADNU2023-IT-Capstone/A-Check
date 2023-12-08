@@ -137,14 +137,14 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
             studentId: student.id,
             classId: widget.schoolClass!.id,
             dateTime: currentDateTime,
-            status: AttendanceStatus.present);
+            status: AttendanceStatus.Present);
       } else {
         record = AttendanceRecord(
             id: id,
             studentId: student.id,
             classId: widget.schoolClass!.id,
             dateTime: currentDateTime,
-            status: AttendanceStatus.absent);
+            status: AttendanceStatus.Absent);
       }
 
       attendancesRef.doc(id).set(record);
