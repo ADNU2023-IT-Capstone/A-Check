@@ -15,14 +15,7 @@ class CalendarView extends WidgetView<CalendarPage, CalendarState> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(child: WeekView(
-        controller: state.calendarController,
-        eventArranger: const SideEventArranger(),
-      )),
-    );
-    // return Scaffold(
-    //   body: Placeholder(),
-    // );
+    // TODO: Calendar Page
+    return const Placeholder();
   }
 }

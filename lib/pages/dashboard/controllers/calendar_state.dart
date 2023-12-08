@@ -4,6 +4,18 @@ import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 
 class CalendarState extends State<CalendarPage> {
+  @override
+  Widget build(BuildContext context) => CalendarView(this);
+
+  @override
+  void initState() {
+    super.initState();
+
+    calendarController = EventController();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setSchedule());
+  }
+
   late final EventController calendarController;
 
   /// The [weekday] may be 0 for Sunday, 1 for Monday, etc. up to 7 for Sunday.
@@ -11,6 +23,7 @@ class CalendarState extends State<CalendarPage> {
       DateTime(date.year, date.month, date.day - (date.weekday - weekday) % 7);
 
   void setSchedule() async {
+    if (!context.mounted) return;
     final classes = (await classesRef.get()).docs.map((e) => e.data).toList();
 
     for (SchoolClass c in classes) {
@@ -28,27 +41,6 @@ class CalendarState extends State<CalendarPage> {
             endTime: endTime);
         calendarController.add(event);
       }
-
-      setState(() {});
     }
   }
-
-  @override
-  void initState() {
-    super.initState();
-
-    calendarController = EventController();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => setSchedule());
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => setSchedule());
-  }
-
-  @override
-  Widget build(BuildContext context) => CalendarView(this);
 }

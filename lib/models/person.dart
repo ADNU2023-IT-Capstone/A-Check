@@ -27,6 +27,10 @@ class Person {
   final String? email, phoneNumber;
 
   String get fullName => "$firstName ${middleName[0]}. $lastName";
+  String get initials => "${firstName.splitMapJoin(
+        ' ',
+        onNonMatch: (p0) => p0[0],
+      )}${lastName[0]}";
 }
 
 @Collection<Student>('students')
@@ -135,8 +139,8 @@ class Teacher extends Person {
       super.email,
       super.phoneNumber,
       String? photoPath}) {
-        this.photoPath = photoPath ?? "";
-      }
+    this.photoPath = photoPath ?? "";
+  }
 
   factory Teacher.fromJson(Map<String, Object?> json) =>
       _$TeacherFromJson(json);

@@ -80,10 +80,10 @@ class SARCView extends WidgetView<StudentAttendanceRecordCard, SARCState> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  radioButton(value: AttendanceStatus.present),
-                  radioButton(value: AttendanceStatus.absent),
-                  radioButton(value: AttendanceStatus.late),
-                  radioButton(value: AttendanceStatus.excused),
+                  radioButton(value: AttendanceStatus.Present),
+                  radioButton(value: AttendanceStatus.Absent),
+                  radioButton(value: AttendanceStatus.Late),
+                  radioButton(value: AttendanceStatus.Excused),
                 ],
               ),
             )

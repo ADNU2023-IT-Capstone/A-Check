@@ -1,9 +1,12 @@
+import 'package:a_check/auth.dart';
 import 'package:a_check/firebase_options.dart';
 import 'package:a_check/globals.dart';
-import 'package:a_check/splash.dart';
+import 'package:a_check/themes.dart';
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,9 +30,13 @@ void main() async {
 
   if (kDebugMode) {
     try {
-      print("Using local Firebase emulator");
       // !!! CHANGE IP AND PORT TO WHERE THE EMULATOR IS HOSTED !!!
-      FirebaseFirestore.instance.useFirestoreEmulator('192.168.1.3', 8080);
+      const ip = '192.168.1.3';
+
+      print("Using local Firebase emulator");
+      await FirebaseAuth.instance.useAuthEmulator(ip, 9099);
+      await FirebaseStorage.instance.useStorageEmulator(ip, 9199);
+      FirebaseFirestore.instance.useFirestoreEmulator(ip, 8080);
     } catch (e) {
       print(e);
     }
@@ -62,8 +69,9 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       // theme: ThemeData(useMaterial3: true),
       scaffoldMessengerKey: snackbarKey,
+      theme: Themes.main,
       home: const Scaffold(
-        body: SplashWidget(),
+        body: AuthGate(),
       ),
     );
   }

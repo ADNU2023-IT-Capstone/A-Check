@@ -151,18 +151,8 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
     }
 
     // Display recognized students
-    // TODO: yung gawa ni sam hehe
     if (context.mounted) {
-      // await Dialogs.showAlertDialog(
-      //   context,
-      //   const Text("Recognized students"),
-      //   Text(recognizedStudents.entries
-      //       .map((e) => "${e.id.toString()} (${e.value.toStringAsFixed(3)})")
-      //       .cast<String>()
-      //       .toList()
-      //       .join('\n')),
-      // );
-      await Navigator.push(
+      await Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => DetectedFacesPage(
@@ -170,10 +160,6 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
                 recognizedFaces: recognizedFaces,
                 studentsList: _studentsWithRegisteredFaces),
           ));
-    }
-
-    if (context.mounted) {
-      Navigator.pop(context);
     }
   }
 

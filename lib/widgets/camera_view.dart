@@ -75,8 +75,6 @@ class CameraView extends WidgetView<CameraViewWidget, CameraViewState> {
               elevation: 0,
               tooltip: "Switch Camera",
               onPressed: state.switchCamera,
-              backgroundColor: Colors.white,
-              foregroundColor: Colors.green,
               heroTag: null,
               child: const Icon(Icons.switch_camera),
             ),

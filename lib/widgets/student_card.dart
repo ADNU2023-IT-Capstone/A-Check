@@ -1,6 +1,7 @@
 import 'package:a_check/models/school_class.dart';
 import 'package:a_check/models/person.dart';
 import 'package:a_check/pages/student/student_page.dart';
+import 'package:a_check/themes.dart';
 import 'package:flutter/material.dart';
 
 class StudentCard extends StatelessWidget {
@@ -12,6 +13,8 @@ class StudentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textColor = Themes.main.colorScheme.onPrimaryContainer;
+
     void onTap() {
       Navigator.push(
           context,
@@ -43,6 +46,7 @@ class StudentCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Card(
+        color: Themes.main.colorScheme.primaryContainer,
         elevation: 0.5,
         child: Padding(
           padding: const EdgeInsets.all(15.0),
@@ -54,13 +58,17 @@ class StudentCard extends StatelessWidget {
                 children: [
                   Text(
                     student.fullName.toString(),
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: textColor),
                   ),
                   Text(
                     student.id,
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w300),
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w300,
+                        color: textColor),
                   )
                 ],
               ),

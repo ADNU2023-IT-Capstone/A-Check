@@ -6,8 +6,25 @@ import 'package:a_check/pages/forms/student_form_page.dart';
 import 'package:a_check/pages/student/student_page.dart';
 import 'package:a_check/utils/dialogs.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class StudentState extends State<StudentPage> {
+  @override
+  Widget build(BuildContext context) => StudentView(this);
+
+  @override
+  void initState() {
+    super.initState();
+
+    _initStudent();
+  }
+
+  void _initStudent() {
+    studentsRef.doc(widget.studentId).get().then((value) {
+      setState(() => student = value.data!);
+    });
+  }
+
   late Student student;
 
   void showSuccessSnackBar() {
@@ -122,19 +139,9 @@ class StudentState extends State<StudentPage> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-
-    _initStudent();
-  }
-
-  void _initStudent() {
-    studentsRef.doc(widget.studentId).get().then((value) {
-      setState(() => student = value.data!);
+  copyToClipboard(value) {
+    Clipboard.setData(ClipboardData(text: value)).then((_) {
+      snackbarKey.currentState!.showSnackBar(SnackBar(content: Text("Copied $value!")));
     });
   }
-
-  @override
-  Widget build(BuildContext context) => StudentView(this);
 }

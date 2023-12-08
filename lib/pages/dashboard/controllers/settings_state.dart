@@ -17,7 +17,19 @@ class SettingsState extends State<SettingsPage> {
   void setDistanceThreshold() async {
     final result = await Dialogs.showTextInputDialog(
         context, const Text("Enter new distance threshold value"),
-        content: Text("Current value: ${prefs.getDouble('threshold')}"),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+                "Higher values mean more strictness. Lower values mean less strictness."),
+            const SizedBox(
+              height: 8,
+            ),
+            Align(
+                alignment: Alignment.center,
+                child: Text("Current value: ${prefs.getDouble('threshold')}")),
+          ],
+        ),
         formatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*'))],
         keyboardType: TextInputType.number);
 

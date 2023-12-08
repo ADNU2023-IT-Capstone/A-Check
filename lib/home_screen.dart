@@ -2,6 +2,7 @@ import 'package:a_check/pages/dashboard/calendar_page.dart';
 import 'package:a_check/pages/dashboard/home_page.dart';
 import 'package:a_check/pages/dashboard/settings_page.dart';
 import 'package:a_check/pages/dashboard/students_page.dart';
+import 'package:a_check/themes.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -53,8 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
       BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings")
     ];
 
-    return Scaffold(
-      body: buildPageView(),
+    return Scaffold( 
+      body: SafeArea(child: buildPageView()),
       bottomNavigationBar: BottomNavigationBar(
           iconSize: 30,
           showSelectedLabels: true,
@@ -62,7 +63,6 @@ class _HomeScreenState extends State<HomeScreen> {
           type: BottomNavigationBarType.fixed,
           items: bottomNavbarItems,
           currentIndex: bottomNavbarSelectedIndex,
-          selectedItemColor: const Color(0xff557A46),
           onTap: (index) {
             bottomNavbarTapped(index);
           }),
