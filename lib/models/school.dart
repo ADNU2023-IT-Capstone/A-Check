@@ -1,10 +1,10 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:a_check/globals.dart';
+import 'package:a_check/main.dart';
 import 'package:a_check/models/person.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -18,15 +18,15 @@ const firestoreSerializable = JsonSerializable(
     createPerFieldToJson: true);
 
 final schoolsRef = SchoolCollectionReference();
-final studentsRef = schoolRef.students;
-final classesRef = schoolRef.classes;
-final teachersRef = schoolRef.teachers;
-final attendancesRef = schoolRef.attendances;
+StudentCollectionReference get studentsRef => schoolRef.students;
+SchoolClassCollectionReference get classesRef => schoolRef.classes;
+TeacherCollectionReference get teachersRef => schoolRef.teachers;
+AttendanceRecordCollectionReference get attendancesRef => schoolRef.attendances;
 
 SchoolDocumentReference get schoolRef {
-  final uid = FirebaseAuth.instance.currentUser!.uid;
+  final id = auth.currentUser!.schoolId;
 
-  return schoolsRef.doc(uid);
+  return schoolsRef.doc(id);
 }
 
 @Collection<School>('schools')
@@ -84,6 +84,7 @@ class Student extends Person {
   late final List<String> guardianIds;
   late final List faceArray;
 
+  @override
   Map<String, Object?> toJson() => _$StudentToJson(this);
 
   Future<String> getPhotoUrl() async {
@@ -139,6 +140,7 @@ class Teacher extends Person {
       required super.lastName,
       super.email,
       super.phoneNumber,
+      required this.password,
       String? photoPath}) {
     this.photoPath = photoPath ?? "";
   }
@@ -149,9 +151,15 @@ class Teacher extends Person {
   @Id()
   final String id;
 
+  late final String password;
   late final String photoPath;
 
+  @override
   Map<String, Object?> toJson() => _$TeacherToJson(this);
+
+  bool authenticate(String password) {
+    return this.password == password;
+  }
 
   Future<String> getPhotoUrl() async {
     if (photoPath.isEmpty) return "";
@@ -364,7 +372,7 @@ class AttendanceRecord {
 
   Map<String, Object?> toJson() => _$AttendanceRecordToJson(this);
 
-  Future<Student> get student async {
+  Future<Student> getStudent() async {
     return (await studentsRef.doc(studentId).get()).data!;
   }
 }

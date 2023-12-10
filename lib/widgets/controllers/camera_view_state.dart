@@ -39,7 +39,7 @@ class CameraViewState extends State<CameraViewWidget>
   }
 
   void _initializeCameraController() {
-    final controller = CameraController(savedCamDesc, ResolutionPreset.high,
+    final controller = CameraController(savedCamDesc, ResolutionPreset.veryHigh,
         enableAudio: false);
     controller.addListener(() {
       if (mounted) {

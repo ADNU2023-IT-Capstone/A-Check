@@ -1,8 +1,6 @@
-import 'package:a_check/pages/dashboard/calendar_page.dart';
 import 'package:a_check/pages/dashboard/home_page.dart';
 import 'package:a_check/pages/dashboard/settings_page.dart';
 import 'package:a_check/pages/dashboard/students_page.dart';
-import 'package:a_check/themes.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -31,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
       return PageView(
         controller: pageController,
         physics: const NeverScrollableScrollPhysics(),
-        children: const [HomePage(), StudentsPage(), CalendarPage(), SettingsPage()],
+        children: const [HomePage(), StudentsPage(), SettingsPage()],
         onPageChanged: (index) {
           pageChanged(index);
         },
@@ -47,10 +45,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     List<BottomNavigationBarItem> bottomNavbarItems = const [
-      BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home",),
+      BottomNavigationBarItem(icon: Icon(Icons.class_), label: "Classes",),
       BottomNavigationBarItem(icon: Icon(Icons.group), label: "Students"),
-      BottomNavigationBarItem(
-          icon: Icon(Icons.calendar_month), label: "Calendar"),
       BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings")
     ];
 

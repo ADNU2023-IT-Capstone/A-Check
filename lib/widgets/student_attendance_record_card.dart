@@ -47,7 +47,7 @@ class SARCView extends WidgetView<StudentAttendanceRecordCard, SARCState> {
               child: Row(
                 children: [
                   FutureBuilder(
-                    future: widget.record.student,
+                    future: widget.record.getStudent(),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         final student = snapshot.data!;

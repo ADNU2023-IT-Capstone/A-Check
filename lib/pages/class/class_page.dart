@@ -53,11 +53,9 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
           elevation: 1,
           itemBuilder: (context) => [
             PopupMenuItem(
-              onTap: state.editClass,
-              child: const Text("Edit class"),
+              onTap: state.exportRecords,
+              child: const Text("Export attendance records"),
             ),
-            PopupMenuItem(
-                onTap: state.deleteClass, child: const Text("Delete class")),
           ],
         )
       ],

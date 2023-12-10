@@ -1,7 +1,7 @@
 import 'package:a_check/globals.dart';
+import 'package:a_check/main.dart';
 import 'package:a_check/pages/forms/class_form_page.dart';
 import 'package:a_check/pages/dashboard/home_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomeState extends State<HomePage> {
@@ -14,7 +14,7 @@ class HomeState extends State<HomePage> {
   }
 
   void logOut() async {
-    await FirebaseAuth.instance.signOut();
+    await auth.signOut();
 
     snackbarKey.currentState!.showSnackBar(const SnackBar(content: Text("You have logged out.")));
   }

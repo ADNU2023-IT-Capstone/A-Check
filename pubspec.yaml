@@ -12,6 +12,8 @@ dependencies:
   camerawesome: ^1.4.0
   cloud_firestore: ^4.13.3
   cloud_firestore_odm: ^1.0.0-dev.78
+  cloud_functions: ^4.5.8
+  dropdown_search: ^5.0.6
   easy_onvif: ^2.1.2+13
   email_validator: ^2.1.17
   firebase_auth: ^4.15.1

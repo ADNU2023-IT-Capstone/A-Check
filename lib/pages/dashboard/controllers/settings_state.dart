@@ -2,8 +2,11 @@ import 'package:a_check/globals.dart';
 import 'package:a_check/main.dart';
 import 'package:a_check/pages/dashboard/settings_page.dart';
 import 'package:a_check/utils/dialogs.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_onvif/onvif.dart';
 import 'package:easy_onvif/probe.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -141,4 +144,19 @@ class SettingsState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) => SettingsView(this);
+
+  setFirebaseEmulator() async {
+    final result = await Dialogs.showTextInputDialog(
+        context, const Text("Enter IP"),
+        keyboardType: TextInputType.number);
+
+    if (result == null || result.isEmpty) return;
+
+    await FirebaseAuth.instance.useAuthEmulator(result, 9099);
+    await FirebaseStorage.instance.useStorageEmulator(result, 9199);
+    FirebaseFirestore.instance.useFirestoreEmulator(result, 8080);
+
+    snackbarKey.currentState!.showSnackBar(const SnackBar(
+          content: Text("Set new IP.")));
+  }
 }

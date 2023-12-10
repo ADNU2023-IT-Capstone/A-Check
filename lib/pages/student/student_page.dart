@@ -1,5 +1,4 @@
 import 'package:a_check/models/school.dart';
-import 'package:a_check/models/school.dart';
 import 'package:a_check/pages/student/controllers/student_state.dart';
 import 'package:a_check/themes.dart';
 import 'package:a_check/utils/abstracts.dart';
@@ -169,10 +168,10 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
               future: student.getPhotoUrl(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
-                  final url = snapshot.data;
-
+                  final url = snapshot.data!;
+  
                   return CircleAvatar(
-                    foregroundImage: NetworkImage(url ?? ''),
+                    foregroundImage: url.isEmpty ? NetworkImage(url) : null,
                     child: Text(
                       student.initials,
                       style: const TextStyle(fontSize: 80),

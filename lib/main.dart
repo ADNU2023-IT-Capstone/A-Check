@@ -4,7 +4,6 @@ import 'package:a_check/globals.dart';
 import 'package:a_check/themes.dart';
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -18,15 +17,15 @@ late List<CameraDescription> cameras;
 late PackageInfo packageInfo;
 late SharedPreferences prefs;
 
+late final Auth auth;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   FirebaseFirestore.instance.settings = const Settings(
-    persistenceEnabled: true,
-    cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED
-  );
+      persistenceEnabled: true, cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED);
 
   if (kDebugMode) {
     try {
@@ -34,7 +33,6 @@ void main() async {
       const ip = '192.168.1.3';
 
       print("Using local Firebase emulator");
-      await FirebaseAuth.instance.useAuthEmulator(ip, 9099);
       await FirebaseStorage.instance.useStorageEmulator(ip, 9199);
       FirebaseFirestore.instance.useFirestoreEmulator(ip, 8080);
     } catch (e) {
@@ -48,6 +46,14 @@ void main() async {
   prefs = await SharedPreferences.getInstance();
   await setupDefaultPrefs();
 
+  User? lastUser;
+  if (prefs.containsKey('user')) {
+    print("has last user");
+    final values = prefs.getStringList('user')!;
+    lastUser = User(id: values.first, schoolId: values.last);
+  }
+  auth = Auth(user: lastUser);
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(const MainApp());
@@ -56,7 +62,6 @@ void main() async {
 
 Future<void> setupDefaultPrefs() async {
   if (!prefs.containsKey('threshold')) await prefs.setDouble('threshold', 1.5);
-  if (!prefs.containsKey('absent_limit')) await prefs.setInt('absent_limit', 3);
   if (!prefs.containsKey('absent_warn')) await prefs.setInt('absent_warn', 2);
 }
 

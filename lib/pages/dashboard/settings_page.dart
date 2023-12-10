@@ -1,6 +1,7 @@
 import 'package:a_check/pages/dashboard/controllers/settings_state.dart';
 import 'package:a_check/themes.dart';
 import 'package:a_check/utils/abstracts.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -70,6 +71,12 @@ class SettingsView extends WidgetView<SettingsPage, SettingsState> {
             title: const Text("Set distance threshold"),
             subtitle: const Text("Set how strict the face recognition will be"),
             onTap: state.setDistanceThreshold),
+        if (kDebugMode)
+          SettingsListTile(
+              title: const Text("Set firebase emulator IP"),
+              subtitle:
+                  const Text("Set the IP address for connecting to the firebase emulator"),
+              onTap: state.setFirebaseEmulator),
       ],
     );
   }

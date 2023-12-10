@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:a_check/globals.dart';
 import 'package:a_check/main.dart';
 import 'package:a_check/models/school.dart';
-import 'package:a_check/models/school.dart';
 import 'package:a_check/pages/face_detected_page.dart';
 import 'package:a_check/pages/face_recognition_page.dart';
 import 'package:a_check/utils/dialogs.dart';
@@ -192,17 +191,6 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
     capturePhoto(inputImage);
   }
 
-  Future<bool> onWillPop() async {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown
-    ]);
-
-    return true;
-  }
-
   _setupClassList() async {
     _classStudents = await widget.schoolClass!.getStudents();
     _studentsWithRegisteredFaces = [
@@ -217,9 +205,24 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
     _faceDataTree = KDTree.fromIterable(embeddings);
   }
 
+  Future<bool> onWillPop() async {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp
+    ]);
+
+    return true;
+  }
+
   @override
   void initState() {
     super.initState();
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight
+    ]);
 
     if (widget.schoolClass != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) => _setupClassList());

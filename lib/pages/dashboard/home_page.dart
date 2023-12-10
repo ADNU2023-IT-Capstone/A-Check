@@ -1,3 +1,4 @@
+import 'package:a_check/main.dart';
 import 'package:a_check/models/school.dart';
 import 'package:a_check/pages/dashboard/controllers/home_state.dart';
 import 'package:a_check/themes.dart';
@@ -33,7 +34,7 @@ class HomeView extends WidgetView<HomePage, HomeState> {
 
   FirestoreBuilder<SchoolClassQuerySnapshot> buildClassGrid() {
     return FirestoreBuilder(
-      ref: classesRef,
+      ref: classesRef.whereTeacherId(isEqualTo: auth.currentUser?.id),
       builder: (context, snapshot, child) {
         if (snapshot.connectionState == ConnectionState.active) {
           if (snapshot.hasData) {
@@ -87,7 +88,7 @@ class HomeView extends WidgetView<HomePage, HomeState> {
                     fontWeight: FontWeight.bold),
               ),
               Text(
-                "Welcome, ${FirebaseAuth.instance.currentUser!.displayName!}",
+                "Welcome, ${FirebaseAuth.instance.currentUser?.displayName}",
                 style: const TextStyle(
                   color: Color(0xff8b9094),
                   fontSize: 12,
