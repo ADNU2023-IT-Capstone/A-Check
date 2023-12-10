@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:a_check/globals.dart';
 import 'package:a_check/models/school.dart';
 import 'package:a_check/pages/auto_attendance/auto_attendance_page.dart';
@@ -7,6 +9,40 @@ import 'package:flutter/material.dart';
 
 class ClassState extends State<ClassPage> {
   late SchoolClass schoolClass;
+  late StreamSubscription classesStream, attendancesStream;
+
+  @override
+  void initState() {
+    super.initState();
+
+    schoolClass = widget.schoolClass;
+
+    classesStream = classesRef.doc(schoolClass.id).snapshots().listen((event) {
+      if (context.mounted) {
+        setState(() {
+          schoolClass = event.data!;
+        });
+      }
+    });
+
+    attendancesStream = attendancesRef
+        .whereClassId(isEqualTo: widget.schoolClass.id)
+        .snapshots()
+        .listen((event) {
+      if (context.mounted) setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    classesStream.cancel();
+    attendancesStream.cancel();
+  }
+
+  @override
+  Widget build(BuildContext context) => ClassView(this);
 
   void backButtonPressed() {
     Navigator.pop(context);
@@ -42,24 +78,6 @@ class ClassState extends State<ClassPage> {
               "You do not have at least a student with a registered face!")));
     }
   }
-
-  @override
-  void initState() {
-    super.initState();
-
-    schoolClass = widget.schoolClass;
-
-    schoolRef.classes.doc(schoolClass.id).snapshots().listen((event) {
-      if (context.mounted) {
-        setState(() {
-          schoolClass = event.data!;
-        });
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) => ClassView(this);
 
   void exportRecords() {}
 

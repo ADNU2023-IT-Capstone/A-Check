@@ -5,8 +5,6 @@ import 'package:a_check/themes.dart';
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -26,18 +24,18 @@ void main() async {
   FirebaseFirestore.instance.settings = const Settings(
       persistenceEnabled: true, cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED);
 
-  if (kDebugMode) {
-    try {
-      // !!! CHANGE IP AND PORT TO WHERE THE EMULATOR IS HOSTED !!!
-      const ip = '192.168.137.1';
+  // if (kDebugMode) {
+  //   try {
+  //     // !!! CHANGE IP AND PORT TO WHERE THE EMULATOR IS HOSTED !!!
+  //     const ip = '192.168.137.1';
 
-      print("Using local Firebase emulator");
-      await FirebaseStorage.instance.useStorageEmulator(ip, 9199);
-      FirebaseFirestore.instance.useFirestoreEmulator(ip, 8080);
-    } catch (e) {
-      print(e);
-    }
-  }
+  //     print("Using local Firebase emulator");
+  //     await FirebaseStorage.instance.useStorageEmulator(ip, 9199);
+  //     FirebaseFirestore.instance.useFirestoreEmulator(ip, 8080);
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
   cameras = await availableCameras();
   packageInfo = await PackageInfo.fromPlatform();

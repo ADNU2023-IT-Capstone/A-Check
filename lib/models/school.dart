@@ -66,10 +66,9 @@ class Student extends Person {
       required super.lastName,
       super.email,
       super.phoneNumber,
-      List<String>? guardianIds,
+      this.guardian,
       List? faceArray,
       String? photoPath}) {
-    this.guardianIds = guardianIds ?? List.empty();
     this.faceArray = faceArray ?? List.empty();
     this.photoPath = photoPath ?? "";
   }
@@ -80,8 +79,8 @@ class Student extends Person {
   @Id()
   final String id;
 
+  late final Person? guardian;
   late final String photoPath;
-  late final List<String> guardianIds;
   late final List faceArray;
 
   @override

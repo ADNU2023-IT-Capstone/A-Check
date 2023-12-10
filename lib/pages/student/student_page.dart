@@ -30,18 +30,16 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
       actions: [
         PopupMenuButton(
           itemBuilder: (context) => [
-            if (widget.studentClass != null)
+            if (state.student.guardian == null)
               PopupMenuItem(
-                  onTap: state.removeFromClass,
-                  child: const Text("Remove from class")),
-            PopupMenuItem(
-              onTap: state.editStudent,
-              child: const Text("Edit student"),
-            ),
-            PopupMenuItem(
-              onTap: state.deleteStudent,
-              child: const Text("Delete student"),
-            )
+                onTap: state.guardianForm,
+                child: const Text("Add guardian"),
+              )
+            else
+              PopupMenuItem(
+                onTap: state.guardianForm,
+                child: const Text("Edit guardian"),
+              )
           ],
         )
       ],
@@ -57,25 +55,27 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
           if (snapshot.hasData) {
             final student = snapshot.data!.data!;
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                buildHeader(student),
-                Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 24),
-                    child: Column(
-                      children: [
-                        buildStudentInfo(student),
-                        const SizedBox(height: 24),
-                        // student.guardian != null
-                        //     ? buildGuardianInfo(student)
-                        //     : const Text("No guardian!"),
-                        if (widget.studentClass != null)
-                          buildClassInfo(student),
-                      ],
-                    )),
-              ],
+            return SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  buildHeader(student),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 24),
+                      child: Column(
+                        children: [
+                          buildStudentInfo(student),
+                          const SizedBox(height: 24),
+                          buildGuardianInfo(student),
+                          const SizedBox(height: 24),
+                          if (widget.studentClass != null)
+                            buildClassInfo(student),
+                        ],
+                      )),
+                ],
+              ),
             );
           } else {
             return const Center(
@@ -101,7 +101,7 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
+        mainAxisSize: MainAxisSize.min,
         children: [
           buildStudentPhoto(student),
           Padding(
@@ -117,7 +117,7 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         student.fullName.toString(),
@@ -169,7 +169,7 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   final url = snapshot.data!;
-  
+
                   return CircleAvatar(
                     foregroundImage: url.isEmpty ? NetworkImage(url) : null,
                     child: Text(
@@ -203,62 +203,55 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
 
   Widget buildStudentInfo(Student student) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
           "Student Information",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        ListView(
-          shrinkWrap: true,
-          children: [
-            ListTile(
-              title: Text(student.email!),
-              leading: const Icon(Icons.email),
-              onTap: () => state.copyToClipboard(student.email!),
-            ),
-            ListTile(
-              title: Text(student.phoneNumber!),
-              leading: const Icon(Icons.phone),
-              onTap: () => state.copyToClipboard(student.phoneNumber!),
-            ),
-          ],
-        )
+        ListTile(
+          title: Text(student.email!),
+          leading: const Icon(Icons.email),
+          onTap: () => state.copyToClipboard(student.email!),
+        ),
+        ListTile(
+          title: Text(student.phoneNumber!),
+          leading: const Icon(Icons.phone),
+          onTap: () => state.copyToClipboard(student.phoneNumber!),
+        ),
       ],
     );
   }
 
   Widget buildGuardianInfo(Student student) {
-    return Placeholder();
-    // TODO: guardian information using firebase stuff
-    // return Padding(
-    //   padding: const EdgeInsetsDirectional.fromSTEB(10, 0, 10, 30),
-    //   child: Column(
-    //     crossAxisAlignment: CrossAxisAlignment.center,
-    //     children: [
-    //       const Text(
-    //         "Guardian Information",
-    //         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-    //       ),
-    //       Text(
-    //         student.guardian.toString(),
-    //         style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-    //       ),
-    //       TextField(
-    //         enabled: false,
-    //         decoration: const InputDecoration(
-    //             labelText: "Contact Number", isDense: true),
-    //         controller: TextEditingController(text: student.guardian?.phone),
-    //       ),
-    //       TextField(
-    //         enabled: false,
-    //         decoration:
-    //             const InputDecoration(labelText: "E-mail", isDense: true),
-    //         controller: TextEditingController(text: student.guardian?.email),
-    //       )
-    //     ],
-    //   ),
-    // );
+    if (student.guardian == null) {
+      return const Center(
+        child: Text("No guardian!"),
+      );
+    }
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Guardian Information",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        ListTile(
+          title: Text(student.guardian!.email ?? "None"),
+          leading: const Icon(Icons.email),
+          onTap: () => state.copyToClipboard(student.guardian!.email),
+        ),
+        ListTile(
+          title: Text(student.phoneNumber!),
+          leading: const Icon(Icons.phone),
+          onTap: () =>
+              state.copyToClipboard(student.guardian!.phoneNumber ?? "None"),
+        ),
+      ],
+    );
   }
 
   Widget buildClassInfo(Student student) {
@@ -268,11 +261,37 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Present: ${snapshot.data!['present']}"),
-              Text("Absent: ${snapshot.data!['absent']}"),
-              Text("Late: ${snapshot.data!['late']}"),
-              Text("Excused: ${snapshot.data!['excused']}"),
+              const Text(
+                "Class Information",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              ListTile(
+                title: const Text("Present"),
+                leading: const Icon(Icons.event_available),
+                trailing: Text(snapshot.data!['present'].toString()),
+                onTap: () => state.copyToClipboard(student.email!),
+              ),
+              ListTile(
+                title: const Text("Absent"),
+                leading: const Icon(Icons.event_busy),
+                trailing: Text(snapshot.data!['absent'].toString()),
+                onTap: () => state.copyToClipboard(student.email!),
+              ),
+              ListTile(
+                title: const Text("Late"),
+                leading: const Icon(Icons.timer),
+                trailing: Text(snapshot.data!['late'].toString()),
+                onTap: () => state.copyToClipboard(student.email!),
+              ),
+              ListTile(
+                title: const Text("Excused"),
+                leading: const Icon(Icons.assistant_photo),
+                trailing: Text(snapshot.data!['excused'].toString()),
+                onTap: () => state.copyToClipboard(student.email!),
+              ),
             ],
           );
         } else {

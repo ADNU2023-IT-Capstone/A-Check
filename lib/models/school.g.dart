@@ -4713,10 +4713,10 @@ abstract class StudentDocumentReference
   ///
   /// If no document exists yet, the update will fail.
   Future<void> update({
+    Person? guardian,
+    FieldValue guardianFieldValue,
     String photoPath,
     FieldValue photoPathFieldValue,
-    List<String> guardianIds,
-    FieldValue guardianIdsFieldValue,
     List<dynamic> faceArray,
     FieldValue faceArrayFieldValue,
     String firstName,
@@ -4736,10 +4736,10 @@ abstract class StudentDocumentReference
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
+    Person? guardian,
+    FieldValue guardianFieldValue,
     String photoPath,
     FieldValue photoPathFieldValue,
-    List<String> guardianIds,
-    FieldValue guardianIdsFieldValue,
     List<dynamic> faceArray,
     FieldValue faceArrayFieldValue,
     String firstName,
@@ -4789,10 +4789,10 @@ class _$StudentDocumentReference
   }
 
   Future<void> update({
+    Object? guardian = _sentinel,
+    FieldValue? guardianFieldValue,
     Object? photoPath = _sentinel,
     FieldValue? photoPathFieldValue,
-    Object? guardianIds = _sentinel,
-    FieldValue? guardianIdsFieldValue,
     Object? faceArray = _sentinel,
     FieldValue? faceArrayFieldValue,
     Object? firstName = _sentinel,
@@ -4807,12 +4807,12 @@ class _$StudentDocumentReference
     FieldValue? phoneNumberFieldValue,
   }) async {
     assert(
-      photoPath == _sentinel || photoPathFieldValue == null,
-      "Cannot specify both photoPath and photoPathFieldValue",
+      guardian == _sentinel || guardianFieldValue == null,
+      "Cannot specify both guardian and guardianFieldValue",
     );
     assert(
-      guardianIds == _sentinel || guardianIdsFieldValue == null,
-      "Cannot specify both guardianIds and guardianIdsFieldValue",
+      photoPath == _sentinel || photoPathFieldValue == null,
+      "Cannot specify both photoPath and photoPathFieldValue",
     );
     assert(
       faceArray == _sentinel || faceArrayFieldValue == null,
@@ -4839,16 +4839,16 @@ class _$StudentDocumentReference
       "Cannot specify both phoneNumber and phoneNumberFieldValue",
     );
     final json = {
+      if (guardian != _sentinel)
+        _$StudentFieldMap['guardian']!:
+            _$StudentPerFieldToJson.guardian(guardian as Person?),
+      if (guardianFieldValue != null)
+        _$StudentFieldMap['guardian']!: guardianFieldValue,
       if (photoPath != _sentinel)
         _$StudentFieldMap['photoPath']!:
             _$StudentPerFieldToJson.photoPath(photoPath as String),
       if (photoPathFieldValue != null)
         _$StudentFieldMap['photoPath']!: photoPathFieldValue,
-      if (guardianIds != _sentinel)
-        _$StudentFieldMap['guardianIds']!:
-            _$StudentPerFieldToJson.guardianIds(guardianIds as List<String>),
-      if (guardianIdsFieldValue != null)
-        _$StudentFieldMap['guardianIds']!: guardianIdsFieldValue,
       if (faceArray != _sentinel)
         _$StudentFieldMap['faceArray']!:
             _$StudentPerFieldToJson.faceArray(faceArray as List<dynamic>),
@@ -4885,10 +4885,10 @@ class _$StudentDocumentReference
 
   void transactionUpdate(
     Transaction transaction, {
+    Object? guardian = _sentinel,
+    FieldValue? guardianFieldValue,
     Object? photoPath = _sentinel,
     FieldValue? photoPathFieldValue,
-    Object? guardianIds = _sentinel,
-    FieldValue? guardianIdsFieldValue,
     Object? faceArray = _sentinel,
     FieldValue? faceArrayFieldValue,
     Object? firstName = _sentinel,
@@ -4903,12 +4903,12 @@ class _$StudentDocumentReference
     FieldValue? phoneNumberFieldValue,
   }) {
     assert(
-      photoPath == _sentinel || photoPathFieldValue == null,
-      "Cannot specify both photoPath and photoPathFieldValue",
+      guardian == _sentinel || guardianFieldValue == null,
+      "Cannot specify both guardian and guardianFieldValue",
     );
     assert(
-      guardianIds == _sentinel || guardianIdsFieldValue == null,
-      "Cannot specify both guardianIds and guardianIdsFieldValue",
+      photoPath == _sentinel || photoPathFieldValue == null,
+      "Cannot specify both photoPath and photoPathFieldValue",
     );
     assert(
       faceArray == _sentinel || faceArrayFieldValue == null,
@@ -4935,16 +4935,16 @@ class _$StudentDocumentReference
       "Cannot specify both phoneNumber and phoneNumberFieldValue",
     );
     final json = {
+      if (guardian != _sentinel)
+        _$StudentFieldMap['guardian']!:
+            _$StudentPerFieldToJson.guardian(guardian as Person?),
+      if (guardianFieldValue != null)
+        _$StudentFieldMap['guardian']!: guardianFieldValue,
       if (photoPath != _sentinel)
         _$StudentFieldMap['photoPath']!:
             _$StudentPerFieldToJson.photoPath(photoPath as String),
       if (photoPathFieldValue != null)
         _$StudentFieldMap['photoPath']!: photoPathFieldValue,
-      if (guardianIds != _sentinel)
-        _$StudentFieldMap['guardianIds']!:
-            _$StudentPerFieldToJson.guardianIds(guardianIds as List<String>),
-      if (guardianIdsFieldValue != null)
-        _$StudentFieldMap['guardianIds']!: guardianIdsFieldValue,
       if (faceArray != _sentinel)
         _$StudentFieldMap['faceArray']!:
             _$StudentPerFieldToJson.faceArray(faceArray as List<dynamic>),
@@ -5075,6 +5075,17 @@ abstract class StudentQuery
     List<String>? whereIn,
     List<String>? whereNotIn,
   });
+  StudentQuery whereGuardian({
+    Person? isEqualTo,
+    Person? isNotEqualTo,
+    Person? isLessThan,
+    Person? isLessThanOrEqualTo,
+    Person? isGreaterThan,
+    Person? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<Person?>? whereIn,
+    List<Person?>? whereNotIn,
+  });
   StudentQuery wherePhotoPath({
     String? isEqualTo,
     String? isNotEqualTo,
@@ -5085,17 +5096,6 @@ abstract class StudentQuery
     bool? isNull,
     List<String>? whereIn,
     List<String>? whereNotIn,
-  });
-  StudentQuery whereGuardianIds({
-    List<String>? isEqualTo,
-    List<String>? isNotEqualTo,
-    List<String>? isLessThan,
-    List<String>? isLessThanOrEqualTo,
-    List<String>? isGreaterThan,
-    List<String>? isGreaterThanOrEqualTo,
-    bool? isNull,
-    String? arrayContains,
-    List<String>? arrayContainsAny,
   });
   StudentQuery whereFaceArray({
     List<dynamic>? isEqualTo,
@@ -5176,24 +5176,24 @@ abstract class StudentQuery
     StudentDocumentSnapshot? startAfterDocument,
   });
 
-  StudentQuery orderByPhotoPath({
+  StudentQuery orderByGuardian({
     bool descending = false,
-    String startAt,
-    String startAfter,
-    String endAt,
-    String endBefore,
+    Person? startAt,
+    Person? startAfter,
+    Person? endAt,
+    Person? endBefore,
     StudentDocumentSnapshot? startAtDocument,
     StudentDocumentSnapshot? endAtDocument,
     StudentDocumentSnapshot? endBeforeDocument,
     StudentDocumentSnapshot? startAfterDocument,
   });
 
-  StudentQuery orderByGuardianIds({
+  StudentQuery orderByPhotoPath({
     bool descending = false,
-    List<String> startAt,
-    List<String> startAfter,
-    List<String> endAt,
-    List<String> endBefore,
+    String startAt,
+    String startAfter,
+    String endAt,
+    String endBefore,
     StudentDocumentSnapshot? startAtDocument,
     StudentDocumentSnapshot? endAtDocument,
     StudentDocumentSnapshot? endBeforeDocument,
@@ -5449,6 +5449,48 @@ class _$StudentQuery extends QueryReference<Student, StudentQuerySnapshot>
     );
   }
 
+  StudentQuery whereGuardian({
+    Object? isEqualTo = notSetQueryParam,
+    Object? isNotEqualTo = notSetQueryParam,
+    Object? isLessThan = notSetQueryParam,
+    Object? isLessThanOrEqualTo = notSetQueryParam,
+    Object? isGreaterThan = notSetQueryParam,
+    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    bool? isNull,
+    List<Person?>? whereIn,
+    List<Person?>? whereNotIn,
+  }) {
+    return _$StudentQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$StudentFieldMap['guardian']!,
+        isEqualTo: isEqualTo != notSetQueryParam
+            ? _$StudentPerFieldToJson.guardian(isEqualTo as Person?)
+            : notSetQueryParam,
+        isNotEqualTo: isNotEqualTo != notSetQueryParam
+            ? _$StudentPerFieldToJson.guardian(isNotEqualTo as Person?)
+            : notSetQueryParam,
+        isLessThan: isLessThan != notSetQueryParam
+            ? _$StudentPerFieldToJson.guardian(isLessThan as Person?)
+            : notSetQueryParam,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
+            ? _$StudentPerFieldToJson.guardian(isLessThanOrEqualTo as Person?)
+            : notSetQueryParam,
+        isGreaterThan: isGreaterThan != notSetQueryParam
+            ? _$StudentPerFieldToJson.guardian(isGreaterThan as Person?)
+            : notSetQueryParam,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
+            ? _$StudentPerFieldToJson
+                .guardian(isGreaterThanOrEqualTo as Person?)
+            : notSetQueryParam,
+        isNull: isNull,
+        whereIn: whereIn?.map((e) => _$StudentPerFieldToJson.guardian(e)),
+        whereNotIn: whereNotIn?.map((e) => _$StudentPerFieldToJson.guardian(e)),
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
   StudentQuery wherePhotoPath({
     Object? isEqualTo = notSetQueryParam,
     Object? isNotEqualTo = notSetQueryParam,
@@ -5487,56 +5529,6 @@ class _$StudentQuery extends QueryReference<Student, StudentQuerySnapshot>
         whereIn: whereIn?.map((e) => _$StudentPerFieldToJson.photoPath(e)),
         whereNotIn:
             whereNotIn?.map((e) => _$StudentPerFieldToJson.photoPath(e)),
-      ),
-      $queryCursor: $queryCursor,
-    );
-  }
-
-  StudentQuery whereGuardianIds({
-    Object? isEqualTo = notSetQueryParam,
-    Object? isNotEqualTo = notSetQueryParam,
-    Object? isLessThan = notSetQueryParam,
-    Object? isLessThanOrEqualTo = notSetQueryParam,
-    Object? isGreaterThan = notSetQueryParam,
-    Object? isGreaterThanOrEqualTo = notSetQueryParam,
-    bool? isNull,
-    Object? arrayContains = notSetQueryParam,
-    List<String>? arrayContainsAny,
-  }) {
-    return _$StudentQuery(
-      _collection,
-      $referenceWithoutCursor: $referenceWithoutCursor.where(
-        _$StudentFieldMap['guardianIds']!,
-        isEqualTo: isEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson.guardianIds(isEqualTo as List<String>)
-            : notSetQueryParam,
-        isNotEqualTo: isNotEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson.guardianIds(isNotEqualTo as List<String>)
-            : notSetQueryParam,
-        isLessThan: isLessThan != notSetQueryParam
-            ? _$StudentPerFieldToJson.guardianIds(isLessThan as List<String>)
-            : notSetQueryParam,
-        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson
-                .guardianIds(isLessThanOrEqualTo as List<String>)
-            : notSetQueryParam,
-        isGreaterThan: isGreaterThan != notSetQueryParam
-            ? _$StudentPerFieldToJson.guardianIds(isGreaterThan as List<String>)
-            : notSetQueryParam,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
-            ? _$StudentPerFieldToJson
-                .guardianIds(isGreaterThanOrEqualTo as List<String>)
-            : notSetQueryParam,
-        isNull: isNull,
-        arrayContains: arrayContains != notSetQueryParam
-            ? (_$StudentPerFieldToJson.guardianIds([arrayContains as String])
-                    as List?)!
-                .single
-            : notSetQueryParam,
-        arrayContainsAny: arrayContainsAny != null
-            ? _$StudentPerFieldToJson.guardianIds(arrayContainsAny)
-                as Iterable<Object>?
-            : null,
       ),
       $queryCursor: $queryCursor,
     );
@@ -5876,7 +5868,7 @@ class _$StudentQuery extends QueryReference<Student, StudentQuerySnapshot>
     );
   }
 
-  StudentQuery orderByPhotoPath({
+  StudentQuery orderByGuardian({
     bool descending = false,
     Object? startAt = _sentinel,
     Object? startAfter = _sentinel,
@@ -5888,7 +5880,7 @@ class _$StudentQuery extends QueryReference<Student, StudentQuerySnapshot>
     StudentDocumentSnapshot? startAfterDocument,
   }) {
     final query = $referenceWithoutCursor
-        .orderBy(_$StudentFieldMap['photoPath']!, descending: descending);
+        .orderBy(_$StudentFieldMap['guardian']!, descending: descending);
     var queryCursor = $queryCursor;
 
     if (startAtDocument != null) {
@@ -5948,7 +5940,7 @@ class _$StudentQuery extends QueryReference<Student, StudentQuerySnapshot>
     );
   }
 
-  StudentQuery orderByGuardianIds({
+  StudentQuery orderByPhotoPath({
     bool descending = false,
     Object? startAt = _sentinel,
     Object? startAfter = _sentinel,
@@ -5960,7 +5952,7 @@ class _$StudentQuery extends QueryReference<Student, StudentQuerySnapshot>
     StudentDocumentSnapshot? startAfterDocument,
   }) {
     final query = $referenceWithoutCursor
-        .orderBy(_$StudentFieldMap['guardianIds']!, descending: descending);
+        .orderBy(_$StudentFieldMap['photoPath']!, descending: descending);
     var queryCursor = $queryCursor;
 
     if (startAtDocument != null) {
@@ -7912,9 +7904,9 @@ Student _$StudentFromJson(Map<String, dynamic> json) => Student(
       lastName: json['lastName'] as String,
       email: json['email'] as String?,
       phoneNumber: json['phoneNumber'] as String?,
-      guardianIds: (json['guardianIds'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
+      guardian: json['guardian'] == null
+          ? null
+          : Person.fromJson(json['guardian'] as Map<String, dynamic>),
       faceArray: json['faceArray'] as List<dynamic>?,
       photoPath: json['photoPath'] as String?,
     );
@@ -7926,8 +7918,8 @@ const _$StudentFieldMap = <String, String>{
   'email': 'email',
   'phoneNumber': 'phoneNumber',
   'id': 'id',
+  'guardian': 'guardian',
   'photoPath': 'photoPath',
-  'guardianIds': 'guardianIds',
   'faceArray': 'faceArray',
 };
 
@@ -7946,9 +7938,9 @@ abstract class _$StudentPerFieldToJson {
   // ignore: unused_element
   static Object? id(String instance) => instance;
   // ignore: unused_element
-  static Object? photoPath(String instance) => instance;
+  static Object? guardian(Person? instance) => instance?.toJson();
   // ignore: unused_element
-  static Object? guardianIds(List<String> instance) => instance;
+  static Object? photoPath(String instance) => instance;
   // ignore: unused_element
   static Object? faceArray(List<dynamic> instance) => instance;
 }
@@ -7960,8 +7952,8 @@ Map<String, dynamic> _$StudentToJson(Student instance) => <String, dynamic>{
       'email': instance.email,
       'phoneNumber': instance.phoneNumber,
       'id': instance.id,
+      'guardian': instance.guardian?.toJson(),
       'photoPath': instance.photoPath,
-      'guardianIds': instance.guardianIds,
       'faceArray': instance.faceArray,
     };
 

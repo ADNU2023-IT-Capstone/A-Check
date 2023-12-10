@@ -87,17 +87,15 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
         studentsRef
             .doc(widget.student!.id)
             .update(faceArray: await _mlService.predict(faceImage))
-            .catchError((e) {
+            .then((value) {
+          snackbarKey.currentState!.hideCurrentSnackBar();
+          Navigator.pop(context, true);
+        }).catchError((e) {
           if (context.mounted) {
             snackbarKey.currentState!.hideCurrentSnackBar();
             Navigator.pop(context, {'result': false, 'error': e});
           }
         });
-
-        if (context.mounted) {
-          snackbarKey.currentState!.hideCurrentSnackBar();
-          Navigator.pop(context, true);
-        }
       }
     }
   }

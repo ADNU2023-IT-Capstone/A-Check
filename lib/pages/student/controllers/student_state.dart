@@ -1,13 +1,15 @@
 import 'package:a_check/globals.dart';
 import 'package:a_check/models/school.dart';
 import 'package:a_check/pages/take_attendance/face_recognition_page.dart';
-import 'package:a_check/pages/forms/student_form_page.dart';
+import 'package:a_check/pages/forms/guardian_form_page.dart';
 import 'package:a_check/pages/student/student_page.dart';
 import 'package:a_check/utils/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class StudentState extends State<StudentPage> {
+  late Student student;
+
   @override
   Widget build(BuildContext context) => StudentView(this);
 
@@ -24,8 +26,6 @@ class StudentState extends State<StudentPage> {
     });
   }
 
-  late Student student;
-
   void showSuccessSnackBar() {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Successfully registered ${student.firstName}'s face!")));
@@ -37,36 +37,16 @@ class StudentState extends State<StudentPage> {
             "Something went wrong with saving ${student.firstName}'s face...\n$error")));
   }
 
-  void editStudent() {
+  void guardianForm() {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => StudentFormPage(student: student),
+          builder: (context) => GuardianFormPage(
+            student: student,
+          ),
         ));
-  }
 
-  void deleteStudent() async {
-    final result = await Dialogs.showConfirmDialog(
-        context,
-        const Text("Delete Student"),
-        const Text("This will delete the student and its data. Continue?"));
-
-    if (result == null || !result) {
-      return;
-    }
-
-    if (widget.studentClass != null) {
-      final newStudentIds = widget.studentClass!.studentIds;
-      newStudentIds.remove(student.id);
-
-      classesRef.doc(widget.studentClass!.id).update(studentIds: newStudentIds);
-    }
-
-    if (context.mounted) {
-      studentsRef.doc(student.id).delete().then((_) {
-        Navigator.pop(context);
-      });
-    }
+    _initStudent();
   }
 
   void registerFace() async {
@@ -117,30 +97,10 @@ class StudentState extends State<StudentPage> {
     }
   }
 
-  void removeFromClass() async {
-    final result = await Dialogs.showConfirmDialog(
-        context,
-        const Text("Warning"),
-        Text(
-            "${student.firstName} will be removed to class ${widget.studentClass!.id}. Continue?"));
-    if (result == null || !result) {
-      return;
-    }
-
-    final newStudentIds = widget.studentClass!.studentIds;
-    newStudentIds.remove(student.id);
-
-    classesRef
-        .doc(widget.studentClass!.id)
-        .update(studentIds: newStudentIds)
-        .then((_) {
-      Navigator.pop(context);
-    });
-  }
-
   copyToClipboard(value) {
     Clipboard.setData(ClipboardData(text: value)).then((_) {
-      snackbarKey.currentState!.showSnackBar(SnackBar(content: Text("Copied $value!")));
+      snackbarKey.currentState!
+          .showSnackBar(SnackBar(content: Text("Copied $value!")));
     });
   }
 }

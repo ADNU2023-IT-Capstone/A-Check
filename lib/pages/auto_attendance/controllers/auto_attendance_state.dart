@@ -89,7 +89,6 @@ class AutoAttendanceState extends State<AutoAttendancePage> {
   }
 
   onFrame(Uint8List frameBytes) async {
-    print('received frame');
     final inputImage = await FaceMLHelpers.bytesToInputImage(frameBytes);
     final faceImages =
         await FaceMLHelpers.getFaceImagesFromInputImage(inputImage, _mlService);
@@ -102,8 +101,6 @@ class AutoAttendanceState extends State<AutoAttendancePage> {
         final student = _registeredStudents[map['index']! as int];
         final distance = map['distance']!;
 
-        print(
-            'FACE_RECOG: recognized ${student.fullName} with distance $distance');
         if (!context.mounted) return;
         setState(() {
           RecognizedStudent? rs;
@@ -111,13 +108,10 @@ class AutoAttendanceState extends State<AutoAttendancePage> {
             rs = recognizedStudents[student.id]!;
 
             if (rs.locked) {
-              print('FACE_RECOG: this is locked');
               return;
             }
 
             if (distance > rs.distance) {
-              print(
-                  'FACE_RECOG: distance too high from last recorded distance, ignoring');
               // ignore this
               return;
             }
