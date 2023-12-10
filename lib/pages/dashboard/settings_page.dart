@@ -38,7 +38,7 @@ class SettingsView extends WidgetView<SettingsPage, SettingsState> {
           onTap: state.searchIPCam,
         ),
         SettingsListTile(
-          title: const Text("Connect to IP camera"),
+          title: const Text("Test connection to IP camera"),
           onTap: state.connectIPCam,
         ),
         // Card(
@@ -71,12 +71,11 @@ class SettingsView extends WidgetView<SettingsPage, SettingsState> {
             title: const Text("Set distance threshold"),
             subtitle: const Text("Set how strict the face recognition will be"),
             onTap: state.setDistanceThreshold),
-        if (kDebugMode)
-          SettingsListTile(
-              title: const Text("Set firebase emulator IP"),
-              subtitle:
-                  const Text("Set the IP address for connecting to the firebase emulator"),
-              onTap: state.setFirebaseEmulator),
+        SettingsListTile(
+            title: const Text("Set IP camera scan interval"),
+            subtitle: const Text(
+                "Set how long the scan will wait before getting the next frame"),
+            onTap: state.setScanInterval),
       ],
     );
   }

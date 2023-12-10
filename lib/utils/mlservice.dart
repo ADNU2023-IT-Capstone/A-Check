@@ -7,11 +7,20 @@ import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:image/image.dart' as imglib;
 
 class MLService {
-  late Interpreter _interpreter;
+  Interpreter? _interpreter;
+  IsolateInterpreter? _isolateInterpreter;
   final FaceDetector _faceDetector = FaceDetector(
       options: FaceDetectorOptions(performanceMode: FaceDetectorMode.accurate));
 
-  _initializeInterpreter() async {
+  MLService() {
+    _initializeInterpreter();
+  }
+
+  Future<void> _initializeInterpreter() async {
+    if (_interpreter != null) {
+      return;
+    }
+
     Delegate? delegate;
 
     try {
@@ -20,9 +29,18 @@ class MLService {
       var interpreterOptions = InterpreterOptions()..addDelegate(delegate);
       _interpreter = await Interpreter.fromAsset('assets/mobilefacenet.tflite',
           options: interpreterOptions);
+      _isolateInterpreter =
+          await IsolateInterpreter.create(address: _interpreter!.address);
+      await Future.delayed(const Duration(seconds: 1));
     } catch (e) {
       Fluttertoast.showToast(msg: "Failed to load model.\n$e");
     }
+  }
+
+  void dispose() async {
+    await _isolateInterpreter?.close();
+    _interpreter?.close();
+    _faceDetector.close();
   }
 
   euclideanDistance(List l1, List l2) {
@@ -61,8 +79,8 @@ class MLService {
     List output = List.generate(1, (index) => List.filled(192, 0));
 
     await _initializeInterpreter();
+    _interpreter!.run(input, output);
 
-    _interpreter.run(input, output);
     output = output.reshape([192]);
 
     return List.from(output);
@@ -89,14 +107,15 @@ class MLService {
 
     List<imglib.Image> faceImages = [];
     imglib.Image? decodedImage = image;
-    
+
     for (Map<String, int> faceMap in faceMaps) {
       final faceCropImage = imglib.copyCrop(decodedImage!,
           x: faceMap['x']!,
           y: faceMap['y']!,
           width: faceMap['w']!,
           height: faceMap['h']!);
-      final squaredImage = imglib.copyResizeCropSquare(faceCropImage, size: 150);
+      final squaredImage =
+          imglib.copyResizeCropSquare(faceCropImage, size: 150);
 
       faceImages.add(squaredImage);
     }

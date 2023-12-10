@@ -5,7 +5,6 @@ import 'package:a_check/themes.dart';
 import 'package:a_check/utils/abstracts.dart';
 import 'package:a_check/widgets/class_card.dart';
 import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -45,13 +44,13 @@ class HomeView extends WidgetView<HomePage, HomeState> {
                 child: Text("You do not have any classes!"),
               );
             }
-            
+
             return GridView.count(
               crossAxisCount: 2,
               padding: const EdgeInsets.all(20),
               crossAxisSpacing: 10,
               mainAxisSpacing: 8,
-              children: classes.map((e) => ClassCard(mClass: e)).toList(),
+              children: classes.map((e) => ClassCard(schoolClass: e)).toList(),
             );
           } else {
             return const Center(
@@ -88,7 +87,7 @@ class HomeView extends WidgetView<HomePage, HomeState> {
                     fontWeight: FontWeight.bold),
               ),
               Text(
-                "Welcome, ${FirebaseAuth.instance.currentUser?.displayName}",
+                "Welcome, ${auth.currentUser?.name}",
                 style: const TextStyle(
                   color: Color(0xff8b9094),
                   fontSize: 12,

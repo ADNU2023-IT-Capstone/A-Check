@@ -1,5 +1,6 @@
-import 'package:a_check/pages/face_detected_page.dart';
 import 'package:flutter/material.dart';
+
+import '../face_detected_page.dart';
 
 class DetectedFacesState extends State<DetectedFacesPage> {
   

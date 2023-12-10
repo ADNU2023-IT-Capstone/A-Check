@@ -3,16 +3,18 @@ import 'dart:io';
 import 'package:a_check/globals.dart';
 import 'package:a_check/main.dart';
 import 'package:a_check/models/school.dart';
-import 'package:a_check/pages/face_detected_page.dart';
-import 'package:a_check/pages/face_recognition_page.dart';
 import 'package:a_check/utils/dialogs.dart';
 import 'package:a_check/utils/mlservice.dart';
+import 'package:a_check/utils/onvif_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image/image.dart' as imglib;
 import 'package:ml_algo/kd_tree.dart';
 import 'package:path_provider/path_provider.dart';
+
+import '../face_detected_page.dart';
+import '../face_recognition_page.dart';
 
 class FaceRecognitionState extends State<FaceRecognitionPage> {
   final _mlService = MLService();
@@ -206,9 +208,7 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
   }
 
   Future<bool> onWillPop() async {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp
-    ]);
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
     return true;
   }
@@ -230,5 +230,24 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+
+    _mlService.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) => FaceRecognitionView(this);
+
+  Future<String?> connectToCamera() async {
+    try {
+      return await OnvifHelpers.getCameraStreamUri();
+    } on OnvifException catch (ex) {
+      snackbarKey.currentState!
+          .showSnackBar(SnackBar(content: Text(ex.message ?? "Error! $ex")));
+      Navigator.pop(context);
+    }
+
+    return null;
+  }
 }

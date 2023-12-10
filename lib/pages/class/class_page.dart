@@ -8,8 +8,8 @@ import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:flutter/material.dart';
 
 class ClassPage extends StatefulWidget {
-  const ClassPage({Key? key, required this.classId}) : super(key: key);
-  final String classId;
+  const ClassPage({Key? key, required this.schoolClass}) : super(key: key);
+  final SchoolClass schoolClass;
 
   @override
   State<ClassPage> createState() => ClassState();
@@ -22,16 +22,14 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: buildAppBar(context),
-      body: DefaultTabController(
-          length: 2,
-          child: FirestoreBuilder(
-            ref: classesRef.doc(widget.classId),
-            builder: (context, snapshot, child) =>
-                buildBody(context, snapshot, child),
-          )),
-      floatingActionButton: buildFab(),
+    return FirestoreBuilder(
+      ref: classesRef.doc(widget.schoolClass.id),
+      builder: (context, snapshot, child) => Scaffold(
+        appBar: buildAppBar(context),
+        body: DefaultTabController(
+            length: 2, child: buildBody(context, snapshot, child)),
+        floatingActionButton: buildFab(),
+      ),
     );
   }
 
@@ -49,7 +47,7 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
       elevation: 0,
       actions: [
         PopupMenuButton(
-          tooltip: "Edit or Delete Class",
+          tooltip: "Class options",
           elevation: 1,
           itemBuilder: (context) => [
             PopupMenuItem(
@@ -63,11 +61,25 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
   }
 
   Widget buildFab() {
-    return FloatingActionButton.extended(
-      label: const Text("Take attendance"),
-      icon: const Icon(Icons.checklist),
-      tooltip: "Take Attendance",
-      onPressed: state.takeAttendance,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        FloatingActionButton.extended(
+          heroTag: null,
+          label: const Text("Take attendance"),
+          icon: const Icon(Icons.checklist),
+          tooltip: "Take Attendance",
+          onPressed: state.takeAttendance,
+        ),
+        const SizedBox(height: 8),
+        FloatingActionButton.extended(
+          heroTag: null,
+          label: const Text("Auto-attendance"),
+          icon: const Icon(Icons.video_camera_front),
+          tooltip: "Auto-attendance",
+          onPressed: state.autoAttendance,
+        ),
+      ],
     );
   }
 
@@ -104,7 +116,10 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
         indicatorColor: Themes.main.colorScheme.primaryContainer,
         labelColor: headerTextColor,
         tabs: const [
-          Tab(text: "Student List", icon: Icon(Icons.group),),
+          Tab(
+            text: "Student List",
+            icon: Icon(Icons.group),
+          ),
           Tab(text: "Attendance Records", icon: Icon(Icons.list))
         ],
       ),
@@ -251,7 +266,7 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
                 .toList(),
           );
         } else {
-          return const CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         }
       },
     );

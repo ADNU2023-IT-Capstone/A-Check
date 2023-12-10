@@ -4,9 +4,9 @@ import 'package:a_check/themes.dart';
 import 'package:flutter/material.dart';
 
 class ClassCard extends StatelessWidget {
-  const ClassCard({Key? key, required this.mClass}) : super(key: key);
+  const ClassCard({Key? key, required this.schoolClass}) : super(key: key);
 
-  final SchoolClass mClass;
+  final SchoolClass schoolClass;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class ClassCard extends StatelessWidget {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => ClassPage(classId: mClass.id)));
+              builder: (context) => ClassPage(schoolClass: schoolClass)));
     }
 
     return GestureDetector(
@@ -38,7 +38,7 @@ class ClassCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(mClass.subjectCode,
+              Text(schoolClass.subjectCode,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
@@ -50,7 +50,7 @@ class ClassCard extends StatelessWidget {
                   thickness: 0.6,
                   color: Themes.main.colorScheme.onPrimary),
               const SizedBox(height: 10),
-              Text(mClass.name,
+              Text(schoolClass.name,
                   textAlign: TextAlign.center,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -59,7 +59,7 @@ class ClassCard extends StatelessWidget {
                       fontSize: 14,
                       fontWeight: FontWeight.w300)),
               const SizedBox(height: 10),
-              Text(mClass.section,
+              Text(schoolClass.section,
                   style: const TextStyle(
                       color: textColor,
                       fontSize: 12,

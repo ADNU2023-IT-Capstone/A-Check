@@ -9,7 +9,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:media_kit/media_kit.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,7 +29,7 @@ void main() async {
   if (kDebugMode) {
     try {
       // !!! CHANGE IP AND PORT TO WHERE THE EMULATOR IS HOSTED !!!
-      const ip = '192.168.1.3';
+      const ip = '192.168.137.1';
 
       print("Using local Firebase emulator");
       await FirebaseStorage.instance.useStorageEmulator(ip, 9199);
@@ -40,7 +39,6 @@ void main() async {
     }
   }
 
-  MediaKit.ensureInitialized();
   cameras = await availableCameras();
   packageInfo = await PackageInfo.fromPlatform();
   prefs = await SharedPreferences.getInstance();
@@ -48,9 +46,8 @@ void main() async {
 
   User? lastUser;
   if (prefs.containsKey('user')) {
-    print("has last user");
     final values = prefs.getStringList('user')!;
-    lastUser = User(id: values.first, schoolId: values.last);
+    lastUser = User(id: values.first, schoolId: values[1], name: values.last);
   }
   auth = Auth(user: lastUser);
 
@@ -63,6 +60,7 @@ void main() async {
 Future<void> setupDefaultPrefs() async {
   if (!prefs.containsKey('threshold')) await prefs.setDouble('threshold', 1.5);
   if (!prefs.containsKey('absent_warn')) await prefs.setInt('absent_warn', 2);
+  if (!prefs.containsKey('scan_interval')) await prefs.setInt('scan_interval', 2);
 }
 
 class MainApp extends StatelessWidget {

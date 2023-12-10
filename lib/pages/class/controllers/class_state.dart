@@ -1,6 +1,7 @@
 import 'package:a_check/globals.dart';
 import 'package:a_check/models/school.dart';
-import 'package:a_check/pages/face_recognition_page.dart';
+import 'package:a_check/pages/auto_attendance/auto_attendance_page.dart';
+import 'package:a_check/pages/take_attendance/face_recognition_page.dart';
 import 'package:a_check/pages/class/class_page.dart';
 import 'package:flutter/material.dart';
 
@@ -46,14 +47,29 @@ class ClassState extends State<ClassPage> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      schoolClass = (await classesRef.doc(widget.classId).get()).data!;
+    schoolClass = widget.schoolClass;
+
+    schoolRef.classes.doc(schoolClass.id).snapshots().listen((event) {
+      if (context.mounted) {
+        setState(() {
+          schoolClass = event.data!;
+        });
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) => ClassView(this);
 
-  void exportRecords() {
+  void exportRecords() {}
+
+  void autoAttendance() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AutoAttendancePage(
+            schoolClass: schoolClass,
+          ),
+        ));
   }
 }

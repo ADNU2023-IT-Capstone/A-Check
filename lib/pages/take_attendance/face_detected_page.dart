@@ -1,10 +1,11 @@
 import 'dart:typed_data';
 
 import 'package:a_check/models/school.dart';
-import 'package:a_check/pages/controllers/face_detected_page.dart';
 import 'package:a_check/utils/abstracts.dart';
 import 'package:a_check/widgets/face_card.dart';
 import 'package:flutter/material.dart';
+
+import 'controllers/face_detected_page.dart';
 
 class DetectedFacesPage extends StatefulWidget {
   const DetectedFacesPage(

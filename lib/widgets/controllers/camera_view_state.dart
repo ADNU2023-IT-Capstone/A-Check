@@ -11,6 +11,39 @@ class CameraViewState extends State<CameraViewWidget>
   bool takingPicture = false;
   var savedCamDesc = cameras.first;
 
+  @override
+  Widget build(BuildContext context) => CameraView(this);
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+
+    _initializeCameraController();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    final CameraController? cameraController = camCon;
+
+    // App state changed before we got the chance to initialize.
+    if (cameraController == null || !cameraController.value.isInitialized) {
+      return;
+    }
+
+    if (state == AppLifecycleState.inactive) {
+      cameraController.dispose();
+    } else if (state == AppLifecycleState.resumed) {
+      _initializeCameraController();
+    }
+  }
+
+  @override
+  void dispose() {
+    camCon!.dispose();
+    super.dispose();
+  }
+
   void takePicture() async {
     takingPicture = true;
     final photo = await camCon!.takePicture().then((value) {
@@ -18,7 +51,7 @@ class CameraViewState extends State<CameraViewWidget>
       return value;
     });
     final inputImage = InputImage.fromFilePath(photo.path);
-    
+
     widget.onCapture!(inputImage);
   }
 
@@ -65,37 +98,4 @@ class CameraViewState extends State<CameraViewWidget>
       // camCon!.startImageStream((image) => widget.onImage);
     });
   }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-
-    _initializeCameraController();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    final CameraController? cameraController = camCon;
-
-    // App state changed before we got the chance to initialize.
-    if (cameraController == null || !cameraController.value.isInitialized) {
-      return;
-    }
-
-    if (state == AppLifecycleState.inactive) {
-      cameraController.dispose();
-    } else if (state == AppLifecycleState.resumed) {
-      _initializeCameraController();
-    }
-  }
-
-  @override
-  void dispose() {
-    camCon!.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) => CameraView(this);
 }

@@ -2,11 +2,8 @@ import 'package:a_check/globals.dart';
 import 'package:a_check/main.dart';
 import 'package:a_check/pages/dashboard/settings_page.dart';
 import 'package:a_check/utils/dialogs.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_onvif/onvif.dart';
 import 'package:easy_onvif/probe.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -41,6 +38,37 @@ class SettingsState extends State<SettingsPage> {
     prefs.setDouble('threshold', double.parse(result)).then((_) {
       snackbarKey.currentState!.showSnackBar(const SnackBar(
           content: Text("Successfully saved new distance threshold value!")));
+    }).onError((error, stackTrace) {
+      snackbarKey.currentState!.showSnackBar(SnackBar(
+          content:
+              Text("Something went horribly wrong!\n$error: $stackTrace")));
+    });
+  }
+
+  void setScanInterval() async {
+    final result = await Dialogs.showTextInputDialog(
+        context, const Text("Enter new scan interval value"),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+                "Only accepts by seconds."),
+            const SizedBox(
+              height: 8,
+            ),
+            Align(
+                alignment: Alignment.center,
+                child: Text("Current value: ${prefs.getInt('scan_interval')}")),
+          ],
+        ),
+        formatters: [FilteringTextInputFormatter.digitsOnly],
+        keyboardType: TextInputType.number);
+
+    if (result == null || result.isEmpty) return;
+
+    prefs.setInt('scan_interval', int.parse(result)).then((_) {
+      snackbarKey.currentState!.showSnackBar(const SnackBar(
+          content: Text("Successfully saved new scan interval value!")));
     }).onError((error, stackTrace) {
       snackbarKey.currentState!.showSnackBar(SnackBar(
           content:
@@ -127,36 +155,20 @@ class SettingsState extends State<SettingsPage> {
       final onvif = await Onvif.connect(
               host: host, username: username, password: password)
           .timeout(const Duration(seconds: 5))
-          .onError(
-              (error, stackTrace) => throw Exception("OnvifConnectionFailure"));
+          .onError((error, stackTrace) => throw Exception(error));
 
       snackbarKey.currentState!.hideCurrentSnackBar();
       var deviceInfo = await onvif.deviceManagement.getDeviceInformation();
       snackbarKey.currentState!.showSnackBar(
           SnackBar(content: Text("Connected to ${deviceInfo.model}!")));
-    } catch (ex) {
+    } on Exception catch (ex) {
       snackbarKey.currentState!.hideCurrentSnackBar();
       snackbarKey.currentState!.showSnackBar(
-          const SnackBar(content: Text("Failed to connect to IP camera")));
+          SnackBar(content: Text("Failed to connect to IP camera! $ex")));
       return;
     }
   }
 
   @override
   Widget build(BuildContext context) => SettingsView(this);
-
-  setFirebaseEmulator() async {
-    final result = await Dialogs.showTextInputDialog(
-        context, const Text("Enter IP"),
-        keyboardType: TextInputType.number);
-
-    if (result == null || result.isEmpty) return;
-
-    await FirebaseAuth.instance.useAuthEmulator(result, 9099);
-    await FirebaseStorage.instance.useStorageEmulator(result, 9199);
-    FirebaseFirestore.instance.useFirestoreEmulator(result, 8080);
-
-    snackbarKey.currentState!.showSnackBar(const SnackBar(
-          content: Text("Set new IP.")));
-  }
 }

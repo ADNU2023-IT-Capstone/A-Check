@@ -10,14 +10,18 @@ class User {
   User({
     required this.id,
     required this.schoolId,
+    required this.name
   });
 
   String id;
   String schoolId;
+  String name;
+
+  Future<Teacher> get teacher async => (await teachersRef.doc(id).get()).data!;
 
   @override
   String toString() {
-    return "User: ${id}, School ID: ${schoolId}";
+    return "User: $id, School ID: $schoolId";
   }
 }
 
@@ -44,10 +48,6 @@ class Auth {
     }
   }
 
-  printUserFromStream() async {
-    print(await userStream.first ?? "No user");
-  }
-
   Future<User> signIn(
       {required School school,
       required String email,
@@ -60,18 +60,16 @@ class Auth {
     } else if (teachersDocs.length > 1) {
       throw AuthException("DuplicateEmail", "Email has more than one record");
     }
-    print('found teacher');
 
     // check if password is correct
     final teacher = teachersDocs.first.data;
     if (!teacher.authenticate(password)) {
       throw AuthException("InvalidPassword", "Invalid password");
     }
-    print('credentials are correct');
 
     // if all pass, set as current user
-    final user = User(id: teacher.id, schoolId: school.id);
-    await prefs.setStringList('user', [teacher.id, school.id]);
+    final user = User(id: teacher.id, schoolId: school.id, name: teacher.fullName);
+    await prefs.setStringList('user', [teacher.id, school.id, teacher.fullName]);
 
     _loggedInUser = user;
     _userController.add(user);
