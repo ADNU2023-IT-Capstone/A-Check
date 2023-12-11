@@ -16,10 +16,8 @@ class AttendanceHelpers {
       // check if student already has an attendance
       // if all schedules are skipped, it makes a new one
       for (var schedule in classSchedules) {
-        print(schedule);
         // if schedule's weekday isn't today, then go to next schedule
         if (currentDateTime.weekday != schedule.weekday) {
-          print('schedule weekday isn\'t today');
           continue;
         }
 
@@ -28,7 +26,6 @@ class AttendanceHelpers {
             ? AttendanceStatus.statusByTime(schedule.getStartDateTime(),
                 schedule.getEndDateTime(), currentDateTime)
             : AttendanceStatus.Absent;
-        print(status);
 
         // get the record ranging from the class schedule
         final currentRecord = (await attendancesRef
@@ -45,8 +42,6 @@ class AttendanceHelpers {
         // this will update that record instead of making a new record
         // once that's done, stop the loop; database should have only one record
         if (currentRecord != null) {
-          print('found existing record, set id to it');
-
           // if student is recognized, set to present
           // else, set to absent
           id = currentRecord.id;
@@ -60,9 +55,8 @@ class AttendanceHelpers {
           classId: schoolClass.id,
           dateTime: currentDateTime,
           status: status);
-      print(newRecord);
-      
-      await attendancesRef.doc(id).set(newRecord);
+
+      return attendancesRef.doc(id).set(newRecord);
     }
   }
 }

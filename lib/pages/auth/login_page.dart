@@ -117,7 +117,6 @@ class LoginPageView extends WidgetView<LoginPage, LoginPageState> {
                       decoration: InputDecoration(
                     isDense: true,
                     border: OutlineInputBorder(),
-                    // labelText: "School",
                   ))),
               asyncItems: state.getSearchedItems,
               itemAsString: (item) => item.name,
@@ -137,7 +136,7 @@ class LoginPageView extends WidgetView<LoginPage, LoginPageState> {
                   color: Colors.black54,
                   size: 20,
                 ),
-                labelText: "Email",
+                labelText: "Teacher Email",
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 8, horizontal: 12),
               ),

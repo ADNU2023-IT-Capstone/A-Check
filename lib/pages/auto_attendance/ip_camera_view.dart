@@ -56,15 +56,10 @@ class _IPCameraViewState extends State<IPCameraView> {
       return Scaffold(
         body: Center(
             child: VlcPlayer(controller: _vlcController, aspectRatio: 16 / 9)),
-        floatingActionButton: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            FloatingActionButton(
-                onPressed: () async => widget.onCapture!(await _getCurrentFrame()),
-                child: const Icon(Icons.camera)),
-          ],
-        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: FloatingActionButton(
+            onPressed: () async => widget.onCapture!(await _getCurrentFrame()),
+            child: const Icon(Icons.camera)),
       );
     }
 

@@ -2,7 +2,6 @@ import 'package:a_check/models/school.dart';
 import 'package:a_check/pages/student/controllers/student_state.dart';
 import 'package:a_check/themes.dart';
 import 'package:a_check/utils/abstracts.dart';
-import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:flutter/material.dart';
 
 class StudentPage extends StatefulWidget {
@@ -48,9 +47,9 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
 
   Widget buildBody() {
     return SafeArea(
-        child: FirestoreBuilder(
-      ref: studentsRef.doc(widget.studentId),
-      builder: (context, snapshot, child) {
+        child: StreamBuilder(
+      stream: studentsRef.doc(widget.studentId).snapshots(),
+      builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           if (snapshot.hasData) {
             final student = snapshot.data!.data!;

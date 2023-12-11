@@ -59,6 +59,7 @@ Future<void> setupDefaultPrefs() async {
   if (!prefs.containsKey('threshold')) await prefs.setDouble('threshold', 1.5);
   if (!prefs.containsKey('absent_warn')) await prefs.setInt('absent_warn', 2);
   if (!prefs.containsKey('scan_interval')) await prefs.setInt('scan_interval', 2);
+  if (!prefs.containsKey('late_value')) await prefs.setInt('late_value', 15);
 }
 
 class MainApp extends StatelessWidget {

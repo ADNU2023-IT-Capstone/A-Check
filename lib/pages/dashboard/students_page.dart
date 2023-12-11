@@ -3,7 +3,6 @@ import 'package:a_check/pages/dashboard/controllers/students_state.dart';
 import 'package:a_check/themes.dart';
 import 'package:a_check/utils/abstracts.dart';
 import 'package:a_check/widgets/student_card.dart';
-import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:flutter/material.dart';
 
 class StudentsPage extends StatefulWidget {
@@ -21,10 +20,10 @@ class StudentsView extends WidgetView<StudentsPage, StudentsState> {
     return buildStudentsList();
   }
 
-  FirestoreBuilder<StudentQuerySnapshot> buildStudentsList() {
-    return FirestoreBuilder(
-        ref: studentsRef,
-        builder: (context, snapshot, child) {
+  Widget buildStudentsList() {
+    return StreamBuilder(
+        stream: studentsRef.snapshots(),
+        builder: (context, snapshot) {
           if (snapshot.hasData) {
             final students = snapshot.data!.docs.map((e) => e.data).toList();
             students.sort(

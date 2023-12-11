@@ -160,17 +160,27 @@ class AutoAttendanceState extends State<AutoAttendancePage> {
         const Text("Recognized students will be set as present. Continue?"));
 
     if (result == true) {
+      snackbarKey.currentState!.showSnackBar(const SnackBar(
+          content: Row(children: [
+        CircularProgressIndicator(),
+        SizedBox(width: 16),
+        Text("Saving...")
+      ])));
       AttendanceHelpers.recordAttendance(
               schoolClass: widget.schoolClass,
               classStudents: _classStudents,
               recognizedStudents:
                   recognizedStudents.values.map((e) => e.student).toList())
-          .then((_) {
-        snackbarKey.currentState!.showSnackBar(SnackBar(
-            content: Text(
-                "Took attendances of ${recognizedStudents.length} student${recognizedStudents.length > 1 ? 's' : ''}")));
-        if (mounted) Navigator.pop(context);
+          .whenComplete(() {
+        snackbarKey.currentState!.removeCurrentSnackBar();
+        snackbarKey.currentState!
+            .showSnackBar(const SnackBar(content: Text("Saved to firebase!")));
       });
+
+      snackbarKey.currentState!.showSnackBar(SnackBar(
+          content: Text(
+              "Took attendances of ${recognizedStudents.length} student${recognizedStudents.length > 1 ? 's' : ''}")));
+      if (mounted) Navigator.pop(context);
     }
   }
 

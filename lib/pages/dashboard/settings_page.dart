@@ -40,22 +40,6 @@ class SettingsView extends WidgetView<SettingsPage, SettingsState> {
           title: const Text("Test connection to IP camera"),
           onTap: state.connectIPCam,
         ),
-        // Card(
-        //   child: ListTile(
-        //     title: const Text("Set absent warning value"),
-        //     onTap: state.setAbsentWarning,
-        //   ),
-        // ),
-        // TODO: sms notifs
-        SettingsListTile(
-          title: const Text("Automatic SMS notification"),
-          subtitle: const Text(
-              "If enabled, will notify the student and its guardian when absent warning and limit value is met through SMS"),
-          trailing: Checkbox(
-            value: false,
-            onChanged: state.toggleSMSNotifs,
-          ),
-        ),
         // TODO: email notifs
         SettingsListTile(
           title: const Text("Automatic email notification"),

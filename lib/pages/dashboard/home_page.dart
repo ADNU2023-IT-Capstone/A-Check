@@ -4,7 +4,6 @@ import 'package:a_check/pages/dashboard/controllers/home_state.dart';
 import 'package:a_check/themes.dart';
 import 'package:a_check/utils/abstracts.dart';
 import 'package:a_check/widgets/class_card.dart';
-import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -31,10 +30,10 @@ class HomeView extends WidgetView<HomePage, HomeState> {
     );
   }
 
-  FirestoreBuilder<SchoolClassQuerySnapshot> buildClassGrid() {
-    return FirestoreBuilder(
-      ref: classesRef.whereTeacherId(isEqualTo: auth.currentUser?.id),
-      builder: (context, snapshot, child) {
+  Widget buildClassGrid() {
+    return StreamBuilder(
+      stream: classesRef.whereTeacherId(isEqualTo: auth.currentUser?.id).snapshots(),
+      builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           if (snapshot.hasData) {
             final classes = snapshot.data!.docs.map((e) => e.data).toList();

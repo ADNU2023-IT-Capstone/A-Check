@@ -406,7 +406,7 @@ enum AttendanceStatus {
 
   static AttendanceStatus statusByTime(DateTime startTime, DateTime endTime, DateTime currentTime) {
     if (startTime.isBefore(currentTime) && endTime.isAfter(currentTime)) {
-      if (currentTime.isAfter(startTime.add(const Duration(minutes: 15)))) {
+      if (currentTime.isAfter(startTime.add(Duration(minutes: prefs.getInt('late_value') ?? 15)))) {
         return Late;
       }
 

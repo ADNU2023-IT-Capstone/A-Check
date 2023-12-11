@@ -4,7 +4,6 @@ import 'package:a_check/themes.dart';
 import 'package:a_check/utils/abstracts.dart';
 import 'package:a_check/widgets/attendance_record_card.dart';
 import 'package:a_check/widgets/student_card.dart';
-import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:flutter/material.dart';
 
 class ClassPage extends StatefulWidget {
@@ -22,12 +21,12 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
 
   @override
   Widget build(BuildContext context) {
-    return FirestoreBuilder(
-      ref: classesRef.doc(widget.schoolClass.id),
-      builder: (context, snapshot, child) => Scaffold(
+    return StreamBuilder(
+      stream: classesRef.doc(widget.schoolClass.id).snapshots(),
+      builder: (context, snapshot) => Scaffold(
         appBar: buildAppBar(context),
         body: DefaultTabController(
-            length: 2, child: buildBody(context, snapshot, child)),
+            length: 2, child: buildBody(context, snapshot)),
         floatingActionButton: buildFab(),
       ),
     );
@@ -84,7 +83,7 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
   }
 
   Widget buildBody(BuildContext context,
-      AsyncSnapshot<SchoolClassDocumentSnapshot> snapshot, Widget? child) {
+      AsyncSnapshot<SchoolClassDocumentSnapshot> snapshot) {
     if (snapshot.connectionState == ConnectionState.active) {
       if (snapshot.hasData) {
         return Column(

@@ -3,7 +3,6 @@ import 'package:a_check/main.dart';
 import 'package:a_check/pages/dashboard/settings_page.dart';
 import 'package:a_check/utils/dialogs.dart';
 import 'package:a_check/utils/onvif_helpers.dart';
-import 'package:easy_onvif/onvif.dart';
 import 'package:easy_onvif/probe.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
