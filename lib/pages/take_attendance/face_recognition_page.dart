@@ -23,25 +23,28 @@ class FaceRecognitionView
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: state.onWillPop,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-              widget.student != null ? "Register face" : "Take attendance"),
-        ),
-        body: SafeArea(
-            child: state.isUsingIPCamera
-                ? buildIPCamView()
-                : CameraViewWidget(
-                    onCapture: state.capturePhoto,
-                  )),
-        floatingActionButton: FloatingActionButton(
-            heroTag: null,
-            onPressed: state.switchCamera,
-            child: const Icon(Icons.switch_video)),
-        floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
-      ),
-    );
+        onWillPop: state.onWillPop,
+        child: FutureBuilder(
+          future: state.waitForSetup,
+          builder: (context, snapshot) => Scaffold(
+            appBar: AppBar(
+              title: Text(
+                  widget.student != null ? "Register face" : "Take attendance"),
+            ),
+            body: SafeArea(
+                child: state.isUsingIPCamera
+                    ? buildIPCamView()
+                    : CameraViewWidget(
+                        onCapture: state.capturePhoto,
+                      )),
+            floatingActionButton: FloatingActionButton(
+                heroTag: null,
+                onPressed: state.switchCamera,
+                child: const Icon(Icons.switch_video)),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.miniEndTop,
+          ),
+        ));
   }
 
   Widget buildIPCamView() {

@@ -31,4 +31,9 @@ class Person {
         ' ',
         onNonMatch: (p0) => p0[0],
       )}${lastName[0]}";
+
+  @override
+  String toString() {
+    return fullName;
+  }
 }

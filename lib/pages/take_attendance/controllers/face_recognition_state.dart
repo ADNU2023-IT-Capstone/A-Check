@@ -1,9 +1,8 @@
-import 'dart:io';
-
 import 'package:a_check/globals.dart';
-import 'package:a_check/main.dart';
+import 'package:a_check/models/recognized_student.dart';
 import 'package:a_check/models/school.dart';
 import 'package:a_check/utils/dialogs.dart';
+import 'package:a_check/utils/face_ml_helpers.dart';
 import 'package:a_check/utils/mlservice.dart';
 import 'package:a_check/utils/onvif_helpers.dart';
 import 'package:flutter/material.dart';
@@ -11,205 +10,14 @@ import 'package:flutter/services.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image/image.dart' as imglib;
 import 'package:ml_algo/kd_tree.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../face_detected_page.dart';
 import '../face_recognition_page.dart';
 
 class FaceRecognitionState extends State<FaceRecognitionPage> {
-  final _mlService = MLService();
-  List<Face> _detectedFaces = [];
-  List<imglib.Image> _faceImages = [];
-  List<Student> _classStudents = [], _studentsWithRegisteredFaces = [];
-  KDTree? _faceDataTree;
+  late Future<void> waitForSetup;
+  Map<String, RecognizedStudent> recognizedStudents = {};
   bool isUsingIPCamera = false;
-
-  Future<void> processCapturedImage(InputImage inputImage) async {
-    snackbarKey.currentState!.showSnackBar(const SnackBar(
-        content: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [Text("Processing image..."), CircularProgressIndicator()],
-    )));
-
-    if (!await _detectFacesFromInputImage(inputImage)) return;
-    if (!await _getFaceImages(inputImage)) return;
-  }
-
-  Future<bool> _detectFacesFromInputImage(InputImage inputImage) async {
-    final faces = await _mlService.getFaces(inputImage);
-    if (faces.isEmpty) {
-      snackbarKey.currentState!.hideCurrentSnackBar();
-      snackbarKey.currentState!
-          .showSnackBar(const SnackBar(content: Text("No faces detected!")));
-      return false;
-    }
-
-    _detectedFaces = List.from(faces);
-    return true;
-  }
-
-  Future<bool> _getFaceImages(InputImage inputImage) async {
-    dynamic photo;
-    if (inputImage.filePath != null && inputImage.filePath!.isNotEmpty) {
-      final file = File(inputImage.filePath!);
-      photo = await imglib.decodeImageFile(file.path);
-
-      if (photo == null) return false;
-    } else if (inputImage.bytes != null) {
-      photo = imglib.Image.fromBytes(
-          width: inputImage.metadata!.size.width.toInt(),
-          height: inputImage.metadata!.size.height.toInt(),
-          bytes: inputImage.bytes!.buffer);
-    } else {
-      return false;
-    }
-
-    if (_detectedFaces.isEmpty) {
-      snackbarKey.currentState!.hideCurrentSnackBar();
-      snackbarKey.currentState!
-          .showSnackBar(const SnackBar(content: Text("No face images!")));
-      return false;
-    }
-
-    final faceImages = await _mlService.getFaceImages(_detectedFaces, photo);
-    _faceImages = List.from(faceImages);
-    return true;
-  }
-
-  Future<void> _registerFace() async {
-    final faceImage = _faceImages.first;
-    final encodedImage = imglib.encodeJpg(faceImage);
-
-    if (context.mounted) {
-      final result = await Dialogs.showConfirmDialog(
-          context, const Text("Register face"), Image.memory(encodedImage));
-      if (result != null && result) {
-        studentsRef
-            .doc(widget.student!.id)
-            .update(faceArray: await _mlService.predict(faceImage))
-            .then((value) {
-          snackbarKey.currentState!.hideCurrentSnackBar();
-          Navigator.pop(context, true);
-        }).catchError((e) {
-          if (context.mounted) {
-            snackbarKey.currentState!.hideCurrentSnackBar();
-            Navigator.pop(context, {'result': false, 'error': e});
-          }
-        });
-      }
-    }
-  }
-
-  Future<void> _takeAttendance() async {
-    // Recognize students
-    Map<Student, num> recognizedStudents = {};
-    Map<Student, Uint8List> recognizedFaces = {};
-    for (imglib.Image image in _faceImages) {
-      List predictedArray = await _mlService.predict(image);
-      final neighbor =
-          _faceDataTree!.queryIterable(predictedArray.cast<num>(), 1);
-      final threshold = prefs.getDouble('threshold')!;
-
-      if (neighbor.first.distance <= threshold) {
-        final student =
-            _studentsWithRegisteredFaces.elementAt(neighbor.first.index);
-        recognizedStudents.addAll({student: neighbor.first.distance});
-        recognizedFaces.addAll({student: imglib.encodeJpg(image)});
-      }
-    }
-
-    if (recognizedStudents.isEmpty) {
-      snackbarKey.currentState!.hideCurrentSnackBar();
-      snackbarKey.currentState!.showSnackBar(
-          const SnackBar(content: Text("No recognized students!")));
-      return;
-    }
-
-    // Create attendance records
-    final currentDateTime = DateTime.now();
-    for (Student student in _classStudents) {
-      AttendanceRecord record;
-      String id = attendancesRef.doc().id;
-      if (recognizedStudents[student] != null) {
-        record = AttendanceRecord(
-            id: id,
-            studentId: student.id,
-            classId: widget.schoolClass!.id,
-            dateTime: currentDateTime,
-            status: AttendanceStatus.Present);
-      } else {
-        record = AttendanceRecord(
-            id: id,
-            studentId: student.id,
-            classId: widget.schoolClass!.id,
-            dateTime: currentDateTime,
-            status: AttendanceStatus.Absent);
-      }
-
-      attendancesRef.doc(id).set(record);
-    }
-
-    // Display recognized students
-    if (context.mounted) {
-      await Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DetectedFacesPage(
-                recognizedStudents: recognizedStudents,
-                recognizedFaces: recognizedFaces,
-                studentsList: _studentsWithRegisteredFaces),
-          ));
-    }
-  }
-
-  void switchCamera() {
-    setState(() => isUsingIPCamera = !isUsingIPCamera);
-  }
-
-  void capturePhoto(InputImage inputImage) async {
-    await processCapturedImage(inputImage);
-
-    if (widget.student != null) {
-      await _registerFace();
-    } else {
-      await _takeAttendance();
-    }
-  }
-
-  void captureScreenshot(Uint8List screenshot) async {
-    snackbarKey.currentState!.showSnackBar(const SnackBar(
-        content: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [Text("Capturing screenshot..."), CircularProgressIndicator()],
-    )));
-    final tempDir = await getTemporaryDirectory();
-    var file = await File("${tempDir.path}/screenshot.jpg").create();
-    file = await file.writeAsBytes(screenshot);
-    final inputImage = InputImage.fromFile(file);
-
-    snackbarKey.currentState!.hideCurrentSnackBar();
-    capturePhoto(inputImage);
-  }
-
-  _setupClassList() async {
-    _classStudents = await widget.schoolClass!.getStudents();
-    _studentsWithRegisteredFaces = [
-      for (var student in _classStudents)
-        if (student.faceArray.isNotEmpty) student
-    ];
-
-    List<List<num>> embeddings = [
-      for (Student student in _studentsWithRegisteredFaces)
-        student.faceArray.cast<num>()
-    ];
-    _faceDataTree = KDTree.fromIterable(embeddings);
-  }
-
-  Future<bool> onWillPop() async {
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-
-    return true;
-  }
 
   @override
   void initState() {
@@ -223,7 +31,9 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
     ]);
 
     if (widget.schoolClass != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => _setupClassList());
+      waitForSetup = _setupClassList();
+    } else {
+      waitForSetup = Future.value();
     }
   }
 
@@ -243,9 +53,162 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
     } on OnvifException catch (ex) {
       snackbarKey.currentState!
           .showSnackBar(SnackBar(content: Text(ex.message ?? "Error! $ex")));
-      Navigator.pop(context);
+      setState(() => isUsingIPCamera = false);
     }
 
     return null;
+  }
+
+  void capturePhoto(InputImage inputImage) async {
+    final bool result = await _processInputImage(inputImage);
+
+    if (!result) {
+      // error occured, do nothing
+      return;
+    }
+
+    if (widget.student != null) {
+      await _registerFace();
+    } else {
+      await _takeAttendance();
+    }
+  }
+
+  void captureScreenshot(Uint8List frameBytes) async {
+    snackbarKey.currentState!.showSnackBar(const SnackBar(
+        content: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [Text("Capturing screenshot..."), CircularProgressIndicator()],
+    )));
+
+    final inputImage = await FaceMLHelpers.bytesToInputImage(frameBytes);
+
+    snackbarKey.currentState!.hideCurrentSnackBar();
+    capturePhoto(inputImage);
+  }
+
+  void switchCamera() {
+    setState(() => isUsingIPCamera = !isUsingIPCamera);
+  }
+
+  Future<bool> onWillPop() async {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+    return true;
+  }
+
+  final _mlService = MLService();
+  late final List<Student> _classStudents, _registeredStudents;
+  late final KDTree _faceEmbeddings;
+  late List<imglib.Image> _faceImages;
+  // List<imglib.Image> _faceImages = [];
+  // List<Student> _classStudents = [], _studentsWithRegisteredFaces = [];
+  // KDTree? _faceDataTree;
+
+  Future<void> _setupClassList() async {
+    _classStudents = await widget.schoolClass!.getStudents();
+    _registeredStudents = [
+      for (var student in _classStudents)
+        if (student.faceArray.isNotEmpty) student
+    ];
+
+    List<List<num>> embeddings = [
+      for (Student student in _registeredStudents) student.faceArray.cast<num>()
+    ];
+    _faceEmbeddings = KDTree.fromIterable(embeddings);
+  }
+
+  Future<bool> _processInputImage(InputImage inputImage) async {
+    snackbarKey.currentState!.showSnackBar(const SnackBar(
+        content: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [Text("Processing image..."), CircularProgressIndicator()],
+    )));
+
+    return await _getFaceImagesFromInputImage(inputImage);
+  }
+
+  Future<bool> _getFaceImagesFromInputImage(InputImage inputImage) async {
+    final faces =
+        await FaceMLHelpers.getFaceImagesFromInputImage(inputImage, _mlService);
+
+    if (faces.isEmpty) {
+      snackbarKey.currentState!.hideCurrentSnackBar();
+      snackbarKey.currentState!
+          .showSnackBar(const SnackBar(content: Text("No faces detected!")));
+      return false;
+    }
+
+    _faceImages = List.from(faces);
+    return true;
+  }
+
+  Future<void> _registerFace() async {
+    final faceImage = _faceImages.first;
+    final encodedImage = imglib.encodeJpg(faceImage);
+    final bool? result = await Dialogs.showConfirmDialog(
+        context, const Text("Register face"), Image.memory(encodedImage));
+
+    if (result == true) {
+      FaceMLHelpers.registerFace(
+              widget.student!.id, _faceImages.first, _mlService)
+          .then((value) {
+        snackbarKey.currentState!.hideCurrentSnackBar();
+        Navigator.pop(context, true);
+      });
+    }
+  }
+
+  Future<void> _takeAttendance() async {
+    // iterate through faces images...
+    for (var face in _faceImages) {
+      final faceMap =
+          await FaceMLHelpers.recognizeFace(face, _faceEmbeddings, _mlService);
+
+      // ...if it recognized a person
+      if (faceMap != null) {
+        final student = _registeredStudents[faceMap['index']! as int];
+        final distance = faceMap['distance']!;
+        RecognizedStudent? rs;
+
+        // ...if student was already recognized
+        if (recognizedStudents.containsKey(student.id)) {
+          rs = recognizedStudents[student.id]!;
+
+          if (distance > rs.distance) {
+            // distance too far; ignore
+            continue;
+          }
+
+          rs.distance = distance;
+          rs.faceImage = face;
+        }
+
+        // ...add to recognized students map
+        recognizedStudents[student.id] = rs ??
+            RecognizedStudent(
+                student: student, distance: distance, faceImage: face);
+      }
+    }
+
+    if (recognizedStudents.isEmpty) {
+      snackbarKey.currentState!.hideCurrentSnackBar();
+      snackbarKey.currentState!.showSnackBar(
+          const SnackBar(content: Text("No recognized students!")));
+      return;
+    }
+
+    // Display recognized students
+    if (context.mounted) {
+      snackbarKey.currentState!.hideCurrentSnackBar();
+      await Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetectedFacesPage(
+                schoolClass: widget.schoolClass!,
+                recognizedStudents: recognizedStudents,
+                classStudents: _classStudents),
+          ));
+    }
   }
 }

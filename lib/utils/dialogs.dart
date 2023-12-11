@@ -1,5 +1,3 @@
-import 'package:a_check/models/school.dart';
-import 'package:a_check/widgets/schedule_dialog.dart';
 import 'package:a_check/widgets/select_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -42,16 +40,6 @@ class Dialogs {
                     child: const Text("No")),
               ],
             ));
-  }
-
-  static Future<ClassSchedule?> showScheduleDialog(BuildContext context,
-      {ClassSchedule? schedule}) async {
-    return await showDialog(
-      context: context,
-      builder: (context) => ScheduleDialog(
-        schedule: schedule,
-      ),
-    );
   }
 
   static Future<String?> showTextInputDialog(BuildContext context, Widget title,

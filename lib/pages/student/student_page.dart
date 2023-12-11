@@ -245,10 +245,9 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
           onTap: () => state.copyToClipboard(student.guardian!.email),
         ),
         ListTile(
-          title: Text(student.phoneNumber!),
+          title: Text(student.guardian!.phoneNumber ?? "None"),
           leading: const Icon(Icons.phone),
-          onTap: () =>
-              state.copyToClipboard(student.guardian!.phoneNumber ?? "None"),
+          onTap: () => state.copyToClipboard(student.guardian!.phoneNumber),
         ),
       ],
     );

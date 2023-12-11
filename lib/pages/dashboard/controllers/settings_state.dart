@@ -2,12 +2,11 @@ import 'package:a_check/globals.dart';
 import 'package:a_check/main.dart';
 import 'package:a_check/pages/dashboard/settings_page.dart';
 import 'package:a_check/utils/dialogs.dart';
+import 'package:a_check/utils/onvif_helpers.dart';
 import 'package:easy_onvif/onvif.dart';
 import 'package:easy_onvif/probe.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-// TODO: Bulk Add Students via CSV import
 
 class SettingsState extends State<SettingsPage> {
   void toggleSMSNotifs(bool? value) {}
@@ -51,8 +50,7 @@ class SettingsState extends State<SettingsPage> {
         content: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-                "Only accepts by seconds."),
+            const Text("Only accepts by seconds."),
             const SizedBox(
               height: 8,
             ),
@@ -77,28 +75,33 @@ class SettingsState extends State<SettingsPage> {
   }
 
   void searchIPCam() async {
-    final prober = MulticastProbe(timeout: 5);
-    snackbarKey.currentState!.showSnackBar(const SnackBar(
-      content: Row(
+    int timeout = 10;
+
+    snackbarKey.currentState!.showSnackBar(SnackBar(
+      content: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text("Searching for cameras..."),
           CircularProgressIndicator()
         ],
       ),
-      duration: Duration(seconds: 5),
+      duration: Duration(seconds: timeout),
     ));
-    await prober.probe();
+    final foundCameras =
+        await OnvifHelpers.probeForCameras(timeout).whenComplete(() {
+      snackbarKey.currentState!.hideCurrentSnackBar();
+    }).onError((error, stackTrace) {
+      return [];
+    });
 
-    snackbarKey.currentState!.hideCurrentSnackBar();
-    if (prober.onvifDevices.isEmpty) {
+    if (foundCameras.isEmpty) {
       snackbarKey.currentState!.showSnackBar(
           const SnackBar(content: Text("Could not find any cameras.")));
       return;
     }
 
     Map<String, ProbeMatch> cams = {};
-    for (var cam in prober.onvifDevices) {
+    for (var cam in foundCameras) {
       cams[cam.name] = cam;
     }
 
@@ -152,19 +155,23 @@ class SettingsState extends State<SettingsPage> {
     ));
 
     try {
-      final onvif = await Onvif.connect(
-              host: host, username: username, password: password)
-          .timeout(const Duration(seconds: 5))
-          .onError((error, stackTrace) => throw Exception(error));
+      int timeout = 10;
+      final onvif = await OnvifHelpers.connectToCamera(
+              host: host,
+              username: username!,
+              password: password!,
+              timeout: timeout)
+          .whenComplete(() {
+        snackbarKey.currentState!.hideCurrentSnackBar();
+      });
 
-      snackbarKey.currentState!.hideCurrentSnackBar();
       var deviceInfo = await onvif.deviceManagement.getDeviceInformation();
       snackbarKey.currentState!.showSnackBar(
           SnackBar(content: Text("Connected to ${deviceInfo.model}!")));
-    } on Exception catch (ex) {
+    } on OnvifException catch (ex) {
       snackbarKey.currentState!.hideCurrentSnackBar();
-      snackbarKey.currentState!.showSnackBar(
-          SnackBar(content: Text("Failed to connect to IP camera! $ex")));
+      snackbarKey.currentState!
+          .showSnackBar(SnackBar(content: Text(ex.message ?? ex.code)));
       return;
     }
   }

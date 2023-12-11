@@ -1,7 +1,6 @@
 import 'package:a_check/pages/dashboard/controllers/settings_state.dart';
 import 'package:a_check/themes.dart';
 import 'package:a_check/utils/abstracts.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatefulWidget {

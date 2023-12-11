@@ -21,13 +21,23 @@ class AutoAttendanceView
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: [buildIPCamPlayer(), buildRecognizedList()],
-      ),
-      floatingActionButton: buildFab(),
-    );
+    return FutureBuilder(
+        future: state.waitForSetup,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          return Scaffold(
+            appBar: AppBar(),
+            body: Column(
+              children: [buildIPCamPlayer(), buildRecognizedList()],
+            ),
+            floatingActionButton: buildFab(),
+          );
+        });
   }
 
   Widget buildIPCamPlayer() {

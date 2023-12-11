@@ -207,6 +207,17 @@ class SchoolClass {
     return (await teachersRef.doc(teacherId).get()).data!;
   }
 
+  bool get isScheduleToday {
+    final now = DateTime.now();
+    for (var s in schedule) {
+      if (now.weekday == s.weekday) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   @override
   String toString() {
     String classInfo = "$id: $name [$section]\n";
@@ -374,6 +385,11 @@ class AttendanceRecord {
   Future<Student> getStudent() async {
     return (await studentsRef.doc(studentId).get()).data!;
   }
+
+  @override
+  String toString() {
+    return "${DateFormat(DateFormat.YEAR_NUM_MONTH_DAY).format(dateTime)}: $status";
+  }
 }
 
 enum AttendanceStatus {
@@ -387,4 +403,32 @@ enum AttendanceStatus {
   Late,
   @JsonValue(3)
   Excused;
+
+  static AttendanceStatus statusByTime(DateTime startTime, DateTime endTime, DateTime currentTime) {
+    if (startTime.isBefore(currentTime) && endTime.isAfter(currentTime)) {
+      if (currentTime.isAfter(startTime.add(const Duration(minutes: 15)))) {
+        return Late;
+      }
+
+      return Present;
+    } else {
+      return Absent;
+    }
+  }
+
+  @override
+  String toString() {
+    switch (this) {
+      case Present:
+        return "Present";
+      case Absent:
+        return "Absent";
+      case Late:
+        return "Late";
+      case Excused:
+        return "Excused";
+      default:
+        return "Unknown";
+    }
+  }
 }

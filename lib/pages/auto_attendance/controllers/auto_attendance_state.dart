@@ -11,33 +11,12 @@ import 'package:a_check/utils/mlservice.dart';
 import 'package:a_check/utils/onvif_helpers.dart';
 import 'package:a_check/widgets/correct_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_vlc_player/flutter_vlc_player.dart';
-import 'package:image/image.dart' as imglib;
 import 'package:ml_algo/kd_tree.dart';
 
-class RecognizedStudent {
-  Student student;
-  num distance;
-  imglib.Image faceImage;
-  bool locked = false;
-
-  late int occurences;
-
-  RecognizedStudent(
-      {required this.student,
-      required this.distance,
-      required this.faceImage,
-      int? occurences}) {
-    this.occurences = occurences ?? 1;
-  }
-
-  Uint8List get jpegBytes {
-    return imglib.encodeJpg(faceImage, quality: 50);
-  }
-}
+import '../../../models/recognized_student.dart';
 
 class AutoAttendanceState extends State<AutoAttendancePage> {
-  VlcPlayerController? vlcController;
+  late Future<void> waitForSetup;
   Map<String, RecognizedStudent> recognizedStudents = {};
   bool isTakingScreenshots = true;
 
@@ -48,7 +27,7 @@ class AutoAttendanceState extends State<AutoAttendancePage> {
   void initState() {
     super.initState();
 
-    _setupClassList();
+    waitForSetup = _setupClassList();
   }
 
   @override
@@ -56,7 +35,6 @@ class AutoAttendanceState extends State<AutoAttendancePage> {
     super.dispose();
 
     _mlService.dispose();
-    if (vlcController != null) vlcController?.dispose();
   }
 
   Future<String?> connectToCamera() async {
@@ -65,17 +43,17 @@ class AutoAttendanceState extends State<AutoAttendancePage> {
     } on OnvifException catch (ex) {
       snackbarKey.currentState!
           .showSnackBar(SnackBar(content: Text(ex.message ?? "Error! $ex")));
-      Navigator.pop(context);
+      if (mounted) Navigator.pop(context);
     }
 
     return null;
   }
 
-  final MLService _mlService = MLService();
+  final _mlService = MLService();
   late final List<Student> _classStudents, _registeredStudents;
   late final KDTree _faceEmbeddings;
 
-  _setupClassList() async {
+  Future<void> _setupClassList() async {
     _classStudents = await widget.schoolClass.getStudents();
     _registeredStudents = [
       for (var student in _classStudents)
@@ -89,44 +67,56 @@ class AutoAttendanceState extends State<AutoAttendancePage> {
   }
 
   onFrame(Uint8List frameBytes) async {
+    // get input image and its face images
     final inputImage = await FaceMLHelpers.bytesToInputImage(frameBytes);
     final faceImages =
         await FaceMLHelpers.getFaceImagesFromInputImage(inputImage, _mlService);
 
+    // if no face detected, do nothing
+    if (faceImages.isEmpty) {
+      return;
+    }
+
+    // iterate through face images...
     for (var face in faceImages) {
-      final map =
+      // run recognition
+      final faceMap =
           await FaceMLHelpers.recognizeFace(face, _faceEmbeddings, _mlService);
 
-      if (map != null) {
-        final student = _registeredStudents[map['index']! as int];
-        final distance = map['distance']!;
+      // ...if it recognized a person
+      if (faceMap != null) {
+        final student = _registeredStudents[faceMap['index']! as int];
+        final distance = faceMap['distance']!;
 
-        if (!context.mounted) return;
-        setState(() {
-          RecognizedStudent? rs;
-          if (recognizedStudents.containsKey(student.id)) {
-            rs = recognizedStudents[student.id]!;
+        RecognizedStudent? rs;
+        if (recognizedStudents.containsKey(student.id)) {
+          rs = recognizedStudents[student.id]!;
 
-            if (rs.locked) {
-              return;
-            }
-
-            if (distance > rs.distance) {
-              // ignore this
-              return;
-            }
-            rs.distance = distance;
-            rs.faceImage = face;
-            rs.occurences++;
+          if (rs.locked) {
+            // already corrected; ignore
+            continue;
           }
 
-          recognizedStudents[student.id] = rs ??
-              RecognizedStudent(
-                  student: student,
-                  distance: distance,
-                  faceImage: face,
-                  occurences: recognizedStudents[student.id]?.occurences);
-        });
+          if (distance > rs.distance) {
+            // distance too far; ignore
+            continue;
+          }
+          rs.distance = distance;
+          rs.faceImage = face;
+          rs.occurences++;
+        }
+
+        // ...add to recognized students map if widget is mounted
+        if (mounted) {
+          setState(() {
+            recognizedStudents[student.id] = rs ??
+                RecognizedStudent(
+                    student: student,
+                    distance: distance,
+                    faceImage: face,
+                    occurences: recognizedStudents[student.id]?.occurences);
+          });
+        }
       }
     }
   }
@@ -171,7 +161,7 @@ class AutoAttendanceState extends State<AutoAttendancePage> {
 
     if (result == true) {
       AttendanceHelpers.recordAttendance(
-              classId: widget.schoolClass.id,
+              schoolClass: widget.schoolClass,
               classStudents: _classStudents,
               recognizedStudents:
                   recognizedStudents.values.map((e) => e.student).toList())
@@ -179,7 +169,7 @@ class AutoAttendanceState extends State<AutoAttendancePage> {
         snackbarKey.currentState!.showSnackBar(SnackBar(
             content: Text(
                 "Took attendances of ${recognizedStudents.length} student${recognizedStudents.length > 1 ? 's' : ''}")));
-        Navigator.pop(context);
+        if (mounted) Navigator.pop(context);
       });
     }
   }

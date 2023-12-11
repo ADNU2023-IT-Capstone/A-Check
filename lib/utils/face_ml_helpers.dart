@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:a_check/main.dart';
+import 'package:a_check/models/school.dart';
 import 'package:a_check/utils/mlservice.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:ml_algo/kd_tree.dart';
@@ -71,5 +72,12 @@ class FaceMLHelpers {
     }
 
     return null;
+  }
+
+  static Future<void> registerFace(
+      String studentId, imglib.Image faceImage, MLService ml) async {
+    return await studentsRef
+        .doc(studentId)
+        .update(faceArray: await ml.predict(faceImage));
   }
 }

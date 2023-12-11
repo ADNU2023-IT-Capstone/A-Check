@@ -39,8 +39,8 @@ class AttendanceRecordsView
           PopupMenuButton(
             itemBuilder: (context) => [
               PopupMenuItem(
-                onTap: state.deleteRecord,
-                child: const Text("Delete record"),
+                onTap: state.exportRecord,
+                child: const Text("Export record"),
               )
             ],
           )

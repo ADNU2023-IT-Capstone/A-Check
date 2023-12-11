@@ -11,6 +11,7 @@ dependencies:
   cloud_firestore: ^4.13.3
   cloud_firestore_odm: ^1.0.0-dev.78
   cloud_functions: ^4.5.8
+  csv: ^5.1.1
   dropdown_search: ^5.0.6
   easy_onvif: ^2.1.2+13
   email_validator: ^2.1.17
@@ -29,6 +30,7 @@ dependencies:
   ml_algo: ^16.17.8
   package_info_plus: ^4.1.0
   path_provider: ^2.1.1
+  permission_handler: ^11.0.1
   provider: ^6.0.5
   shared_preferences: ^2.2.1
   tflite_flutter: ^0.10.2

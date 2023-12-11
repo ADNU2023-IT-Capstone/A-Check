@@ -36,6 +36,8 @@ class _IPCameraViewState extends State<IPCameraView> {
         _timer = Timer.periodic(
             Duration(seconds: prefs.getInt('scan_interval')!),
             (timer) async => widget.onFrame!(await _getCurrentFrame()));
+      } else {
+        _timer = null;
       }
     });
   }
