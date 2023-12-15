@@ -119,8 +119,8 @@ class AutoAttendanceView
         const SizedBox(height: 8),
         FloatingActionButton.extended(
           heroTag: null,
-          label: const Text("Finalize attendance"),
-          icon: const Icon(Icons.event_note),
+          label: const Text("Next"),
+          icon: const Icon(Icons.arrow_forward_ios),
           tooltip: "Record",
           onPressed: state.finalize,
         ),

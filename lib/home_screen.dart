@@ -19,20 +19,11 @@ class _HomeScreenState extends State<HomeScreen> {
       keepPage: true,
     );
 
-    void pageChanged(int index) {
-      setState(() {
-        bottomNavbarSelectedIndex = index;
-      });
-    }
-
     Widget buildPageView() {
       return PageView(
         controller: pageController,
         physics: const NeverScrollableScrollPhysics(),
-        children: const [HomePage(), StudentsPage(), SettingsPage()],
-        onPageChanged: (index) {
-          pageChanged(index);
-        },
+        children: const [HomePage(), StudentsPage(), SettingsPage()]
       );
     }
 

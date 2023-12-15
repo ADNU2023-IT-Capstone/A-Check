@@ -93,7 +93,7 @@ class _AttendanceFormPageView
       floatingActionButton: FloatingActionButton.extended(
           onPressed: state.finalize,
           icon: const Icon(Icons.event_note),
-          label: const Text("Finalize")),
+          label: const Text("Save")),
     );
   }
 
