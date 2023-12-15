@@ -105,17 +105,20 @@ class LoginPageView extends WidgetView<LoginPage, LoginPageState> {
           children: [
             DropdownSearch<School>(
               dropdownBuilder: _customDropDownSchool,
-              popupProps: const PopupProps.menu(
-                  title: Text("Search school",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white)),
+              popupProps: PopupProps.modalBottomSheet(
+                  itemBuilder: (context, item, isSelected) {
+                    return ListTile(
+                      title: Text(item.name),
+                      subtitle: Text(item.officeName),
+                      selected: isSelected,
+                    );
+                  },
                   showSearchBox: true,
                   showSelectedItems: true,
-                  searchFieldProps: TextFieldProps(
+                  searchFieldProps: const TextFieldProps(
                       decoration: InputDecoration(
                     isDense: true,
+                    labelText: "Search school...",
                     border: OutlineInputBorder(),
                   ))),
               asyncItems: state.getSearchedItems,
@@ -220,7 +223,14 @@ class LoginPageView extends WidgetView<LoginPage, LoginPageState> {
                   item.name,
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 13.5, color: Colors.black),
-                )));
+                  style: const TextStyle(fontSize: 14, color: Colors.black),
+                ),
+                subtitle: Text(
+                  item.officeName,
+                  textAlign: TextAlign.left,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+              ));
   }
 }

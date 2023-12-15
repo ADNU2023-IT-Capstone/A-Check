@@ -1,62 +1,138 @@
+import 'package:a_check/main.dart';
 import 'package:a_check/models/school.dart';
+import 'package:a_check/utils/email_helpers.dart';
+import 'package:flutter/material.dart';
 
 class AttendanceHelpers {
-  static Future<void> recordAttendance(
-      {required SchoolClass schoolClass,
-      required List<Student> classStudents,
-      required List<Student> recognizedStudents}) async {
-    final currentDateTime = DateTime.now();
-    final classSchedules = schoolClass.schedule;
+  // static Future<void> recordAttendance(
+  //     {required SchoolClass schoolClass,
+  //     required List<Student> classStudents,
+  //     required List<Student> recognizedStudents}) async {
+  //   final now = DateTime.now();
+  //   for (var student in classStudents) {
+  //     late AttendanceRecord newRecord;
+  //     AttendanceStatus status = recognizedStudents.contains(student)
+  //         ? AttendanceStatus.Present
+  //         : AttendanceStatus.Absent;
 
-    for (Student student in classStudents) {
-      late AttendanceRecord newRecord;
-      late AttendanceStatus status;
-      String id = attendancesRef.doc().id;
+  //     try {
+  //       // try to get an existing record
+  //       // if there is one, skip this
+  //       final record = (await attendancesRef
+  //               .whereStudentId(isEqualTo: student.id)
+  //               .whereDateTime(
+  //                   isGreaterThan: DateUtils.dateOnly(now), isLessThan: now)
+  //               .get())
+  //           .docs
+  //           .first
+  //           .data;
+  //       print('found record, skipping');
+  //       continue;
+  //     } on StateError {
+  //       print('record not found, continuing');
+  //       // do nothing if not found
+  //     }
 
-      // check if student already has an attendance
-      // if all schedules are skipped, it makes a new one
-      for (var schedule in classSchedules) {
-        // if schedule's weekday isn't today, then go to next schedule
-        if (currentDateTime.weekday != schedule.weekday) {
-          continue;
-        }
+  //     String id = attendancesRef.doc().id;
+  //     newRecord = AttendanceRecord(
+  //         id: id,
+  //         studentId: student.id,
+  //         classId: schoolClass.id,
+  //         dateTime: now,
+  //         status: status);
 
-        // set status based on time; present, late, or absent
-        status = recognizedStudents.contains(student)
-            ? AttendanceStatus.statusByTime(schedule.getStartDateTime(),
-                schedule.getEndDateTime(), currentDateTime)
-            : AttendanceStatus.Absent;
+  //     attendancesRef.doc(id).set(newRecord).then((value) async {
+  //       if (newRecord.status != AttendanceStatus.Absent) {
+  //         return;
+  //       } else {
+  //         await sendEmail(schoolClass: schoolClass, student: student);
+  //       }
+  //     });
+  //   }
 
-        // get the record ranging from the class schedule
-        final currentRecord = (await attendancesRef
-                .whereStudentId(isEqualTo: student.id)
-                .whereDateTime(
-                    isGreaterThanOrEqualTo: schedule.getStartDateTime(),
-                    isLessThanOrEqualTo: schedule.getEndDateTime())
-                .get())
-            .docs
-            .map((e) => e.data)
-            .firstOrNull;
+  //   return Future.value();
+  // }
 
-        // if there is a record, set the ID to it instead
-        // this will update that record instead of making a new record
-        // once that's done, stop the loop; database should have only one record
-        if (currentRecord != null) {
-          // if student is recognized, set to present
-          // else, set to absent
-          id = currentRecord.id;
-          break;
+  static Future<void> sendEmail(
+      {required SchoolClass schoolClass, required Student student}) async {
+    // send email if auto email notify is on
+    if (prefs.getBool('auto_email') ?? false) {
+      final absences = (await attendancesRef
+              .whereStudentId(isEqualTo: student.id)
+              .whereClassId(isEqualTo: schoolClass.id)
+              .get())
+          .docs
+          .length;
+      final maxAbsences = schoolClass.maxAbsences;
+
+      if (absences >= maxAbsences) {
+        // check if this student has not been emailed
+        if (!schoolClass.studentsAboveMaxAbsences.contains(student.id)) {
+          final teacher = await schoolClass.getTeacher();
+          await EmailHelpers.sendEmail(
+              template: EmailTemplate.student,
+              params: EmailTemplate.studentParams(
+                  classCode: schoolClass.subjectCode,
+                  classSection: schoolClass.section,
+                  studentName: student.fullName,
+                  studentEmail: student.email!,
+                  teacherName: teacher.fullName,
+                  teacherEmail: teacher.email!));
+
+          if (student.guardian != null) {
+            await EmailHelpers.sendEmail(
+                template: EmailTemplate.guardian,
+                params: EmailTemplate.guardianParams(
+                    classCode: schoolClass.subjectCode,
+                    classSection: schoolClass.section,
+                    guardianName: student.guardian!.fullName,
+                    guardianEmail: student.guardian!.email!,
+                    studentName: student.fullName,
+                    teacherName: teacher.fullName,
+                    teacherEmail: teacher.email!));
+          }
+
+          final newList = schoolClass.studentsAboveMaxAbsences..add(student.id);
+          await classesRef
+              .doc(schoolClass.id)
+              .update(studentsAboveMaxAbsences: newList);
         }
       }
+    }
+  }
 
-      newRecord = AttendanceRecord(
-          id: id,
-          studentId: student.id,
-          classId: schoolClass.id,
-          dateTime: currentDateTime,
-          status: status);
+  static Future<void> recordAttendance(
+      {required List<AttendanceRecord> attendances}) async {
+    final now = DateTime.now();
+    for (var a in attendances) {
+      final schoolClass = (await classesRef.doc(a.classId).get()).data!;
+      final student = (await studentsRef.doc(a.studentId).get()).data!;
 
-      return attendancesRef.doc(id).set(newRecord);
+      try {
+        // try to get an existing record
+        // if there is one, skip this
+        final record = (await attendancesRef
+                .whereStudentId(isEqualTo: a.studentId)
+                .whereDateTime(
+                    isGreaterThan: DateUtils.dateOnly(now), isLessThan: now)
+                .get())
+            .docs
+            .first
+            .data;
+        print('found record, skipping');
+        continue;
+      } on StateError {
+        print('record not found, continuing');
+        // do nothing if not found
+      }
+
+      attendancesRef.doc(a.id).set(a).whenComplete(() async {
+        if (a.status != AttendanceStatus.Absent) {
+          return;
+        } else {
+          await sendEmail(schoolClass: schoolClass, student: student);
+        }
+      });
     }
   }
 }

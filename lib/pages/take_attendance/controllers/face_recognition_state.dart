@@ -1,15 +1,20 @@
+import 'dart:io';
+
 import 'package:a_check/globals.dart';
 import 'package:a_check/models/recognized_student.dart';
 import 'package:a_check/models/school.dart';
+import 'package:a_check/pages/forms/attendance_records_form.dart';
 import 'package:a_check/utils/dialogs.dart';
 import 'package:a_check/utils/face_ml_helpers.dart';
 import 'package:a_check/utils/mlservice.dart';
 import 'package:a_check/utils/onvif_helpers.dart';
+import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image/image.dart' as imglib;
 import 'package:ml_algo/kd_tree.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../face_detected_page.dart';
 import '../face_recognition_page.dart';
@@ -22,13 +27,6 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
   @override
   void initState() {
     super.initState();
-
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight
-    ]);
 
     if (widget.schoolClass != null) {
       waitForSetup = _setupClassList();
@@ -87,14 +85,46 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
     capturePhoto(inputImage);
   }
 
-  void switchCamera() {
+  void takePhoto(CameraState camState) async {
+    final camera = camState as PhotoCameraState;
+
+    try {
+      await camera.takePhoto(
+          onPhoto: (captureRequest) {
+            final request = captureRequest as SingleCaptureRequest;
+
+            capturePhoto(InputImage.fromFilePath(request.file!.path));
+          },
+          onPhotoFailed: (ex) => throw ex);
+    } on Exception catch (ex) {
+      snackbarKey.currentState!
+          .showSnackBar(SnackBar(content: Text(ex.toString())));
+    }
+  }
+
+  Future<CaptureRequest> photoPathBuilder(List<Sensor> sensors) async {
+    final tempDir = await getTemporaryDirectory();
+    final picsDir =
+        await Directory("${tempDir.path}/camerawesome").create(recursive: true);
+    final filePath =
+        "${picsDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+
+    return SingleCaptureRequest(filePath, sensors.first);
+  }
+
+  void switchToIPCamera() async {
     setState(() => isUsingIPCamera = !isUsingIPCamera);
   }
 
-  Future<bool> onWillPop() async {
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-
-    return true;
+  void manualAttendance() {
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AttendanceFormPage(
+            students: _classStudents,
+            classId: widget.schoolClass!.id,
+          ),
+        ));
   }
 
   final _mlService = MLService();

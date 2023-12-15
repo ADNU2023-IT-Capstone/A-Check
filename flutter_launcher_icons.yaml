@@ -1,4 +1,3 @@
 flutter_launcher_icons:
   android: "launcher_icon"
-  ios: false
   image_path: "assets/images/small_logo_blue.png"

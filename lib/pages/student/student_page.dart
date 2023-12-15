@@ -2,6 +2,7 @@ import 'package:a_check/models/school.dart';
 import 'package:a_check/pages/student/controllers/student_state.dart';
 import 'package:a_check/themes.dart';
 import 'package:a_check/utils/abstracts.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class StudentPage extends StatefulWidget {
@@ -168,16 +169,34 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   final url = snapshot.data!;
-
+                  if (url.isNotEmpty) {
+                    return CachedNetworkImage(
+                      imageUrl: url,
+                      fit: BoxFit.cover,
+                      progressIndicatorBuilder: (context, url, progress) =>
+                          CircularProgressIndicator(value: progress.progress),
+                      errorWidget: (context, url, error) => const Column(
+                        children: [
+                          Icon(Icons.error_outline),
+                          Text("Failed to load image")
+                        ],
+                      ),
+                    );
+                  } else {
+                    return CircleAvatar(
+                      child: Text(
+                        student.initials,
+                        style: const TextStyle(fontSize: 72),
+                      ),
+                    );
+                  }
+                } else {
                   return CircleAvatar(
-                    foregroundImage: url.isEmpty ? NetworkImage(url) : null,
                     child: Text(
                       student.initials,
-                      style: const TextStyle(fontSize: 80),
+                      style: const TextStyle(fontSize: 72),
                     ),
                   );
-                } else {
-                  return const Center(child: CircularProgressIndicator());
                 }
               }),
         ),
@@ -270,25 +289,25 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
                 title: const Text("Present"),
                 leading: const Icon(Icons.event_available),
                 trailing: Text(snapshot.data!['present'].toString()),
-                onTap: () => state.copyToClipboard(student.email!),
+                onTap: () => state.showDatesWhereStatus(status: AttendanceStatus.Present),
               ),
               ListTile(
                 title: const Text("Absent"),
                 leading: const Icon(Icons.event_busy),
                 trailing: Text(snapshot.data!['absent'].toString()),
-                onTap: () => state.copyToClipboard(student.email!),
+                onTap: () => state.showDatesWhereStatus(status: AttendanceStatus.Absent),
               ),
               ListTile(
                 title: const Text("Late"),
                 leading: const Icon(Icons.timer),
                 trailing: Text(snapshot.data!['late'].toString()),
-                onTap: () => state.copyToClipboard(student.email!),
+                onTap: () => state.showDatesWhereStatus(status: AttendanceStatus.Late),
               ),
               ListTile(
                 title: const Text("Excused"),
                 leading: const Icon(Icons.assistant_photo),
                 trailing: Text(snapshot.data!['excused'].toString()),
-                onTap: () => state.copyToClipboard(student.email!),
+                onTap: () => state.showDatesWhereStatus(status: AttendanceStatus.Excused),
               ),
             ],
           );

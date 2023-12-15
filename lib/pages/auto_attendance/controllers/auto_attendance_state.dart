@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:a_check/globals.dart';
 import 'package:a_check/models/school.dart';
 import 'package:a_check/pages/auto_attendance/auto_attendance_page.dart';
-import 'package:a_check/utils/attendance_helpers.dart';
+import 'package:a_check/pages/forms/attendance_records_form.dart';
 import 'package:a_check/utils/dialogs.dart';
 import 'package:a_check/utils/face_ml_helpers.dart';
 import 'package:a_check/utils/mlservice.dart';
@@ -154,33 +154,27 @@ class AutoAttendanceState extends State<AutoAttendancePage> {
   }
 
   void finalize() async {
+    setState(() => isTakingScreenshots = false);
+
     final bool? result = await Dialogs.showConfirmDialog(
         context,
-        const Text("Finalize attendance"),
+        const Text("Confirm action"),
         const Text("Recognized students will be set as present. Continue?"));
 
     if (result == true) {
-      snackbarKey.currentState!.showSnackBar(const SnackBar(
-          content: Row(children: [
-        CircularProgressIndicator(),
-        SizedBox(width: 16),
-        Text("Saving...")
-      ])));
-      AttendanceHelpers.recordAttendance(
-              schoolClass: widget.schoolClass,
-              classStudents: _classStudents,
-              recognizedStudents:
-                  recognizedStudents.values.map((e) => e.student).toList())
-          .whenComplete(() {
-        snackbarKey.currentState!.removeCurrentSnackBar();
-        snackbarKey.currentState!
-            .showSnackBar(const SnackBar(content: Text("Saved to firebase!")));
-      });
+      if (mounted) {
+        final rs = recognizedStudents.values.map((e) => e.student).toList();
 
-      snackbarKey.currentState!.showSnackBar(SnackBar(
-          content: Text(
-              "Took attendances of ${recognizedStudents.length} student${recognizedStudents.length > 1 ? 's' : ''}")));
-      if (mounted) Navigator.pop(context);
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AttendanceFormPage(
+                students: _classStudents,
+                classId: widget.schoolClass.id,
+                recognizedStudents: rs,
+              ),
+            ));
+      }
     }
   }
 

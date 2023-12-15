@@ -1,10 +1,10 @@
 import 'package:a_check/models/school.dart';
 import 'package:a_check/themes.dart';
 import 'package:a_check/utils/abstracts.dart';
+import 'package:a_check/widgets/ip_camera_view.dart';
 import 'package:flutter/material.dart';
 
 import 'controllers/auto_attendance_state.dart';
-import 'ip_camera_view.dart';
 
 class AutoAttendancePage extends StatefulWidget {
   const AutoAttendancePage({super.key, required this.schoolClass});

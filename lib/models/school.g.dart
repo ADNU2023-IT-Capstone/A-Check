@@ -1131,6 +1131,8 @@ abstract class SchoolClassDocumentReference extends FirestoreDocumentReference<
     FieldValue scheduleFieldValue,
     String teacherId,
     FieldValue teacherIdFieldValue,
+    Set<String> studentsAboveMaxAbsences,
+    FieldValue studentsAboveMaxAbsencesFieldValue,
     int maxAbsences,
     FieldValue maxAbsencesFieldValue,
     Set<String> studentIds,
@@ -1152,6 +1154,8 @@ abstract class SchoolClassDocumentReference extends FirestoreDocumentReference<
     FieldValue scheduleFieldValue,
     String teacherId,
     FieldValue teacherIdFieldValue,
+    Set<String> studentsAboveMaxAbsences,
+    FieldValue studentsAboveMaxAbsencesFieldValue,
     int maxAbsences,
     FieldValue maxAbsencesFieldValue,
     Set<String> studentIds,
@@ -1203,6 +1207,8 @@ class _$SchoolClassDocumentReference
     FieldValue? scheduleFieldValue,
     Object? teacherId = _sentinel,
     FieldValue? teacherIdFieldValue,
+    Object? studentsAboveMaxAbsences = _sentinel,
+    FieldValue? studentsAboveMaxAbsencesFieldValue,
     Object? maxAbsences = _sentinel,
     FieldValue? maxAbsencesFieldValue,
     Object? studentIds = _sentinel,
@@ -1227,6 +1233,11 @@ class _$SchoolClassDocumentReference
     assert(
       teacherId == _sentinel || teacherIdFieldValue == null,
       "Cannot specify both teacherId and teacherIdFieldValue",
+    );
+    assert(
+      studentsAboveMaxAbsences == _sentinel ||
+          studentsAboveMaxAbsencesFieldValue == null,
+      "Cannot specify both studentsAboveMaxAbsences and studentsAboveMaxAbsencesFieldValue",
     );
     assert(
       maxAbsences == _sentinel || maxAbsencesFieldValue == null,
@@ -1262,6 +1273,13 @@ class _$SchoolClassDocumentReference
             _$SchoolClassPerFieldToJson.teacherId(teacherId as String),
       if (teacherIdFieldValue != null)
         _$SchoolClassFieldMap['teacherId']!: teacherIdFieldValue,
+      if (studentsAboveMaxAbsences != _sentinel)
+        _$SchoolClassFieldMap['studentsAboveMaxAbsences']!:
+            _$SchoolClassPerFieldToJson.studentsAboveMaxAbsences(
+                studentsAboveMaxAbsences as Set<String>),
+      if (studentsAboveMaxAbsencesFieldValue != null)
+        _$SchoolClassFieldMap['studentsAboveMaxAbsences']!:
+            studentsAboveMaxAbsencesFieldValue,
       if (maxAbsences != _sentinel)
         _$SchoolClassFieldMap['maxAbsences']!:
             _$SchoolClassPerFieldToJson.maxAbsences(maxAbsences as int),
@@ -1289,6 +1307,8 @@ class _$SchoolClassDocumentReference
     FieldValue? scheduleFieldValue,
     Object? teacherId = _sentinel,
     FieldValue? teacherIdFieldValue,
+    Object? studentsAboveMaxAbsences = _sentinel,
+    FieldValue? studentsAboveMaxAbsencesFieldValue,
     Object? maxAbsences = _sentinel,
     FieldValue? maxAbsencesFieldValue,
     Object? studentIds = _sentinel,
@@ -1313,6 +1333,11 @@ class _$SchoolClassDocumentReference
     assert(
       teacherId == _sentinel || teacherIdFieldValue == null,
       "Cannot specify both teacherId and teacherIdFieldValue",
+    );
+    assert(
+      studentsAboveMaxAbsences == _sentinel ||
+          studentsAboveMaxAbsencesFieldValue == null,
+      "Cannot specify both studentsAboveMaxAbsences and studentsAboveMaxAbsencesFieldValue",
     );
     assert(
       maxAbsences == _sentinel || maxAbsencesFieldValue == null,
@@ -1348,6 +1373,13 @@ class _$SchoolClassDocumentReference
             _$SchoolClassPerFieldToJson.teacherId(teacherId as String),
       if (teacherIdFieldValue != null)
         _$SchoolClassFieldMap['teacherId']!: teacherIdFieldValue,
+      if (studentsAboveMaxAbsences != _sentinel)
+        _$SchoolClassFieldMap['studentsAboveMaxAbsences']!:
+            _$SchoolClassPerFieldToJson.studentsAboveMaxAbsences(
+                studentsAboveMaxAbsences as Set<String>),
+      if (studentsAboveMaxAbsencesFieldValue != null)
+        _$SchoolClassFieldMap['studentsAboveMaxAbsences']!:
+            studentsAboveMaxAbsencesFieldValue,
       if (maxAbsences != _sentinel)
         _$SchoolClassFieldMap['maxAbsences']!:
             _$SchoolClassPerFieldToJson.maxAbsences(maxAbsences as int),
@@ -1514,6 +1546,17 @@ abstract class SchoolClassQuery
     List<String>? whereIn,
     List<String>? whereNotIn,
   });
+  SchoolClassQuery whereStudentsAboveMaxAbsences({
+    Set<String>? isEqualTo,
+    Set<String>? isNotEqualTo,
+    Set<String>? isLessThan,
+    Set<String>? isLessThanOrEqualTo,
+    Set<String>? isGreaterThan,
+    Set<String>? isGreaterThanOrEqualTo,
+    bool? isNull,
+    String? arrayContains,
+    Set<String>? arrayContainsAny,
+  });
   SchoolClassQuery whereMaxAbsences({
     int? isEqualTo,
     int? isNotEqualTo,
@@ -1603,6 +1646,18 @@ abstract class SchoolClassQuery
     String startAfter,
     String endAt,
     String endBefore,
+    SchoolClassDocumentSnapshot? startAtDocument,
+    SchoolClassDocumentSnapshot? endAtDocument,
+    SchoolClassDocumentSnapshot? endBeforeDocument,
+    SchoolClassDocumentSnapshot? startAfterDocument,
+  });
+
+  SchoolClassQuery orderByStudentsAboveMaxAbsences({
+    bool descending = false,
+    Set<String> startAt,
+    Set<String> startAfter,
+    Set<String> endAt,
+    Set<String> endBefore,
     SchoolClassDocumentSnapshot? startAtDocument,
     SchoolClassDocumentSnapshot? endAtDocument,
     SchoolClassDocumentSnapshot? endBeforeDocument,
@@ -2037,6 +2092,61 @@ class _$SchoolClassQuery
         whereIn: whereIn?.map((e) => _$SchoolClassPerFieldToJson.teacherId(e)),
         whereNotIn:
             whereNotIn?.map((e) => _$SchoolClassPerFieldToJson.teacherId(e)),
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  SchoolClassQuery whereStudentsAboveMaxAbsences({
+    Object? isEqualTo = notSetQueryParam,
+    Object? isNotEqualTo = notSetQueryParam,
+    Object? isLessThan = notSetQueryParam,
+    Object? isLessThanOrEqualTo = notSetQueryParam,
+    Object? isGreaterThan = notSetQueryParam,
+    Object? isGreaterThanOrEqualTo = notSetQueryParam,
+    bool? isNull,
+    Object? arrayContains = notSetQueryParam,
+    Set<String>? arrayContainsAny,
+  }) {
+    return _$SchoolClassQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$SchoolClassFieldMap['studentsAboveMaxAbsences']!,
+        isEqualTo: isEqualTo != notSetQueryParam
+            ? _$SchoolClassPerFieldToJson
+                .studentsAboveMaxAbsences(isEqualTo as Set<String>)
+            : notSetQueryParam,
+        isNotEqualTo: isNotEqualTo != notSetQueryParam
+            ? _$SchoolClassPerFieldToJson
+                .studentsAboveMaxAbsences(isNotEqualTo as Set<String>)
+            : notSetQueryParam,
+        isLessThan: isLessThan != notSetQueryParam
+            ? _$SchoolClassPerFieldToJson
+                .studentsAboveMaxAbsences(isLessThan as Set<String>)
+            : notSetQueryParam,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != notSetQueryParam
+            ? _$SchoolClassPerFieldToJson
+                .studentsAboveMaxAbsences(isLessThanOrEqualTo as Set<String>)
+            : notSetQueryParam,
+        isGreaterThan: isGreaterThan != notSetQueryParam
+            ? _$SchoolClassPerFieldToJson
+                .studentsAboveMaxAbsences(isGreaterThan as Set<String>)
+            : notSetQueryParam,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != notSetQueryParam
+            ? _$SchoolClassPerFieldToJson
+                .studentsAboveMaxAbsences(isGreaterThanOrEqualTo as Set<String>)
+            : notSetQueryParam,
+        isNull: isNull,
+        arrayContains: arrayContains != notSetQueryParam
+            ? (_$SchoolClassPerFieldToJson
+                        .studentsAboveMaxAbsences({arrayContains as String})
+                    as List?)!
+                .single
+            : notSetQueryParam,
+        arrayContainsAny: arrayContainsAny != null
+            ? _$SchoolClassPerFieldToJson
+                .studentsAboveMaxAbsences(arrayContainsAny) as Iterable<Object>?
+            : null,
       ),
       $queryCursor: $queryCursor,
     );
@@ -2512,6 +2622,79 @@ class _$SchoolClassQuery
   }) {
     final query = $referenceWithoutCursor
         .orderBy(_$SchoolClassFieldMap['teacherId']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$SchoolClassQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  SchoolClassQuery orderByStudentsAboveMaxAbsences({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    SchoolClassDocumentSnapshot? startAtDocument,
+    SchoolClassDocumentSnapshot? endAtDocument,
+    SchoolClassDocumentSnapshot? endBeforeDocument,
+    SchoolClassDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(
+        _$SchoolClassFieldMap['studentsAboveMaxAbsences']!,
+        descending: descending);
     var queryCursor = $queryCursor;
 
     if (startAtDocument != null) {
@@ -8022,6 +8205,10 @@ SchoolClass _$SchoolClassFromJson(Map<String, dynamic> json) => SchoolClass(
       studentIds: (json['studentIds'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toSet(),
+      studentsAboveMaxAbsences:
+          (json['studentsAboveMaxAbsences'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toSet(),
       maxAbsences: json['maxAbsences'] as int?,
     );
 
@@ -8032,6 +8219,7 @@ const _$SchoolClassFieldMap = <String, String>{
   'section': 'section',
   'schedule': 'schedule',
   'teacherId': 'teacherId',
+  'studentsAboveMaxAbsences': 'studentsAboveMaxAbsences',
   'maxAbsences': 'maxAbsences',
   'studentIds': 'studentIds',
 };
@@ -8052,6 +8240,9 @@ abstract class _$SchoolClassPerFieldToJson {
   // ignore: unused_element
   static Object? teacherId(String instance) => instance;
   // ignore: unused_element
+  static Object? studentsAboveMaxAbsences(Set<String> instance) =>
+      instance.toList();
+  // ignore: unused_element
   static Object? maxAbsences(int instance) => instance;
   // ignore: unused_element
   static Object? studentIds(Set<String> instance) => instance.toList();
@@ -8065,6 +8256,7 @@ Map<String, dynamic> _$SchoolClassToJson(SchoolClass instance) =>
       'section': instance.section,
       'schedule': instance.schedule.map((e) => e.toJson()).toList(),
       'teacherId': instance.teacherId,
+      'studentsAboveMaxAbsences': instance.studentsAboveMaxAbsences.toList(),
       'maxAbsences': instance.maxAbsences,
       'studentIds': instance.studentIds.toList(),
     };

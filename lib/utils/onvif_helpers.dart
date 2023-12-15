@@ -46,12 +46,12 @@ class OnvifHelpers {
       required String username,
       required String password,
       int? timeout}) async {
-    return await Onvif.connect(
+    return Onvif.connect(
             host: host, username: username, password: password)
         .timeout(Duration(seconds: timeout ?? 5),
             onTimeout: () => throw OnvifException(
                 "ConnectionTimeout", "The connection to the camera timed out"))
         .onError((error, stackTrace) =>
-            throw OnvifException(error.toString(), stackTrace.toString()));
+            throw OnvifException(error.toString()));
   }
 }

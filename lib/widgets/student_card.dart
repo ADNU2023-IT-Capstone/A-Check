@@ -1,3 +1,4 @@
+import 'package:a_check/main.dart';
 import 'package:a_check/models/school.dart';
 import 'package:a_check/pages/student/student_page.dart';
 import 'package:a_check/themes.dart';
@@ -24,54 +25,58 @@ class StudentCard extends StatelessWidget {
                   )));
     }
 
-    // Color? colorByAbsent() {
-    //   if (studentClass == null) {
-    //     return null;
-    //   }
+    Future<Color?> colorByAbsent() async {
+      if (studentClass == null) {
+        return null;
+      }
 
-    //   final absences = student.getPALEValues(studentClass!.id)['absent']!;
-    //   final warning = prefs.getInt('absent_warn')!;
-    //   final limit = prefs.getInt('absent_limit')!;
+      final absences =
+          (await student.getPALEValues(studentClass!.id))['absent']!;
+      final limit = studentClass!.maxAbsences;
+      final warning = (limit / 2).ceil();
 
-    //   if (absences >= limit) {
-    //     return Colors.red[200];
-    //   } else if (absences >= warning) {
-    //     return Colors.amber[200];
-    //   } else {
-    //     return null;
-    //   }
-    // }
+      if (absences >= limit) {
+        return Colors.red[200];
+      } else if (absences >= warning) {
+        return Colors.amber[200];
+      } else {
+        return null;
+      }
+    }
 
     return GestureDetector(
       onTap: onTap,
-      child: Card(
-        color: Themes.main.colorScheme.primaryContainer,
-        elevation: 0.5,
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    student.fullName.toString(),
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: textColor),
-                  ),
-                  Text(
-                    student.id,
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w300,
-                        color: textColor),
-                  )
-                ],
-              ),
-            ],
+      child: FutureBuilder(
+        future: colorByAbsent(),
+        builder: (context, snapshot) => Card(
+          color: snapshot.data != null ? snapshot.data! : Themes.main.colorScheme.primaryContainer,
+          elevation: 0.5,
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      student.fullName.toString(),
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: textColor),
+                    ),
+                    Text(
+                      student.id,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w300,
+                          color: textColor),
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

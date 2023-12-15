@@ -1,7 +1,6 @@
-import 'package:a_check/globals.dart';
 import 'package:a_check/models/recognized_student.dart';
 import 'package:a_check/models/school.dart';
-import 'package:a_check/utils/attendance_helpers.dart';
+import 'package:a_check/pages/forms/attendance_records_form.dart';
 import 'package:a_check/utils/dialogs.dart';
 import 'package:a_check/widgets/correct_dialog.dart';
 import 'package:flutter/material.dart';
@@ -54,37 +53,21 @@ class DetectedFacesState extends State<DetectedFacesPage> {
   void finalize() async {
     final bool? result = await Dialogs.showConfirmDialog(
         context,
-        const Text("Finalize attendance"),
+        const Text("Confirm action"),
         const Text("Recognized students will be set as present. Continue?"));
 
     if (result == true) {
-      if (!widget.schoolClass.isScheduleToday) {
-        snackbarKey.currentState!.showSnackBar(
-            const SnackBar(content: Text("The class schedule isn't today!")));
-        return;
+      if (mounted) {
+        final rs = recognizedStudents.values.map((e) => e.student).toList();
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AttendanceFormPage(
+                  students: classStudents,
+                  classId: widget.schoolClass.id,
+                  recognizedStudents: rs),
+            ));
       }
-
-      snackbarKey.currentState!.showSnackBar(const SnackBar(
-          content: Row(children: [
-        CircularProgressIndicator(),
-        SizedBox(width: 16),
-        Text("Saving...")
-      ])));
-      AttendanceHelpers.recordAttendance(
-              schoolClass: widget.schoolClass,
-              classStudents: classStudents,
-              recognizedStudents:
-                  recognizedStudents.values.map((e) => e.student).toList())
-          .whenComplete(() {
-        snackbarKey.currentState!.removeCurrentSnackBar();
-        snackbarKey.currentState!
-            .showSnackBar(const SnackBar(content: Text("Saved to firebase!")));
-      });
-
-      snackbarKey.currentState!.showSnackBar(SnackBar(
-          content: Text(
-              "Took attendances of ${recognizedStudents.length} student${recognizedStudents.length > 1 ? 's' : ''}")));
-      if (mounted) Navigator.pop(context);
     }
   }
 }

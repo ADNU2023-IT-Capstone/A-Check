@@ -45,8 +45,8 @@ class DetectedFacesView
   FloatingActionButton buildFab() {
     return FloatingActionButton.extended(
       onPressed: state.finalize,
-      label: const Text("Finalize"),
-      icon: const Icon(Icons.event_note),
+      label: const Text("Next"),
+      icon: const Icon(Icons.arrow_forward_ios),
     );
   }
 

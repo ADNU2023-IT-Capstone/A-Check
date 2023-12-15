@@ -1,6 +1,7 @@
 import 'package:a_check/pages/dashboard/controllers/settings_state.dart';
 import 'package:a_check/themes.dart';
 import 'package:a_check/utils/abstracts.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -44,12 +45,17 @@ class SettingsView extends WidgetView<SettingsPage, SettingsState> {
         SettingsListTile(
           title: const Text("Automatic email notification"),
           subtitle: const Text(
-              "If enabled, will notify the student and its guardian when absent warning and limit value is met through email"),
+              "If enabled, will notify the student and its guardian when absences reach the maximum through email"),
           trailing: Checkbox(
-            value: false,
+            value: state.autoEmail,
             onChanged: state.toggleEmailNotifs,
           ),
         ),
+        if (kDebugMode)
+          SettingsListTile(
+            title: const Text("Test email"),
+            onTap: state.testEmail,
+          ),
         SettingsListTile(
             title: const Text("Set distance threshold"),
             subtitle: const Text("Set how strict the face recognition will be"),

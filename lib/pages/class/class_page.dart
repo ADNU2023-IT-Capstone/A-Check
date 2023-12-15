@@ -50,7 +50,7 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
           elevation: 1,
           itemBuilder: (context) => [
             PopupMenuItem(
-              onTap: state.exportRecords,
+              onTap: state.exportDialog,
               child: const Text("Export attendance records"),
             ),
           ],
@@ -197,13 +197,13 @@ class ClassView extends WidgetView<ClassPage, ClassState> {
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
-                    color: Themes.main.colorScheme.secondary),
+                    color: Colors.green),
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
                   child: Text(
                     "${schoolClass.studentIds.length.toString()} student${schoolClass.studentIds.length > 1 ? "s" : ""}",
                     style:
-                        TextStyle(color: Themes.main.colorScheme.onSecondary),
+                        TextStyle(color: Themes.main.colorScheme.onSecondary, fontWeight: FontWeight.normal),
                   ),
                 ),
               ),

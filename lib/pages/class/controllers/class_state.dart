@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 
 class ClassState extends State<ClassPage> {
   late SchoolClass schoolClass;
+  late List<AttendanceRecord> classRecords;
   late StreamSubscription classesStream, attendancesStream;
 
   @override
@@ -31,7 +32,12 @@ class ClassState extends State<ClassPage> {
         .whereClassId(isEqualTo: widget.schoolClass.id)
         .snapshots()
         .listen((event) {
-      if (context.mounted) setState(() {});
+      if (context.mounted) {
+        setState(() => classRecords = event.docs.map((e) => e.data).toList()
+          ..sort(
+            (a, b) => a.dateTime.compareTo(b.dateTime),
+          ));
+      }
     });
   }
 
@@ -81,7 +87,31 @@ class ClassState extends State<ClassPage> {
     }
   }
 
-  void exportRecords() async {
+  void exportDialog() async {
+    final DateTimeRange? result = await showDateRangePicker(
+        context: context,
+        firstDate: classRecords.first.dateTime,
+        lastDate: classRecords.last.dateTime);
+    if (result == null) return;
+
+    final Map<DateTime, List<AttendanceRecord>> map = {};
+    for (var s in classRecords) {
+      if (s.dateTime.isAfter(result.start) && s.dateTime.isBefore(result.end)) {
+        final date =
+            DateTime(s.dateTime.year, s.dateTime.month, s.dateTime.day);
+
+        if (!map.containsKey(date)) {
+          map[date] = [];
+        }
+
+        map[date]!.add(s);
+      }
+    }
+    await exportRecords(map);
+  }
+
+  Future<void> exportRecords(
+      Map<DateTime, List<AttendanceRecord>> records) async {
     final now = DateTime.now();
     final records = Map.fromEntries(
         (await schoolClass.getAttendanceRecords()).entries.toList()

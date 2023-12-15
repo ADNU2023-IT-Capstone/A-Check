@@ -12,7 +12,10 @@ class SARCState extends State<StudentAttendanceRecordCard> {
 
     if (value != null) {
       widget.record.status = value;
-      await attendancesRef.doc(widget.record.id).update(status: status!);
+
+      if (widget.isLocal == false) {
+        await attendancesRef.doc(widget.record.id).update(status: status!);
+      }
     }
   }
 

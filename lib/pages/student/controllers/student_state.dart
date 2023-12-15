@@ -6,6 +6,7 @@ import 'package:a_check/pages/student/student_page.dart';
 import 'package:a_check/utils/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class StudentState extends State<StudentPage> {
   late Student student;
@@ -102,5 +103,34 @@ class StudentState extends State<StudentPage> {
       snackbarKey.currentState!
           .showSnackBar(SnackBar(content: Text("Copied $value!")));
     });
+  }
+
+  showDatesWhereStatus({required AttendanceStatus status}) async {
+    final records = (await attendancesRef
+            .whereStudentId(isEqualTo: widget.studentId)
+            .whereStatus(isEqualTo: status)
+            .orderByDateTime()
+            .get())
+        .docs
+        .map((e) => e.data)
+        .toList();
+    
+    if (records.isEmpty) {
+      snackbarKey.currentState!.showSnackBar(const SnackBar(content: Text("No records!")));
+      return;
+    }
+
+    if (mounted) {
+      await showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: Wrap(
+            children: records.map((e) => ListTile(title: Text(DateFormat.yMMMMd().format(e.dateTime)),)).toList(),
+          ),
+        );
+      },
+    );
+    }  
   }
 }

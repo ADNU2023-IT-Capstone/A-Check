@@ -182,8 +182,10 @@ class SchoolClass {
       required this.schedule,
       required this.teacherId,
       Set<String>? studentIds,
+      Set<String>? studentsAboveMaxAbsences, 
       int? maxAbsences}) {
     this.studentIds = studentIds ?? List.empty().toSet().cast();
+    this.studentsAboveMaxAbsences = studentsAboveMaxAbsences ?? List.empty().toSet().cast();
     this.maxAbsences = maxAbsences ?? 3;
   }
 
@@ -198,6 +200,7 @@ class SchoolClass {
   final String section;
   final List<ClassSchedule> schedule;
   final String teacherId;
+  late final Set<String> studentsAboveMaxAbsences;
   late final int maxAbsences;
   late final Set<String> studentIds;
 

@@ -2,7 +2,7 @@ import 'package:a_check/auth.dart';
 import 'package:a_check/firebase_options.dart';
 import 'package:a_check/globals.dart';
 import 'package:a_check/themes.dart';
-import 'package:camera/camera.dart';
+// import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-late List<CameraDescription> cameras;
+// late List<CameraDescription> cameras;
 late PackageInfo packageInfo;
 late SharedPreferences prefs;
 
@@ -37,7 +37,7 @@ void main() async {
   //   }
   // }
 
-  cameras = await availableCameras();
+  // cameras = await availableCameras();
   packageInfo = await PackageInfo.fromPlatform();
   prefs = await SharedPreferences.getInstance();
   await setupDefaultPrefs();
@@ -60,6 +60,7 @@ Future<void> setupDefaultPrefs() async {
   if (!prefs.containsKey('absent_warn')) await prefs.setInt('absent_warn', 2);
   if (!prefs.containsKey('scan_interval')) await prefs.setInt('scan_interval', 2);
   if (!prefs.containsKey('late_value')) await prefs.setInt('late_value', 15);
+  if (!prefs.containsKey('auto_email')) await prefs.setBool('auto_email', false);
 }
 
 class MainApp extends StatelessWidget {

@@ -2,15 +2,29 @@ import 'package:a_check/globals.dart';
 import 'package:a_check/main.dart';
 import 'package:a_check/pages/dashboard/settings_page.dart';
 import 'package:a_check/utils/dialogs.dart';
+import 'package:a_check/utils/email_helpers.dart';
 import 'package:a_check/utils/onvif_helpers.dart';
 import 'package:easy_onvif/probe.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class SettingsState extends State<SettingsPage> {
-  void toggleSMSNotifs(bool? value) {}
+  late bool? autoEmail;
 
-  void toggleEmailNotifs(bool? value) {}
+  @override
+  Widget build(BuildContext context) => SettingsView(this);
+
+  @override
+  void initState() {
+    super.initState();
+
+    autoEmail = prefs.getBool('auto_email');
+  }
+
+  void toggleEmailNotifs(bool? value) async {
+    await prefs.setBool('auto_email', value ?? false);
+    setState(() => autoEmail = value);
+  }
 
   void setDistanceThreshold() async {
     final result = await Dialogs.showTextInputDialog(
@@ -175,6 +189,25 @@ class SettingsState extends State<SettingsPage> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) => SettingsView(this);
+  testEmail() async {
+    EmailHelpers.sendEmail(
+            template: EmailTemplate.student,
+            params: EmailTemplate.studentParams(
+                classCode: "Class Code",
+                classSection: "Class Section",
+                studentName: "Student Name",
+                studentEmail: "amserrano1337@gmail.com",
+                teacherName: "Teacher Name",
+                teacherEmail: "aaserrano@gbox.adnu.edu.ph"))
+        .then((response) {
+      if (response.statusCode == 200) {
+        snackbarKey.currentState!
+            .showSnackBar(const SnackBar(content: Text("Sent a test email!")));
+      } else {
+        snackbarKey.currentState!.showSnackBar(SnackBar(
+            content: Text(
+                "Something went wrong! ${response.statusCode}: ${response.body}")));
+      }
+    });
+  }
 }

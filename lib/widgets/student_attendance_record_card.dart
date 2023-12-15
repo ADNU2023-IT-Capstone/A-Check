@@ -4,10 +4,12 @@ import 'package:a_check/widgets/controllers/student_attendance_record_card_state
 import 'package:flutter/material.dart';
 
 class StudentAttendanceRecordCard extends StatefulWidget {
-  const StudentAttendanceRecordCard({Key? key, required this.record})
+  const StudentAttendanceRecordCard(
+      {Key? key, required this.record, required this.isLocal})
       : super(key: key);
 
   final AttendanceRecord record;
+  final bool isLocal;
 
   @override
   State<StudentAttendanceRecordCard> createState() => SARCState();
@@ -31,7 +33,9 @@ class SARCView extends WidgetView<StudentAttendanceRecordCard, SARCState> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: const Color(0xfff3f6f4),
+      color: widget.record.status == AttendanceStatus.unknown
+          ? Colors.amber[200]
+          : const Color(0xfff3f6f4),
       elevation: 1,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       child: Padding(

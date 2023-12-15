@@ -11,7 +11,7 @@ import 'package:image/image.dart' as imglib;
 
 class FaceMLHelpers {
   static Future<InputImage> bytesToInputImage(Uint8List bytes) async {
-    final now = DateTime.now();
+    final now = DateTime.now().millisecondsSinceEpoch;
     final tempDir = await getTemporaryDirectory();
     var file =
         await File("${tempDir.path}/ip-cam-frame-screenshot-$now.jpg").create();

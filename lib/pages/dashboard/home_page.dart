@@ -4,6 +4,7 @@ import 'package:a_check/pages/dashboard/controllers/home_state.dart';
 import 'package:a_check/themes.dart';
 import 'package:a_check/utils/abstracts.dart';
 import 'package:a_check/widgets/class_card.dart';
+import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -32,7 +33,9 @@ class HomeView extends WidgetView<HomePage, HomeState> {
 
   Widget buildClassGrid() {
     return StreamBuilder(
-      stream: classesRef.whereTeacherId(isEqualTo: auth.currentUser?.id).snapshots(),
+      stream: classesRef
+          .whereTeacherId(isEqualTo: auth.currentUser?.id)
+          .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           if (snapshot.hasData) {
@@ -85,13 +88,31 @@ class HomeView extends WidgetView<HomePage, HomeState> {
                     fontSize: 24,
                     fontWeight: FontWeight.bold),
               ),
-              Text(
-                "Welcome, ${auth.currentUser?.name}",
-                style: const TextStyle(
-                  color: Color(0xff8b9094),
-                  fontSize: 12,
-                ),
-              )
+              FirestoreBuilder(
+                ref: schoolRef,
+                builder: (context, snapshot, child) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        snapshot.hasData ? "${snapshot.data!.data!.name} (${snapshot.data!.data!.officeName})" : "",
+                        style: const TextStyle(
+                          color: Color(0xff8b9094),
+                          fontSize: 12,
+                        ),
+                      ),
+                      Text(
+                        "Welcome, ${auth.currentUser?.name}",
+                        style: const TextStyle(
+                          color: Color(0xff8b9094),
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
             ],
           ),
           const Spacer(),
