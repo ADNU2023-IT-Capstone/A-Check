@@ -111,6 +111,7 @@ class AttendanceHelpers {
       try {
         // try to get an existing record
         // if there is one, skip this
+        // ignore: unused_local_variable
         final record = (await attendancesRef
                 .whereStudentId(isEqualTo: a.studentId)
                 .whereDateTime(
@@ -119,10 +120,8 @@ class AttendanceHelpers {
             .docs
             .first
             .data;
-        print('found record, skipping');
         continue;
       } on StateError {
-        print('record not found, continuing');
         // do nothing if not found
       }
 

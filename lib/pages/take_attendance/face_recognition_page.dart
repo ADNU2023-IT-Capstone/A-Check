@@ -37,25 +37,26 @@ class FaceRecognitionView
       elevation: 0,
       backgroundColor: Colors.black.withOpacity(0.5),
       actions: [
-        IconButton(
-          constraints: const BoxConstraints.expand(width: 150),
-          onPressed: state.manualAttendance,
-          icon: const Wrap(
-            alignment: WrapAlignment.center,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            direction: Axis.horizontal,
-            children: [
-              Text(
-                "MANUAL\nATTENDANCE",
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.clip,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              SizedBox(width: 8),
-              Icon(Icons.arrow_forward),
-            ],
-          ),
-        )
+        if (widget.schoolClass != null)
+          IconButton(
+            constraints: const BoxConstraints.expand(width: 150),
+            onPressed: state.manualAttendance,
+            icon: const Wrap(
+              alignment: WrapAlignment.center,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              direction: Axis.horizontal,
+              children: [
+                Text(
+                  "MANUAL\nATTENDANCE",
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.clip,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(width: 8),
+                Icon(Icons.arrow_forward),
+              ],
+            ),
+          )
       ],
     );
   }

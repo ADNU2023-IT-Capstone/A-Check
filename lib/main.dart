@@ -1,6 +1,7 @@
 import 'package:a_check/auth.dart';
 import 'package:a_check/firebase_options.dart';
 import 'package:a_check/globals.dart';
+import 'package:a_check/models/school.dart';
 import 'package:a_check/themes.dart';
 // import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -45,7 +46,16 @@ void main() async {
   User? lastUser;
   if (prefs.containsKey('user')) {
     final values = prefs.getStringList('user')!;
-    lastUser = User(id: values.first, schoolId: values[1], name: values.last);
+    final teacherId = values.first;
+    final schoolId = values[1];
+
+    final school = (await schoolsRef.doc(schoolId).get()).data;
+    if (school != null) {
+      final teacher = (await school.ref.teachers.doc(teacherId).get()).data;
+      if (teacher != null) {
+        lastUser = User(id: teacherId, schoolId: schoolId, name: teacher.fullName);
+      }
+    }
   }
   auth = Auth(user: lastUser);
 

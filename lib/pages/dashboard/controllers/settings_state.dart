@@ -1,6 +1,8 @@
 import 'package:a_check/globals.dart';
 import 'package:a_check/main.dart';
+import 'package:a_check/models/school.dart';
 import 'package:a_check/pages/dashboard/settings_page.dart';
+import 'package:a_check/utils/attendance_helpers.dart';
 import 'package:a_check/utils/dialogs.dart';
 import 'package:a_check/utils/email_helpers.dart';
 import 'package:a_check/utils/onvif_helpers.dart';
@@ -189,25 +191,55 @@ class SettingsState extends State<SettingsPage> {
     }
   }
 
-  testEmail() async {
-    EmailHelpers.sendEmail(
-            template: EmailTemplate.student,
-            params: EmailTemplate.studentParams(
-                classCode: "Class Code",
-                classSection: "Class Section",
-                studentName: "Student Name",
-                studentEmail: "amserrano1337@gmail.com",
-                teacherName: "Teacher Name",
-                teacherEmail: "aaserrano@gbox.adnu.edu.ph"))
-        .then((response) {
-      if (response.statusCode == 200) {
-        snackbarKey.currentState!
-            .showSnackBar(const SnackBar(content: Text("Sent a test email!")));
-      } else {
-        snackbarKey.currentState!.showSnackBar(SnackBar(
-            content: Text(
-                "Something went wrong! ${response.statusCode}: ${response.body}")));
-      }
+  void logOut() async {
+    await auth.signOut();
+
+    snackbarKey.currentState!
+        .showSnackBar(const SnackBar(content: Text("You have logged out.")));
+  }
+
+  changePassword() async {
+    final input = await Dialogs.showTextInputDialog(
+        context, const Text("Change password"),
+        content: const Text(
+            "Enter your new password. It should have at least 6 characters."),
+        keyboardType: TextInputType.visiblePassword,
+        obscureText: true);
+
+    if (input == null || input.isEmpty) {
+      snackbarKey.currentState!
+          .showSnackBar(const SnackBar(content: Text("Input a password!")));
+      return;
+    }
+
+    if (input.length < 6) {
+      snackbarKey.currentState!.showSnackBar(
+          const SnackBar(content: Text("Password is too short!")));
+      return;
+    }
+
+    await teachersRef
+        .doc(auth.currentUser!.id)
+        .update(password: input)
+        .whenComplete(() {
+      snackbarKey.currentState!
+          .showSnackBar(const SnackBar(content: Text("Password changed!")));
     });
   }
+
+  // manualNotify() async {
+  //   final result = await Dialogs.showConfirmDialog(
+  //       context,
+  //       const Text("Confirm notify"),
+  //       const Text(
+  //           "Are you sure you want to notify all students who have reached maximum absences?"));
+
+  //   if (result == true) {
+  //     final classes = (await schoolRef.classes.whereTeacherId(isEqualTo: auth.currentUser!.id).get()).docs.map((e) => e.data).toList();
+  //     for (var c in classes) {
+  //       c.
+  //     }
+  //     AttendanceHelpers.sendEmail(schoolClass: schoolClass, student: student);
+  //   }
+  // }
 }

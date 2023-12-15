@@ -96,7 +96,9 @@ class HomeView extends WidgetView<HomePage, HomeState> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        snapshot.hasData ? "${snapshot.data!.data!.name} (${snapshot.data!.data!.officeName})" : "",
+                        snapshot.hasData
+                            ? "${snapshot.data!.data!.name} (${snapshot.data!.data!.officeName})"
+                            : "",
                         style: const TextStyle(
                           color: Color(0xff8b9094),
                           fontSize: 12,
@@ -113,17 +115,6 @@ class HomeView extends WidgetView<HomePage, HomeState> {
                   );
                 },
               ),
-            ],
-          ),
-          const Spacer(),
-          PopupMenuButton(
-            icon: const Icon(Icons.account_box),
-            tooltip: "Account",
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                onTap: state.logOut,
-                child: const Text("Log out"),
-              )
             ],
           )
         ],
