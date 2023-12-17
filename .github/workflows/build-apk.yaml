@@ -33,6 +33,7 @@ jobs:
     
     upload_release:
         name: Upload to release
+        permissions: write-all
         needs: build
         runs-on: ubuntu-latest
         steps:
