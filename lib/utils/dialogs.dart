@@ -30,14 +30,14 @@ class Dialogs {
               actions: [
                 MaterialButton(
                     onPressed: () {
-                      Navigator.pop(context, true);
-                    },
-                    child: const Text("Yes")),
-                MaterialButton(
-                    onPressed: () {
                       Navigator.pop(context, false);
                     },
                     child: const Text("No")),
+                MaterialButton(
+                    onPressed: () {
+                      Navigator.pop(context, true);
+                    },
+                    child: const Text("Yes")),
               ],
             ));
   }
