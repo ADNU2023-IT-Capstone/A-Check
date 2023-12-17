@@ -13,13 +13,13 @@ class Validators {
       return "This field cannot be left blank!";
     }
 
-    if (value.substring(0, 2) != "09") {
-      return "Invalid mobile phone number!";
-    }
+    // if (value.substring(0, 2) != "09") {
+    //   return "Invalid mobile phone number!";
+    // }
 
-    if (value.length != 11) {
-      return "Mobile number is too short!";
-    }
+    // if (value.length != 11) {
+    //   return "Mobile number is too short!";
+    // }
 
     return null;
   }

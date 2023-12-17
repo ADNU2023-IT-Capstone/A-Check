@@ -1,139 +1,47 @@
 import 'package:a_check/globals.dart';
 import 'package:a_check/main.dart';
-import 'package:a_check/models/class.dart';
+import 'package:a_check/models/school.dart';
 import 'package:a_check/pages/dashboard/settings_page.dart';
 import 'package:a_check/utils/dialogs.dart';
-import 'package:a_check/utils/localdb.dart';
-import 'package:easy_onvif/onvif.dart';
+import 'package:a_check/utils/onvif_helpers.dart';
 import 'package:easy_onvif/probe.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-// TODO: Bulk Add Students via CSV import
-
 class SettingsState extends State<SettingsPage> {
-  Widget _createConfirmDialog(Widget title, Widget content) {
-    return AlertDialog(
-      title: title,
-      content: content,
-      actions: [
-        ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context, true);
-            },
-            child: const Text("Yes")),
-        ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context, false);
-            },
-            child: const Text("Cancel"))
-      ],
-    );
+  late bool? autoEmail;
+
+  @override
+  Widget build(BuildContext context) => SettingsView(this);
+
+  @override
+  void initState() {
+    super.initState();
+
+    autoEmail = prefs.getBool('auto_email');
   }
 
-  void clearAllClasses() {
-    showDialog(
-            context: context,
-            builder: (context) => _createConfirmDialog(
-                const Text("Clear All Classes"),
-                const Text(
-                    "Are you sure you want to delete ALL CLASSES? This is not recoverable!")))
-        .then((value) {
-      if (value == true) {
-        HiveBoxes.classesBox().clear().then((value) {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Cleared all classes.")));
-        });
-      }
-    });
+  void toggleEmailNotifs(bool? value) async {
+    await prefs.setBool('auto_email', value ?? false);
+    setState(() => autoEmail = value);
   }
-
-  void clearAllAttendanceRecords() {
-    showDialog(
-            context: context,
-            builder: (context) => _createConfirmDialog(
-                const Text("Clear All Students"),
-                const Text(
-                    "Are you sure you want to delete ALL ATTENDANCE RECORDS? This is not recoverable!")))
-        .then((value) {
-      if (value == true) {
-        HiveBoxes.attendancesBox().clear().then((value) {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Cleared all attendance records.")));
-        });
-      }
-    });
-  }
-
-  void clearAllStudents() {
-    showDialog(
-            context: context,
-            builder: (context) => _createConfirmDialog(
-                const Text("Clear All Students"),
-                const Text(
-                    "Are you sure you want to delete ALL STUDENTS? This is not recoverable!")))
-        .then((value) {
-      if (value == true) {
-        HiveBoxes.studentsBox().clear().then((value) {
-          HiveBoxes.classesBox().values.forEach((element) {
-            final c = element as Class;
-            c.studentIds.clear();
-            c.save();
-          });
-
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Cleared all students.")));
-        });
-      }
-    });
-  }
-
-  void setAbsentWarning() async {
-    final result = await Dialogs.showTextInputDialog(
-        context, const Text("Enter new absent warning value"),
-        content: Text("Current value: ${prefs.getInt('absent_warn')}"),
-        formatters: [FilteringTextInputFormatter.digitsOnly],
-        keyboardType: TextInputType.number);
-
-    if (result == null || result.isEmpty) return;
-
-    prefs.setInt('absent_warn', int.parse(result)).then((_) {
-      snackbarKey.currentState!.showSnackBar(const SnackBar(
-          content: Text("Successfully saved new absent warning value!")));
-    }).onError((error, stackTrace) {
-      snackbarKey.currentState!.showSnackBar(SnackBar(
-          content:
-              Text("Something went horribly wrong!\n$error: $stackTrace")));
-    });
-  }
-
-  void setAbsentLimit() async {
-    final result = await Dialogs.showTextInputDialog(
-        context, const Text("Enter new absent limit value"),
-        content: Text("Current value: ${prefs.getInt('absent_limit')}"),
-        formatters: [FilteringTextInputFormatter.digitsOnly],
-        keyboardType: TextInputType.number);
-
-    if (result == null || result.isEmpty) return;
-
-    prefs.setInt('absent_limit', int.parse(result)).then((_) {
-      snackbarKey.currentState!.showSnackBar(const SnackBar(
-          content: Text("Successfully saved new absent limit value!")));
-    }).onError((error, stackTrace) {
-      snackbarKey.currentState!.showSnackBar(SnackBar(
-          content:
-              Text("Something went horribly wrong!\n$error: $stackTrace")));
-    });
-  }
-
-  void toggleSMSNotifs(bool? value) {}
-
-  void toggleEmailNotifs(bool? value) {}
 
   void setDistanceThreshold() async {
     final result = await Dialogs.showTextInputDialog(
         context, const Text("Enter new distance threshold value"),
-        content: Text("Current value: ${prefs.getDouble('threshold')}"),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+                "Higher values mean more strictness. Lower values mean less strictness."),
+            const SizedBox(
+              height: 8,
+            ),
+            Align(
+                alignment: Alignment.center,
+                child: Text("Current value: ${prefs.getDouble('threshold')}")),
+          ],
+        ),
         formatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*'))],
         keyboardType: TextInputType.number);
 
@@ -149,29 +57,64 @@ class SettingsState extends State<SettingsPage> {
     });
   }
 
+  void setScanInterval() async {
+    final result = await Dialogs.showTextInputDialog(
+        context, const Text("Enter new scan interval value"),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text("Only accepts by seconds."),
+            const SizedBox(
+              height: 8,
+            ),
+            Align(
+                alignment: Alignment.center,
+                child: Text("Current value: ${prefs.getInt('scan_interval')}")),
+          ],
+        ),
+        formatters: [FilteringTextInputFormatter.digitsOnly],
+        keyboardType: TextInputType.number);
+
+    if (result == null || result.isEmpty) return;
+
+    prefs.setInt('scan_interval', int.parse(result)).then((_) {
+      snackbarKey.currentState!.showSnackBar(const SnackBar(
+          content: Text("Successfully saved new scan interval value!")));
+    }).onError((error, stackTrace) {
+      snackbarKey.currentState!.showSnackBar(SnackBar(
+          content:
+              Text("Something went horribly wrong!\n$error: $stackTrace")));
+    });
+  }
+
   void searchIPCam() async {
-    final prober = MulticastProbe(timeout: 5);
-    snackbarKey.currentState!.showSnackBar(const SnackBar(
-      content: Row(
+    int timeout = 10;
+
+    snackbarKey.currentState!.showSnackBar(SnackBar(
+      content: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text("Searching for cameras..."),
           CircularProgressIndicator()
         ],
       ),
-      duration: Duration(seconds: 5),
+      duration: Duration(seconds: timeout),
     ));
-    await prober.probe();
+    final foundCameras =
+        await OnvifHelpers.probeForCameras(timeout).whenComplete(() {
+      snackbarKey.currentState!.hideCurrentSnackBar();
+    }).onError((error, stackTrace) {
+      return [];
+    });
 
-    snackbarKey.currentState!.hideCurrentSnackBar();
-    if (prober.onvifDevices.isEmpty) {
+    if (foundCameras.isEmpty) {
       snackbarKey.currentState!.showSnackBar(
           const SnackBar(content: Text("Could not find any cameras.")));
       return;
     }
 
     Map<String, ProbeMatch> cams = {};
-    for (var cam in prober.onvifDevices) {
+    for (var cam in foundCameras) {
       cams[cam.name] = cam;
     }
 
@@ -225,24 +168,76 @@ class SettingsState extends State<SettingsPage> {
     ));
 
     try {
-      final onvif = await Onvif.connect(
-              host: host, username: username, password: password)
-          .timeout(const Duration(seconds: 5))
-          .onError(
-              (error, stackTrace) => throw Exception("OnvifConnectionFailure"));
+      int timeout = 10;
+      final onvif = await OnvifHelpers.connectToCamera(
+              host: host,
+              username: username!,
+              password: password!,
+              timeout: timeout)
+          .whenComplete(() {
+        snackbarKey.currentState!.hideCurrentSnackBar();
+      });
 
-      snackbarKey.currentState!.hideCurrentSnackBar();
       var deviceInfo = await onvif.deviceManagement.getDeviceInformation();
       snackbarKey.currentState!.showSnackBar(
           SnackBar(content: Text("Connected to ${deviceInfo.model}!")));
-    } catch (ex) {
+    } on OnvifException catch (ex) {
       snackbarKey.currentState!.hideCurrentSnackBar();
-      snackbarKey.currentState!.showSnackBar(
-          const SnackBar(content: Text("Failed to connect to IP camera")));
+      snackbarKey.currentState!
+          .showSnackBar(SnackBar(content: Text(ex.message ?? ex.code)));
       return;
     }
   }
 
-  @override
-  Widget build(BuildContext context) => SettingsView(this);
+  void logOut() async {
+    await auth.signOut();
+
+    snackbarKey.currentState!
+        .showSnackBar(const SnackBar(content: Text("You have logged out.")));
+  }
+
+  changePassword() async {
+    final input = await Dialogs.showTextInputDialog(
+        context, const Text("Change password"),
+        content: const Text(
+            "Enter your new password. It should have at least 6 characters."),
+        keyboardType: TextInputType.visiblePassword,
+        obscureText: true);
+
+    if (input == null || input.isEmpty) {
+      snackbarKey.currentState!
+          .showSnackBar(const SnackBar(content: Text("Input a password!")));
+      return;
+    }
+
+    if (input.length < 6) {
+      snackbarKey.currentState!.showSnackBar(
+          const SnackBar(content: Text("Password is too short!")));
+      return;
+    }
+
+    await teachersRef
+        .doc(auth.currentUser!.id)
+        .update(password: input)
+        .whenComplete(() {
+      snackbarKey.currentState!
+          .showSnackBar(const SnackBar(content: Text("Password changed!")));
+    });
+  }
+
+  // manualNotify() async {
+  //   final result = await Dialogs.showConfirmDialog(
+  //       context,
+  //       const Text("Confirm notify"),
+  //       const Text(
+  //           "Are you sure you want to notify all students who have reached maximum absences?"));
+
+  //   if (result == true) {
+  //     final classes = (await schoolRef.classes.whereTeacherId(isEqualTo: auth.currentUser!.id).get()).docs.map((e) => e.data).toList();
+  //     for (var c in classes) {
+  //       c.
+  //     }
+  //     AttendanceHelpers.sendEmail(schoolClass: schoolClass, student: student);
+  //   }
+  // }
 }

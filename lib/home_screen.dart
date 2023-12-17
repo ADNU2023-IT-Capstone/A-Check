@@ -1,4 +1,3 @@
-import 'package:a_check/pages/dashboard/calendar_page.dart';
 import 'package:a_check/pages/dashboard/home_page.dart';
 import 'package:a_check/pages/dashboard/settings_page.dart';
 import 'package:a_check/pages/dashboard/students_page.dart';
@@ -20,20 +19,11 @@ class _HomeScreenState extends State<HomeScreen> {
       keepPage: true,
     );
 
-    void pageChanged(int index) {
-      setState(() {
-        bottomNavbarSelectedIndex = index;
-      });
-    }
-
     Widget buildPageView() {
       return PageView(
         controller: pageController,
         physics: const NeverScrollableScrollPhysics(),
-        children: const [HomePage(), StudentsPage(), CalendarPage(), SettingsPage()],
-        onPageChanged: (index) {
-          pageChanged(index);
-        },
+        children: const [HomePage(), StudentsPage(), SettingsPage()]
       );
     }
 
@@ -46,15 +36,13 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     List<BottomNavigationBarItem> bottomNavbarItems = const [
-      BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home",),
+      BottomNavigationBarItem(icon: Icon(Icons.class_), label: "Classes",),
       BottomNavigationBarItem(icon: Icon(Icons.group), label: "Students"),
-      BottomNavigationBarItem(
-          icon: Icon(Icons.calendar_month), label: "Calendar"),
       BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings")
     ];
 
-    return Scaffold(
-      body: buildPageView(),
+    return Scaffold( 
+      body: SafeArea(child: buildPageView()),
       bottomNavigationBar: BottomNavigationBar(
           iconSize: 30,
           showSelectedLabels: true,
@@ -62,7 +50,6 @@ class _HomeScreenState extends State<HomeScreen> {
           type: BottomNavigationBarType.fixed,
           items: bottomNavbarItems,
           currentIndex: bottomNavbarSelectedIndex,
-          selectedItemColor: const Color(0xff557A46),
           onTap: (index) {
             bottomNavbarTapped(index);
           }),

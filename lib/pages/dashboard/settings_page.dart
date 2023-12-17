@@ -1,4 +1,5 @@
 import 'package:a_check/pages/dashboard/controllers/settings_state.dart';
+import 'package:a_check/themes.dart';
 import 'package:a_check/utils/abstracts.dart';
 import 'package:flutter/material.dart';
 
@@ -14,92 +15,120 @@ class SettingsView extends WidgetView<SettingsPage, SettingsState> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xffFFF4F4),
-      body: SafeArea(
-          child: ListView(
-            padding: const EdgeInsets.all(20),
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  "Settings",
-                  style: TextStyle(color: Color(0xff606C5D), fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  title: const Text("Search for IP camera"),
-                  onTap: state.searchIPCam,
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  title: const Text("Connect to IP camera"),
-                  onTap: state.connectIPCam,
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  title: const Text("Set absent warning value"),
-                  onTap: state.setAbsentWarning,
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  title: const Text("Set absent limit value"),
-                  onTap: state.setAbsentLimit,
-                ),
-              ),
-              // TODO: sms notifs
-              Card(
-                child: CheckboxListTile(
-                  title: const Text("Automatic SMS notification"),
-                  subtitle: const Text(
-                      "If enabled, will notify the student and its guardian when absent warning and limit value is met through SMS"),
-                  contentPadding: const EdgeInsets.all(16),
-                  value: false,
-                  onChanged: state.toggleSMSNotifs,
-                ),
-              ),
-              // TODO: email notifs
-              Card(
-                child: CheckboxListTile(
-                  title: const Text("Automatic email notification"),
-                  subtitle: const Text(
-                      "If enabled, will notify the student and its guardian when absent warning and limit value is met through email"),
-                  contentPadding: const EdgeInsets.all(16),
-                  value: false,
-                  onChanged: state.toggleEmailNotifs,
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  title:
-                      const Text("Set distance threshold (for face recognition)"),
-                  onTap: state.setDistanceThreshold,
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  title: const Text("Clear all classes"),
-                  onTap: state.clearAllClasses,
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  title: const Text("Clear all students"),
-                  onTap: state.clearAllStudents,
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  title: const Text("Clear all attendance records"),
-                  onTap: state.clearAllAttendanceRecords,
-                ),
-              ),
-            ],
-          )),
+    return ListView(
+      padding: const EdgeInsets.all(20),
+      children: [
+        buildSettingsList(),
+        const SizedBox(height: 16),
+        buildUserSettingsList()
+      ],
+    );
+  }
+
+  Widget buildSettingsList() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            "Settings",
+            style: TextStyle(
+                color: Themes.main.colorScheme.primary,
+                fontSize: 24,
+                fontWeight: FontWeight.bold),
+          ),
+        ),
+        SettingsListTile(
+          title: const Text("Search for IP camera"),
+          onTap: state.searchIPCam,
+        ),
+        SettingsListTile(
+          title: const Text("Test connection to IP camera"),
+          onTap: state.connectIPCam,
+        ),
+        SettingsListTile(
+          title: const Text("Automatic email notification"),
+          subtitle: const Text(
+              "If enabled, will notify the student and its guardian when absences reach the maximum through email"),
+          trailing: Checkbox(
+            value: state.autoEmail,
+            onChanged: state.toggleEmailNotifs,
+          ),
+        ),
+        // SettingsListTile(
+        //   title: const Text("Notify students with maximum absences"),
+        //   onTap: state.manualNotify,
+        // ),
+        SettingsListTile(
+            title: const Text("Set distance threshold"),
+            subtitle: const Text("Set how strict the face recognition will be"),
+            onTap: state.setDistanceThreshold),
+        SettingsListTile(
+            title: const Text("Set IP camera scan interval"),
+            subtitle: const Text(
+                "Set how long the scan will wait before getting the next frame"),
+            onTap: state.setScanInterval),
+      ],
+    );
+  }
+
+  Widget buildUserSettingsList() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            "User Settings",
+            style: TextStyle(
+                color: Themes.main.colorScheme.primary,
+                fontSize: 24,
+                fontWeight: FontWeight.bold),
+          ),
+        ),
+        SettingsListTile(
+          title: const Text("Change password"),
+          onTap: state.changePassword,
+        ),
+        SettingsListTile(
+          title: const Text("Log out"),
+          onTap: state.logOut,
+        ),
+      ],
+    );
+  }
+}
+
+class SettingsListTile extends StatelessWidget {
+  const SettingsListTile({
+    super.key,
+    this.onTap,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.trailing,
+  });
+
+  final Widget? title, subtitle, leading, trailing;
+  final Function()? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final tileColor = Themes.main.colorScheme.primaryContainer;
+    final textColor = Themes.main.colorScheme.onPrimaryContainer;
+
+    return Card(
+      child: ListTile(
+        title: title,
+        subtitle: subtitle,
+        leading: leading,
+        trailing: trailing,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        onTap: onTap,
+        tileColor: tileColor,
+        textColor: textColor,
+      ),
     );
   }
 }

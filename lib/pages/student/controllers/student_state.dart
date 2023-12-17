@@ -1,18 +1,31 @@
 import 'package:a_check/globals.dart';
-import 'package:a_check/models/student.dart';
-import 'package:a_check/pages/face_recognition_page.dart';
-import 'package:a_check/pages/forms/student_form_page.dart';
+import 'package:a_check/models/school.dart';
+import 'package:a_check/pages/take_attendance/face_recognition_page.dart';
+import 'package:a_check/pages/forms/guardian_form_page.dart';
 import 'package:a_check/pages/student/student_page.dart';
-import 'package:a_check/utils/localdb.dart';
 import 'package:a_check/utils/dialogs.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class StudentState extends State<StudentPage> {
   late Student student;
-  late StudentValueNotifier studentValueNotifier;
 
-  bool _delete = false;
+  @override
+  Widget build(BuildContext context) => StudentView(this);
+
+  @override
+  void initState() {
+    super.initState();
+
+    _initStudent();
+  }
+
+  void _initStudent() {
+    studentsRef.doc(widget.studentId).get().then((value) {
+      setState(() => student = value.data!);
+    });
+  }
 
   void showSuccessSnackBar() {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -25,39 +38,20 @@ class StudentState extends State<StudentPage> {
             "Something went wrong with saving ${student.firstName}'s face...\n$error")));
   }
 
-  void editStudent() {
+  void guardianForm() {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => StudentFormPage(student: student),
+          builder: (context) => GuardianFormPage(
+            student: student,
+          ),
         ));
-  }
 
-  void deleteStudent() async {
-    final result = await Dialogs.showConfirmDialog(
-        context,
-        const Text("Delete Student"),
-        const Text("This will delete the student and its data. Continue?"));
-
-    if (result == null || !result) {
-      return;
-    }
-
-    if (widget.studentClass != null) {
-      widget.studentClass!.studentIds.remove(student.id);
-      widget.studentClass!.save();
-    }
-
-    if (context.mounted) {
-      _delete = true;
-      student.delete().then((_) {
-        Navigator.pop(context);
-      });
-    }
+    _initStudent();
   }
 
   void registerFace() async {
-    if (student.hasRegisteredFace()) {
+    if (student.faceArray.isNotEmpty) {
       final result = await Dialogs.showConfirmDialog(
           context,
           const Text("Warning"),
@@ -80,10 +74,12 @@ class StudentState extends State<StudentPage> {
     } else if (result['result'] == false) {
       showFailedSnackBar(result['error']);
     }
+
+    _initStudent();
   }
 
   void removeFace() async {
-    if (student.hasRegisteredFace()) {
+    if (student.faceArray.isNotEmpty) {
       final result = await Dialogs.showConfirmDialog(
           context,
           const Text("Warning"),
@@ -91,58 +87,50 @@ class StudentState extends State<StudentPage> {
       if (result == null || !result) {
         return;
       } else {
-        student.deleteFace();
-        snackbarKey.currentState!.showSnackBar(SnackBar(
-            content: Text("Deleted ${student.firstName}'s face data.")));
+        studentsRef.doc(student.id).update(faceArray: List.empty()).then((_) {
+          snackbarKey.currentState!.showSnackBar(SnackBar(
+              content: Text("Deleted ${student.firstName}'s face data.")));
+        });
+        _initStudent();
       }
     } else {
       return;
     }
   }
 
-  void removeFromClass() async {
-    final result = await Dialogs.showConfirmDialog(
-        context,
-        const Text("Warning"),
-        Text(
-            "${student.firstName} will be removed to class ${widget.studentClass!.code}. Continue?"));
-    if (result == null || !result) {
+  copyToClipboard(value) {
+    Clipboard.setData(ClipboardData(text: value)).then((_) {
+      snackbarKey.currentState!
+          .showSnackBar(SnackBar(content: Text("Copied $value!")));
+    });
+  }
+
+  showDatesWhereStatus({required AttendanceStatus status}) async {
+    final records = (await attendancesRef
+            .whereStudentId(isEqualTo: widget.studentId)
+            .whereStatus(isEqualTo: status)
+            .orderByDateTime()
+            .get())
+        .docs
+        .map((e) => e.data)
+        .toList();
+    
+    if (records.isEmpty) {
+      snackbarKey.currentState!.showSnackBar(const SnackBar(content: Text("No records!")));
       return;
     }
 
-    widget.studentClass!.studentIds.remove(student.id);
-    widget.studentClass!.save();
-
-    if (context.mounted) Navigator.pop(context);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    student = HiveBoxes.studentsBox().get(widget.studentKey);
-    studentValueNotifier = StudentValueNotifier(student);
-
-    HiveBoxes.studentsBox()
-        .listenable(keys: [student.key]).addListener(onStudentValueChanged);
-  }
-
-  void onStudentValueChanged() {
-    if (_delete) return;
     if (mounted) {
-      setState(() {
-        student = HiveBoxes.studentsBox().get(widget.studentKey);
-        studentValueNotifier.value = student;
-      });
-    }
+      await showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: Wrap(
+            children: records.map((e) => ListTile(title: Text(DateFormat.yMMMMd().format(e.dateTime)),)).toList(),
+          ),
+        );
+      },
+    );
+    }  
   }
-
-  @override
-  void dispose() {
-    studentValueNotifier.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) => StudentView(this);
 }

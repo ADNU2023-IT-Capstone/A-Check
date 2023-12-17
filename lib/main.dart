@@ -1,28 +1,63 @@
+import 'package:a_check/auth.dart';
+import 'package:a_check/firebase_options.dart';
 import 'package:a_check/globals.dart';
-import 'package:a_check/splash.dart';
-import 'package:a_check/utils/localdb.dart';
-import 'package:camera/camera.dart';
+import 'package:a_check/models/school.dart';
+import 'package:a_check/themes.dart';
+// import 'package:camera/camera.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:media_kit/media_kit.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-late List<CameraDescription> cameras;
+// late List<CameraDescription> cameras;
 late PackageInfo packageInfo;
 late SharedPreferences prefs;
 
+late final Auth auth;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  MediaKit.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  FirebaseFirestore.instance.settings = const Settings(
+      persistenceEnabled: true, cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED);
 
-  await Hive.initFlutter();
-  await HiveBoxes.initialize();
-  cameras = await availableCameras();
+  // if (kDebugMode) {
+  //   try {
+  //     // !!! CHANGE IP AND PORT TO WHERE THE EMULATOR IS HOSTED !!!
+  //     const ip = '192.168.137.1';
+
+  //     print("Using local Firebase emulator");
+  //     await FirebaseStorage.instance.useStorageEmulator(ip, 9199);
+  //     FirebaseFirestore.instance.useFirestoreEmulator(ip, 8080);
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
+
+  // cameras = await availableCameras();
   packageInfo = await PackageInfo.fromPlatform();
   prefs = await SharedPreferences.getInstance();
   await setupDefaultPrefs();
+
+  User? lastUser;
+  if (prefs.containsKey('user')) {
+    final values = prefs.getStringList('user')!;
+    final teacherId = values.first;
+    final schoolId = values[1];
+
+    final school = (await schoolsRef.doc(schoolId).get()).data;
+    if (school != null) {
+      final teacher = (await school.ref.teachers.doc(teacherId).get()).data;
+      if (teacher != null) {
+        lastUser = User(id: teacherId, schoolId: schoolId, name: teacher.fullName);
+      }
+    }
+  }
+  auth = Auth(user: lastUser);
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
@@ -32,8 +67,10 @@ void main() async {
 
 Future<void> setupDefaultPrefs() async {
   if (!prefs.containsKey('threshold')) await prefs.setDouble('threshold', 1.5);
-  if (!prefs.containsKey('absent_limit')) await prefs.setInt('absent_limit', 3);
   if (!prefs.containsKey('absent_warn')) await prefs.setInt('absent_warn', 2);
+  if (!prefs.containsKey('scan_interval')) await prefs.setInt('scan_interval', 2);
+  if (!prefs.containsKey('late_value')) await prefs.setInt('late_value', 15);
+  if (!prefs.containsKey('auto_email')) await prefs.setBool('auto_email', false);
 }
 
 class MainApp extends StatelessWidget {
@@ -45,8 +82,9 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       // theme: ThemeData(useMaterial3: true),
       scaffoldMessengerKey: snackbarKey,
+      theme: Themes.main,
       home: const Scaffold(
-        body: SplashWidget(),
+        body: AuthGate(),
       ),
     );
   }

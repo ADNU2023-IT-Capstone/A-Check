@@ -1,6 +1,5 @@
 import 'package:a_check/home_screen.dart';
 import 'package:a_check/main.dart';
-import 'package:a_check/utils/localdb.dart';
 import 'package:a_check/utils/dialogs.dart';
 import 'package:flutter/material.dart';
 
@@ -39,7 +38,7 @@ class SplashWidgetState extends State<SplashWidget> {
                 height: 100,
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Color(0xffAEC3AE),Color(0xffFFF4F4)],
+                    colors: [Color(0xffAEC3AE), Color(0xffFFF4F4)],
                     stops: [0, 1],
                     begin: AlignmentDirectional(0, -1),
                     end: AlignmentDirectional(0, 1),
@@ -148,9 +147,9 @@ class SplashWidgetState extends State<SplashWidget> {
                               final result = await Dialogs.showConfirmDialog(
                                   context,
                                   const Text("ya goofed up huh"),
-                                  const Text("confirm to delete all data"));
+                                  const Text(
+                                      "confirm to delete all data, does not delete database data"));
                               if (result != null && result) {
-                                HiveBoxes.clearAllData();
                                 prefs.clear();
                                 setupDefaultPrefs();
                               } else {

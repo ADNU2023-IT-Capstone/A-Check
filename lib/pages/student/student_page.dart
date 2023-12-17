@@ -1,15 +1,16 @@
-import 'package:a_check/models/class.dart';
-import 'package:a_check/models/student.dart';
+import 'package:a_check/models/school.dart';
 import 'package:a_check/pages/student/controllers/student_state.dart';
+import 'package:a_check/themes.dart';
 import 'package:a_check/utils/abstracts.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class StudentPage extends StatefulWidget {
-  const StudentPage({Key? key, required this.studentKey, this.studentClass})
+  const StudentPage({Key? key, required this.studentId, this.studentClass})
       : super(key: key);
 
-  final String studentKey;
-  final Class? studentClass;
+  final String studentId;
+  final SchoolClass? studentClass;
 
   @override
   State<StudentPage> createState() => StudentState();
@@ -18,64 +19,94 @@ class StudentPage extends StatefulWidget {
 class StudentView extends WidgetView<StudentPage, StudentState> {
   const StudentView(state, {Key? key}) : super(state, key: key);
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(appBar: buildAppBar(), body: buildBody());
+  }
+
+  AppBar buildAppBar() {
+    return AppBar(
+      elevation: 0,
+      actions: [
+        PopupMenuButton(
+          itemBuilder: (context) => [
+            if (state.student.guardian == null)
+              PopupMenuItem(
+                onTap: state.guardianForm,
+                child: const Text("Add guardian"),
+              )
+            else
+              PopupMenuItem(
+                onTap: state.guardianForm,
+                child: const Text("Edit guardian"),
+              )
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget buildBody() {
+    return SafeArea(
+        child: StreamBuilder(
+      stream: studentsRef.doc(widget.studentId).snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.active) {
+          if (snapshot.hasData) {
+            final student = snapshot.data!.data!;
+
+            return SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  buildHeader(student),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 24),
+                      child: Column(
+                        children: [
+                          buildStudentInfo(student),
+                          const SizedBox(height: 24),
+                          buildGuardianInfo(student),
+                          const SizedBox(height: 24),
+                          if (widget.studentClass != null)
+                            buildClassInfo(student),
+                        ],
+                      )),
+                ],
+              ),
+            );
+          } else {
+            return const Center(
+              child: Text("Failed to get student information"),
+            );
+          }
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    ));
+  }
+
   Widget buildHeader(Student student) {
     return Container(
       margin: const EdgeInsets.all(0),
       padding: const EdgeInsets.all(0),
-      decoration: const BoxDecoration(
-        color: Color(0xffD7E5CA),
-        shape: BoxShape.rectangle,
-        borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(35.0),
-            bottomRight: Radius.circular(35.0)),
-      ),
+      decoration: BoxDecoration(
+          color: Themes.main.colorScheme.primary,
+          boxShadow: const [BoxShadow(spreadRadius: 2, blurRadius: 5)]),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          GestureDetector(
-            onTap: state.registerFace,
-            onLongPress: state.removeFace,
-            child: Stack(
-              clipBehavior: Clip.antiAlias,
-              alignment: Alignment.bottomRight,
-              fit: StackFit.loose,
-              children: [
-                Container(
-                  height: 112,
-                  width: 112,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        colors: <Color>[Color(0xffD7E5CA), Color(0xffF9F3CC)]),
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.all(Radius.circular(35.0)),
-                    border: Border.fromBorderSide(BorderSide()),
-                  ),
-                  child: state.student.facePhotoBytes != null
-                      ? Image.memory(state.student.facePhotoBytes!)
-                      : const Icon(Icons.person_add_alt),
-                ),
-                Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                        color: Colors.green[300],
-                        shape: BoxShape.circle,
-                        boxShadow: const [
-                          BoxShadow(offset: Offset(0, 2), blurRadius: 1)
-                        ]),
-                    child: const Icon(
-                      Icons.camera_alt,
-                      size: 20,
-                    )),
-              ],
-            ),
-          ),
+          buildStudentPhoto(student),
           Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(30, 20, 20, 50),
+            padding: const EdgeInsetsDirectional.symmetric(
+                horizontal: 30, vertical: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -86,32 +117,29 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
-                        child: Text(
-                          student.toString(),
-                          textAlign: TextAlign.center,
-                          maxLines: 2,
-                          overflow: TextOverflow.clip,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontStyle: FontStyle.normal,
-                            fontSize: 18,
-                            color: Color(0xff8EACCD),
-                          ),
+                      Text(
+                        student.fullName.toString(),
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.clip,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontStyle: FontStyle.normal,
+                          fontSize: 18,
+                          color: Themes.main.colorScheme.onPrimary,
                         ),
                       ),
                       Text(
                         student.id,
                         textAlign: TextAlign.start,
                         overflow: TextOverflow.clip,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.w300,
                           fontStyle: FontStyle.normal,
                           fontSize: 14,
-                          color: Color(0xff8EACCD),
+                          color: Themes.main.colorScheme.onPrimary,
                         ),
                       ),
                     ],
@@ -125,160 +153,168 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
     );
   }
 
-  Widget buildStudentInfo(Student student) {
-    return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(10, 30, 10, 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // Container(
-          //   margin: const EdgeInsets.all(0),
-          //   padding: const EdgeInsets.all(0),
-          //   width: 400,
-          //   height: 35,
-          //   decoration: const BoxDecoration(
-          //     color: Color(0x00ffffff),
-          //     shape: BoxShape.rectangle,
-          //     borderRadius: BorderRadius.zero,
-          //   ),
-          //   child: Card(
-          //     margin: const EdgeInsets.all(2.0),
-          //     color: const Color(0xffffffff),
-          //     shadowColor: const Color(0xffebebeb),
-          //     elevation: 2,
-          //     shape: RoundedRectangleBorder(
-          //       borderRadius: BorderRadius.circular(20.0),
-          //     ),
-          //     child: student.hasRegisteredFace()
-          //         ? GestureDetector(
-          //             onLongPress: state.registerFace,
-          //             child: Checkbox(
-          //                 value: student.hasRegisteredFace(),
-          //                 onChanged: (value) {/* do nothing */}),
-          //           )
-          //         : Padding(
-          //             padding: const EdgeInsets.only(left: 8),
-          //             child: MaterialButton(
-          //               onPressed: state.registerFace,
-          //               child: const Icon(Icons.camera_alt),
-          //             ),
-          //           ),
-          //   ),
-          // ),
-          const Text(
-            "Student Information",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          TextField(
-            enabled: false,
-            decoration: const InputDecoration(
-                labelText: "Contact Number", isDense: true),
-            controller: TextEditingController(text: student.phone),
-          ),
-          TextField(
-            enabled: false,
-            decoration:
-                const InputDecoration(labelText: "E-mail", isDense: true),
-            controller: TextEditingController(text: student.email),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildGuardianInfo(Student student) {
-    return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(10, 0, 10, 30),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Text(
-            "Guardian Information",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          Text(
-            student.guardian.toString(),
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          TextField(
-            enabled: false,
-            decoration: const InputDecoration(
-                labelText: "Contact Number", isDense: true),
-            controller: TextEditingController(text: student.guardian?.phone),
-          ),
-          TextField(
-            enabled: false,
-            decoration:
-                const InputDecoration(labelText: "E-mail", isDense: true),
-            controller: TextEditingController(text: student.guardian?.email),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget buildClassInfo(Student student) {
-    final paleMap = student.getPALEValues(widget.studentClass!.key);
-    return Column(
+  Stack buildStudentPhoto(Student student) {
+    return Stack(
+      alignment: Alignment.bottomRight,
       children: [
-        Text("Present: ${paleMap['present']}"),
-        Text("Absent: ${paleMap['absent']}"),
-        Text("Late: ${paleMap['late']}"),
-        Text("Excused: ${paleMap['excused']}"),
+        Container(
+          width: 192,
+          height: 192,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(100),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: FutureBuilder(
+              future: student.getPhotoUrl(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  final url = snapshot.data!;
+                  if (url.isNotEmpty) {
+                    return CachedNetworkImage(
+                      imageUrl: url,
+                      fit: BoxFit.cover,
+                      progressIndicatorBuilder: (context, url, progress) =>
+                          CircularProgressIndicator(value: progress.progress),
+                      errorWidget: (context, url, error) => const Column(
+                        children: [
+                          Icon(Icons.error_outline),
+                          Text("Failed to load image")
+                        ],
+                      ),
+                    );
+                  } else {
+                    return CircleAvatar(
+                      child: Text(
+                        student.initials,
+                        style: const TextStyle(fontSize: 72),
+                      ),
+                    );
+                  }
+                } else {
+                  return CircleAvatar(
+                    child: Text(
+                      student.initials,
+                      style: const TextStyle(fontSize: 72),
+                    ),
+                  );
+                }
+              }),
+        ),
+        Material(
+          borderRadius: BorderRadius.circular(100),
+          elevation: 2,
+          child: InkWell(
+            onTap: state.registerFace,
+            onLongPress: state.removeFace,
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Icon(
+                Icons.camera_alt,
+                size: 32,
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: state.studentValueNotifier,
-      builder: (context, student, _) => Scaffold(
-        backgroundColor: const Color(0xffFFF4F4),
-        appBar: AppBar(
-          backgroundColor: const Color(0xffD7E5CA),
-          foregroundColor: Colors.white,
-          elevation: 0,
-          actions: [
-            PopupMenuButton(
-              itemBuilder: (context) => [
-                if (widget.studentClass != null)
-                  PopupMenuItem(
-                      onTap: state.removeFromClass,
-                      child: const Text("Remove from class")),
-                PopupMenuItem(
-                  onTap: state.editStudent,
-                  child: const Text("Edit student"),
-                ),
-                PopupMenuItem(
-                  onTap: state.deleteStudent,
-                  child: const Text("Delete student"),
-                )
-              ],
-            )
-          ],
+  Widget buildStudentInfo(Student student) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Student Information",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        body: SafeArea(
-            child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            buildHeader(student),
-            Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                child: Column(
-                  children: [
-                    buildStudentInfo(student),
-                    const SizedBox(height: 24),
-                    student.guardian != null
-                        ? buildGuardianInfo(student)
-                        : const Text("No guardian!"),
-                    if (widget.studentClass != null) buildClassInfo(student),
-                  ],
-                )),
-          ],
-        )),
-      ),
+        ListTile(
+          title: Text(student.email!),
+          leading: const Icon(Icons.email),
+          onTap: () => state.copyToClipboard(student.email!),
+        ),
+        ListTile(
+          title: Text(student.phoneNumber!),
+          leading: const Icon(Icons.phone),
+          onTap: () => state.copyToClipboard(student.phoneNumber!),
+        ),
+      ],
+    );
+  }
+
+  Widget buildGuardianInfo(Student student) {
+    if (student.guardian == null) {
+      return const Center(
+        child: Text("No guardian!"),
+      );
+    }
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Guardian Information",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        ListTile(
+          title: Text(student.guardian!.email ?? "None"),
+          leading: const Icon(Icons.email),
+          onTap: () => state.copyToClipboard(student.guardian!.email),
+        ),
+        ListTile(
+          title: Text(student.guardian!.phoneNumber ?? "None"),
+          leading: const Icon(Icons.phone),
+          onTap: () => state.copyToClipboard(student.guardian!.phoneNumber),
+        ),
+      ],
+    );
+  }
+
+  Widget buildClassInfo(Student student) {
+    final paleMap = student.getPALEValues(widget.studentClass!.id);
+    return FutureBuilder(
+      future: paleMap,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Class Information",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              ListTile(
+                title: const Text("Present"),
+                leading: const Icon(Icons.event_available),
+                trailing: Text(snapshot.data!['present'].toString()),
+                onTap: () => state.showDatesWhereStatus(status: AttendanceStatus.Present),
+              ),
+              ListTile(
+                title: const Text("Absent"),
+                leading: const Icon(Icons.event_busy),
+                trailing: Text(snapshot.data!['absent'].toString()),
+                onTap: () => state.showDatesWhereStatus(status: AttendanceStatus.Absent),
+              ),
+              ListTile(
+                title: const Text("Late"),
+                leading: const Icon(Icons.timer),
+                trailing: Text(snapshot.data!['late'].toString()),
+                onTap: () => state.showDatesWhereStatus(status: AttendanceStatus.Late),
+              ),
+              ListTile(
+                title: const Text("Excused"),
+                leading: const Icon(Icons.assistant_photo),
+                trailing: Text(snapshot.data!['excused'].toString()),
+                onTap: () => state.showDatesWhereStatus(status: AttendanceStatus.Excused),
+              ),
+            ],
+          );
+        } else {
+          return const CircularProgressIndicator();
+        }
+      },
     );
   }
 }

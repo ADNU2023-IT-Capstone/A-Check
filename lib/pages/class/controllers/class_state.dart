@@ -1,118 +1,188 @@
+import 'dart:async';
+
 import 'package:a_check/globals.dart';
-import 'package:a_check/models/class.dart';
-import 'package:a_check/pages/face_recognition_page.dart';
-import 'package:a_check/pages/forms/class_form_page.dart';
+import 'package:a_check/models/school.dart';
+import 'package:a_check/pages/auto_attendance/auto_attendance_page.dart';
+import 'package:a_check/pages/take_attendance/face_recognition_page.dart';
 import 'package:a_check/pages/class/class_page.dart';
-import 'package:a_check/pages/forms/student_form_page.dart';
-import 'package:a_check/pages/forms/students_form_page.dart';
-import 'package:a_check/utils/localdb.dart';
-import 'package:a_check/utils/dialogs.dart';
+import 'package:a_check/utils/csv_helpers.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/intl.dart';
 
 class ClassState extends State<ClassPage> {
-  late Class mClass;
-  late ClassValueNotifier classValueNotifier;
-
-  bool _delete = false;
-
-  void backButtonPressed() {
-    Navigator.pop(context);
-  }
-
-  void takeAttendance() {
-    if (mClass.studentIds.isEmpty) {
-      snackbarKey.currentState!
-          .showSnackBar(const SnackBar(content: Text("You have no students!")));
-      return;
-    }
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => FaceRecognitionPage(mClass: mClass)));
-
-    onClassValueChanged();
-  }
-
-  void addNewStudent() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => StudentFormPage(
-                  currentClass: mClass,
-                )));
-  }
-
-  void addExistingStudent() async {
-    final List<String>? result = await Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const StudentsFormPage()));
-
-    if (result == null || result.isEmpty) return;
-
-    await mClass.addStudents(result);
-  }
-
-  void editClass() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ClassFormPage(
-            mClass: mClass,
-          ),
-        ));
-  }
-
-  void deleteClass() async {
-    final result = await Dialogs.showConfirmDialog(
-        context,
-        const Text("Delete Class"),
-        const Text(
-            "This will delete the class and its related data. Continue?"));
-    if (result == null || !result) {
-      return;
-    }
-
-    if (context.mounted) {
-      _delete = true;
-      mClass.getAttendanceRecords().forEach((_, value) async {
-        for (var record in value) {
-          await record.delete();
-        }
-      });
-
-      mClass.delete().then((_) {
-        Navigator.pop(context);
-      });
-    }
-  }
+  late SchoolClass schoolClass;
+  late List<AttendanceRecord> classRecords;
+  late StreamSubscription classesStream, attendancesStream;
 
   @override
   void initState() {
     super.initState();
 
-    mClass = HiveBoxes.classesBox().get(widget.classKey);
-    classValueNotifier = ClassValueNotifier(mClass);
+    schoolClass = widget.schoolClass;
 
-    HiveBoxes.classesBox()
-        .listenable(keys: [mClass.key]).addListener(onClassValueChanged);
-  }
+    classesStream = classesRef.doc(schoolClass.id).snapshots().listen((event) {
+      if (context.mounted) {
+        setState(() {
+          schoolClass = event.data!;
+        });
+      }
+    });
 
-  void onClassValueChanged() {
-    if (_delete) return;
-    if (mounted) {
-      setState(() {
-        mClass = HiveBoxes.classesBox().get(widget.classKey);
-        classValueNotifier.value = mClass;
-      });
-    }
+    attendancesStream = attendancesRef
+        .whereClassId(isEqualTo: widget.schoolClass.id)
+        .snapshots()
+        .listen((event) {
+      if (context.mounted) {
+        setState(() => classRecords = event.docs.map((e) => e.data).toList()
+          ..sort(
+            (a, b) => a.dateTime.compareTo(b.dateTime),
+          ));
+      }
+    });
   }
 
   @override
   void dispose() {
-    classValueNotifier.dispose();
     super.dispose();
+
+    classesStream.cancel();
+    attendancesStream.cancel();
   }
 
   @override
   Widget build(BuildContext context) => ClassView(this);
+
+  void backButtonPressed() {
+    Navigator.pop(context);
+  }
+
+  void takeAttendance() async {
+    if (schoolClass.studentIds.isEmpty) {
+      snackbarKey.currentState!
+          .showSnackBar(const SnackBar(content: Text("You have no students!")));
+      return;
+    }
+
+    final students = await schoolClass.getStudents();
+    bool hasRegisteredFaces = false;
+    for (var student in students) {
+      if (student.faceArray.isNotEmpty) {
+        hasRegisteredFaces = true;
+        break;
+      }
+    }
+
+    if (hasRegisteredFaces) {
+      if (context.mounted) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    FaceRecognitionPage(schoolClass: schoolClass)));
+      }
+    } else {
+      snackbarKey.currentState!.showSnackBar(const SnackBar(
+          content: Text(
+              "You do not have at least a student with a registered face!")));
+    }
+  }
+
+  void exportDialog() async {
+    final DateTimeRange? result = await showDateRangePicker(
+        context: context,
+        firstDate: classRecords.first.dateTime,
+        lastDate: classRecords.last.dateTime);
+    if (result == null) return;
+
+    final Map<DateTime, List<AttendanceRecord>> map = {};
+    for (var s in classRecords) {
+      if (s.dateTime.isAfter(result.start) && s.dateTime.isBefore(result.end)) {
+        final date =
+            DateTime(s.dateTime.year, s.dateTime.month, s.dateTime.day);
+
+        if (!map.containsKey(date)) {
+          map[date] = [];
+        }
+
+        map[date]!.add(s);
+      }
+    }
+    await exportRecords(map);
+  }
+
+  Future<void> exportRecords(
+      Map<DateTime, List<AttendanceRecord>> records) async {
+    final now = DateTime.now();
+    final records = Map.fromEntries(
+        (await schoolClass.getAttendanceRecords()).entries.toList()
+          ..sort(
+            (a, b) => a.key.compareTo(b.key),
+          ));
+    Map<String, List<AttendanceRecord>> map = {};
+
+    for (var entry in records.entries) {
+      for (var record in entry.value) {
+        final id = record.studentId;
+        if (!map.containsKey(id)) {
+          map[id] = [];
+        }
+
+        try {
+          // check if this record exists
+          // will throw StateError if it doesnt exist
+          // otherwise, do nothing
+          map[id]?.firstWhere((element) =>
+              DateUtils.isSameDay(element.dateTime, record.dateTime));
+        } on StateError {
+          // add new record
+          map[id]!.add(record);
+        }
+      }
+    }
+
+    final header = [
+      "ID",
+      "Last Name",
+      "First Name",
+      "Middle Name",
+      for (var date in records.keys) DateFormat.yMd().format(date).toString()
+    ];
+    final List<List<dynamic>> data = [];
+
+    for (var entry in map.entries) {
+      final student = (await studentsRef.doc(entry.key).get()).data!;
+      final row = <dynamic>[
+        student.id,
+        student.lastName,
+        student.firstName,
+        student.lastName
+      ];
+
+      for (var record in entry.value) {
+        row.add(record.status.toString());
+      }
+
+      data.add(row);
+    }
+
+    await CsvHelpers.exportToCsvFile(
+            fileName: "${schoolClass.id}-${now.toString()}",
+            header: header,
+            data: data)
+        .then((filePath) {
+      snackbarKey.currentState!.showSnackBar(SnackBar(
+          content: Text(
+              "Successfully exported class attendance records as CSV file to $filePath!")));
+    });
+  }
+
+  void autoAttendance() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AutoAttendancePage(
+            schoolClass: schoolClass,
+          ),
+        ));
+  }
 }
