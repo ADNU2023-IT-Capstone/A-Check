@@ -116,7 +116,7 @@ class StudentState extends State<StudentPage> {
         .toList();
     
     if (records.isEmpty) {
-      snackbarKey.currentState!.showSnackBar(const SnackBar(content: Text("No records!")));
+      snackbarKey.currentState!.showSnackBar(const SnackBar(content: Text("No attendance records found.")));
       return;
     }
 
@@ -125,8 +125,46 @@ class StudentState extends State<StudentPage> {
       context: context,
       builder: (context) {
         return Dialog(
-          child: Wrap(
-            children: records.map((e) => ListTile(title: Text(DateFormat.yMMMMd().format(e.dateTime)),)).toList(),
+          // child: Wrap(
+          //   children: records.map((e) => ListTile(title: Text(DateFormat.yMMMMd().format(e.dateTime)),)).toList(),
+          // ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
+          child: SizedBox(
+            height: 300,
+            width: 150,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 20.0, top: 10),
+                          child: Text("Attendance List",
+                          style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                         Padding(
+                          padding: const EdgeInsets.only(right: 2.0, top: 6),
+                          child: IconButton(onPressed: () {
+                            Navigator.of(context).pop();
+                          }, icon: const Icon(Icons.close_rounded)),
+                        ),
+                      ]
+                  ),
+                  const Divider(thickness: 1,),
+                  Wrap(
+                      children: records.map((e) => ListTile(
+                        title: Text(DateFormat.yMMMMd().format(e.dateTime),
+                                  style: const TextStyle(fontWeight: FontWeight.w400)
+                      ),)).toList(),
+                  ),
+                ],
+              ),
+            ),
           ),
         );
       },
