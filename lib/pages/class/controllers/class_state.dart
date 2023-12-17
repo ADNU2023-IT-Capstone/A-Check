@@ -56,35 +56,35 @@ class ClassState extends State<ClassPage> {
     Navigator.pop(context);
   }
 
-  void takeAttendance() async {
+  void takeAttendance() {
     if (schoolClass.studentIds.isEmpty) {
       snackbarKey.currentState!
           .showSnackBar(const SnackBar(content: Text("You have no students!")));
       return;
     }
 
-    final students = await schoolClass.getStudents();
-    bool hasRegisteredFaces = false;
-    for (var student in students) {
-      if (student.faceArray.isNotEmpty) {
-        hasRegisteredFaces = true;
-        break;
-      }
-    }
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                FaceRecognitionPage(schoolClass: schoolClass)));
 
-    if (hasRegisteredFaces) {
-      if (context.mounted) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    FaceRecognitionPage(schoolClass: schoolClass)));
-      }
-    } else {
-      snackbarKey.currentState!.showSnackBar(const SnackBar(
-          content: Text(
-              "You do not have at least a student with a registered face!")));
-    }
+    // final students = await schoolClass.getStudents();
+    // bool hasRegisteredFaces = false;
+    // for (var student in students) {
+    //   if (student.faceArray.isNotEmpty) {
+    //     hasRegisteredFaces = true;
+    //     break;
+    //   }
+    // }
+
+    // if (hasRegisteredFaces) {
+    //   if (context.mounted) {}
+    // } else {
+    //   snackbarKey.currentState!.showSnackBar(const SnackBar(
+    //       content: Text(
+    //           "You do not have at least a student with a registered face!")));
+    // }
   }
 
   void exportDialog() async {

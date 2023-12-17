@@ -142,10 +142,27 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
         if (student.faceArray.isNotEmpty) student
     ];
 
+    if (_registeredStudents.isEmpty) {
+      if (mounted) {
+        snackbarKey.currentState!.showSnackBar(const SnackBar(
+            content: Text(
+                "This class has no registered faces! Directing to manual attendance...")));
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DetectedFacesPage(
+                  schoolClass: widget.schoolClass!,
+                  recognizedStudents: recognizedStudents,
+                  classStudents: _classStudents),
+            ));
+      }
+    }
+
     List<List<num>> embeddings = [
       for (Student student in _registeredStudents) student.faceArray.cast<num>()
     ];
     _faceEmbeddings = KDTree.fromIterable(embeddings);
+    ;
   }
 
   Future<bool> _processInputImage(InputImage inputImage) async {

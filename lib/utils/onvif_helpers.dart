@@ -19,10 +19,10 @@ class OnvifException implements Exception {
 class OnvifHelpers {
   static Future<String> getCameraStreamUri() async {
     final host = prefs.getString('onvif_cam_addr');
-    final username = prefs.getString('onvif_cam_username')!;
-    final password = prefs.getString('onvif_cam_password')!;
+    final username = prefs.getString('onvif_cam_username');
+    final password = prefs.getString('onvif_cam_password');
 
-    if (host == null) {
+    if (host == null || username == null || password == null) {
       throw OnvifException("CamNotSet", "IP Camera not set");
     }
 

@@ -184,17 +184,23 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
                     );
                   } else {
                     return CircleAvatar(
-                      child: Text(
-                        student.initials,
-                        style: const TextStyle(fontSize: 72),
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          student.initials,
+                          style: const TextStyle(fontSize: 80),
+                        ),
                       ),
                     );
                   }
                 } else {
                   return CircleAvatar(
-                    child: Text(
-                      student.initials,
-                      style: const TextStyle(fontSize: 72),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        student.initials,
+                        style: const TextStyle(fontSize: 80),
+                      ),
                     ),
                   );
                 }
@@ -289,25 +295,29 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
                 title: const Text("Present"),
                 leading: const Icon(Icons.event_available),
                 trailing: Text(snapshot.data!['present'].toString()),
-                onTap: () => state.showDatesWhereStatus(status: AttendanceStatus.Present),
+                onTap: () => state.showDatesWhereStatus(
+                    status: AttendanceStatus.Present),
               ),
               ListTile(
                 title: const Text("Absent"),
                 leading: const Icon(Icons.event_busy),
                 trailing: Text(snapshot.data!['absent'].toString()),
-                onTap: () => state.showDatesWhereStatus(status: AttendanceStatus.Absent),
+                onTap: () =>
+                    state.showDatesWhereStatus(status: AttendanceStatus.Absent),
               ),
               ListTile(
                 title: const Text("Late"),
                 leading: const Icon(Icons.timer),
                 trailing: Text(snapshot.data!['late'].toString()),
-                onTap: () => state.showDatesWhereStatus(status: AttendanceStatus.Late),
+                onTap: () =>
+                    state.showDatesWhereStatus(status: AttendanceStatus.Late),
               ),
               ListTile(
                 title: const Text("Excused"),
                 leading: const Icon(Icons.assistant_photo),
                 trailing: Text(snapshot.data!['excused'].toString()),
-                onTap: () => state.showDatesWhereStatus(status: AttendanceStatus.Excused),
+                onTap: () => state.showDatesWhereStatus(
+                    status: AttendanceStatus.Excused),
               ),
             ],
           );
