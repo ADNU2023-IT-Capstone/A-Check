@@ -11,8 +11,8 @@ This is a Flutter project specifically made for Android. It is an offline attend
 
 ## Dependencies
 
-[**Hive**](https://github.com/isar/hive)  
-Hive is used as the app's database management. It is a No-SQL key-value database.
+[**Firebase Firestore**](https://firebase.google.com/docs/firestore)  
+Firebase Firestore is used as the app's database management. It is a No-SQL key-value database.
 
 [**Google ML Kit for Flutter**](https://github.com/flutter-ml/google_ml_kit_flutter)  
 Google ML Kit is used for face detection.
