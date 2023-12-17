@@ -30,25 +30,28 @@ class DetectedFacesView
     return Scaffold(
       appBar: buildAppBar(),
       body: buildBody(),
-      floatingActionButton: buildFab(),
     );
   }
 
   AppBar buildAppBar() {
     return AppBar(
+      actions: [IconButton(icon: const Icon(Icons.save), tooltip: "Confirm detected students", onPressed: state.finalize,)],
       title: const Text(
         "Detected Faces",
       ),
     );
   }
 
-  FloatingActionButton buildFab() {
-    return FloatingActionButton.extended(
-      onPressed: state.finalize,
-      label: const Text("Next"),
-      icon: const Icon(Icons.arrow_forward_ios),
-    );
-  }
+  // FloatingActionButton buildFab() {
+  //   return FloatingActionButton.extended(
+  //     onPressed: state.finalize,
+  //     elevation: 0.5,
+  //     backgroundColor:  Colors.green,
+  //     foregroundColor: Colors.white,
+  //     label: const Text("Next"),
+  //     icon: const Icon(Icons.arrow_forward_ios),
+  //   );
+  // }
 
   GridView buildBody() {
     return GridView.count(

@@ -90,15 +90,14 @@ class _AttendanceFormPageView
     return Scaffold(
       appBar: buildAppBar(),
       body: SafeArea(child: buildBody()),
-      floatingActionButton: FloatingActionButton.extended(
-          onPressed: state.finalize,
-          icon: const Icon(Icons.event_note),
-          label: const Text("Save")),
     );
   }
 
   AppBar buildAppBar() {
     return AppBar(
+      actions: [
+        IconButton(icon: const Icon(Icons.spellcheck), onPressed: state.finalize,tooltip: "Save Attendance Form",)
+      ],
         title: Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
