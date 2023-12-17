@@ -270,25 +270,31 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
       );
     }
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          "Guardian Information",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    return Card(
+      elevation: 3,
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Guardian Information",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            ListTile(
+              title: Text(student.guardian!.email ?? "None"),
+              leading: const Icon(Icons.email),
+              onTap: () => state.copyToClipboard(student.guardian!.email),
+            ),
+            ListTile(
+              title: Text(student.guardian!.phoneNumber ?? "None"),
+              leading: const Icon(Icons.phone),
+              onTap: () => state.copyToClipboard(student.guardian!.phoneNumber),
+            ),
+          ],
         ),
-        ListTile(
-          title: Text(student.guardian!.email ?? "None"),
-          leading: const Icon(Icons.email),
-          onTap: () => state.copyToClipboard(student.guardian!.email),
-        ),
-        ListTile(
-          title: Text(student.guardian!.phoneNumber ?? "None"),
-          leading: const Icon(Icons.phone),
-          onTap: () => state.copyToClipboard(student.guardian!.phoneNumber),
-        ),
-      ],
+      ),
     );
   }
 
