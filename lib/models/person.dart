@@ -27,10 +27,8 @@ class Person {
   Map<String, Object?> toJson() => _$PersonToJson(this);
 
   String get fullName => "$firstName ${middleName[0]}. $lastName";
-  String get initials => "${firstName.splitMapJoin(
-        ' ',
-        onNonMatch: (p0) => p0[0],
-      )}${lastName[0]}";
+  String get initials =>
+      ("$firstName $lastName").trim().split(RegExp(' +')).map((e) => e[0]).join();
 
   @override
   String toString() {

@@ -188,17 +188,23 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
                     );
                   } else {
                     return CircleAvatar(
-                      child: Text(
-                        student.initials,
-                        style: const TextStyle(fontSize: 72),
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          student.initials,
+                          style: const TextStyle(fontSize: 80),
+                        ),
                       ),
                     );
                   }
                 } else {
                   return CircleAvatar(
-                    child: Text(
-                      student.initials,
-                      style: const TextStyle(fontSize: 72),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        student.initials,
+                        style: const TextStyle(fontSize: 80),
+                      ),
                     ),
                   );
                 }

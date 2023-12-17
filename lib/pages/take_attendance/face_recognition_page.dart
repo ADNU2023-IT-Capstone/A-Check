@@ -23,13 +23,18 @@ class FaceRecognitionView
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: state.waitForSetup,
-      builder: (context, snapshot) => Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: buildAppBar(),
-        body: state.isUsingIPCamera ? buildIPCamView() : buildCamera(),
-      ),
-    );
+        future: state.waitForSetup,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          return Scaffold(
+            extendBodyBehindAppBar: true,
+            appBar: buildAppBar(),
+            body: state.isUsingIPCamera ? buildIPCamView() : buildCamera(),
+          );
+        });
   }
 
   AppBar buildAppBar() {
