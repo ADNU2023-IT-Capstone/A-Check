@@ -131,9 +131,6 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
   late final List<Student> _classStudents, _registeredStudents;
   late final KDTree _faceEmbeddings;
   late List<imglib.Image> _faceImages;
-  // List<imglib.Image> _faceImages = [];
-  // List<Student> _classStudents = [], _studentsWithRegisteredFaces = [];
-  // KDTree? _faceDataTree;
 
   Future<void> _setupClassList() async {
     _classStudents = await widget.schoolClass!.getStudents();
@@ -162,7 +159,6 @@ class FaceRecognitionState extends State<FaceRecognitionPage> {
       for (Student student in _registeredStudents) student.faceArray.cast<num>()
     ];
     _faceEmbeddings = KDTree.fromIterable(embeddings);
-    ;
   }
 
   Future<bool> _processInputImage(InputImage inputImage) async {

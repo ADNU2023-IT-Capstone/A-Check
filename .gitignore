@@ -45,3 +45,8 @@ app.*.map.json
 lib/models/student_old.dart
 lib/models/class_old.dart
 lib/models/attendance_record_old.dart
+
+# ignore platform files that are not targeted
+/ios
+/linux
+/macos
