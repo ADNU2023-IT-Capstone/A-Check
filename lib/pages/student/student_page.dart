@@ -66,12 +66,16 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
                           horizontal: 16, vertical: 24),
                       child: Column(
                         children: [
-                          buildStudentInfo(student),
-                          const SizedBox(height: 24),
-                          buildGuardianInfo(student),
-                          const SizedBox(height: 24),
                           if (widget.studentClass != null)
                             buildClassInfo(student),
+                          const SizedBox(height: 20),
+
+                          buildStudentInfo(student),
+                          const SizedBox(height: 20),
+                          const SizedBox(height: 50),
+                          buildGuardianInfo(student),
+                          // if (widget.studentClass != null)
+                          //   buildClassInfo(student),
                         ],
                       )),
                 ],
@@ -226,32 +230,43 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
   }
 
   Widget buildStudentInfo(Student student) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          "Student Information",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    return Card(
+      elevation: 3,
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(left:8.0),
+              child: Text(
+                "Student Information",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+            const SizedBox(height: 15),
+
+            ListTile(
+              title: Text(student.email!),
+              leading: const Icon(Icons.email),
+              onTap: () => state.copyToClipboard(student.email!),
+            ),
+            ListTile(
+              title: Text(student.phoneNumber!),
+              leading: const Icon(Icons.phone),
+              onTap: () => state.copyToClipboard(student.phoneNumber!),
+            ),
+          ],
         ),
-        ListTile(
-          title: Text(student.email!),
-          leading: const Icon(Icons.email),
-          onTap: () => state.copyToClipboard(student.email!),
-        ),
-        ListTile(
-          title: Text(student.phoneNumber!),
-          leading: const Icon(Icons.phone),
-          onTap: () => state.copyToClipboard(student.phoneNumber!),
-        ),
-      ],
+      ),
     );
   }
 
   Widget buildGuardianInfo(Student student) {
     if (student.guardian == null) {
       return const Center(
-        child: Text("No guardian!"),
+        child: Text("Sorry, we couldn't find your guardian.", style: TextStyle(color: Colors.grey,fontWeight: FontWeight.w500),),
       );
     }
 
@@ -287,38 +302,146 @@ class StudentView extends WidgetView<StudentPage, StudentState> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Class Information",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 80,
+                    height: 40,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: const Color(0xff008744)), //green color
+                    child: TextButton.icon(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.resolveWith((states) {
+                          // If the button is pressed, return green, otherwise blue
+                          if (states.contains(MaterialState.pressed)) {
+                            return const Color(0xff008744);
+                          }
+                          return const Color(0xff008744);
+                        }),
+                        textStyle: MaterialStateProperty.resolveWith((states) {
+                          // If the button is pressed, return size 40, otherwise 20
+                          if (states.contains(MaterialState.pressed)) {
+                            return const TextStyle(fontSize: 13);
+                          }
+                          return const TextStyle(fontSize: 12);
+                        }),
+                      ),
+                      onPressed: () => state.showDatesWhereStatus(status: AttendanceStatus.Present),
+                      icon: Text(snapshot.data!['present'].toString(), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),),
+                      label: const Text("Present", style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                  const SizedBox(width: 6,),
+                  Container(
+                    width: 80,
+                    height: 40,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: const Color(0xffd62d20)), //red color
+                    child: TextButton.icon(
+                      style: ButtonStyle(
+                        elevation: MaterialStateProperty.resolveWith((states) {
+                          if (states.contains(MaterialState.pressed)) {
+                            return 1;
+                          }
+                          return 1.5;
+                        }),
+                        backgroundColor: MaterialStateProperty.resolveWith((states) {
+                          if (states.contains(MaterialState.pressed)) {
+                            return const Color(0xffd62d20);
+                          }
+                          return const Color(0xffd62d20);
+                        }),
+                        textStyle: MaterialStateProperty.resolveWith((states) {
+                          if (states.contains(MaterialState.pressed)) {
+                            return const TextStyle(fontSize: 13);
+                          }
+                          return const TextStyle(fontSize: 12);
+                        }),
+                      ),
+                      onPressed: () => state.showDatesWhereStatus(status: AttendanceStatus.Absent),
+                      icon: Text(snapshot.data!['absent'].toString(), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
+                      label: const Text("Absent", style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                  const SizedBox(width: 6,),
+                  Container(
+                    width: 80,
+                    height: 40,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: const Color(0xffffa700)), //yellow color
+                    child: TextButton.icon(
+                      style: ButtonStyle(
+                        elevation: MaterialStateProperty.resolveWith((states) {
+                          if (states.contains(MaterialState.pressed)) {
+                            return 1;
+                          }
+                          return 1.5;
+                        }),
+                        backgroundColor: MaterialStateProperty.resolveWith((states) {
+                          if (states.contains(MaterialState.pressed)) {
+                            return const Color(0xffffa700);
+                          }
+                          return const Color(0xffffa700);
+                        }),
+                        textStyle: MaterialStateProperty.resolveWith((states) {
+                          if (states.contains(MaterialState.pressed)) {
+                            return const TextStyle(fontSize: 13);
+                          }
+                          return const TextStyle(fontSize: 12);
+                        }),
+                      ),
+                      onPressed: () => state.showDatesWhereStatus(status: AttendanceStatus.Late),
+                      icon: Text(snapshot.data!['late'].toString(), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
+                      label: const Text("Late",style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                  const SizedBox(width: 6,),
+                  Container(
+                    width: 80,
+                    height: 40,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: const Color(0xff0057e7)),
+                    child: TextButton.icon(
+                      style: ButtonStyle(
+                        elevation: MaterialStateProperty.resolveWith((states) {
+                          if (states.contains(MaterialState.pressed)) {
+                            return 1;
+                          }
+                          return 1.5;
+                        }),
+                        backgroundColor: MaterialStateProperty.resolveWith((states) {
+                          if (states.contains(MaterialState.pressed)) {
+                            return const Color(0xff0057e7);
+                          }
+                          return const Color(0xff0057e7);
+                        }),
+                        textStyle: MaterialStateProperty.resolveWith((states) {
+                          if (states.contains(MaterialState.pressed)) {
+                            return const TextStyle(fontSize: 13);
+                          }
+                          return const TextStyle(fontSize: 12);
+                        }),
+                      ),
+                      onPressed: () => state.showDatesWhereStatus(status: AttendanceStatus.Excused),
+                      icon: Text(snapshot.data!['excused'].toString(), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
+                      label: const Text("Excused", style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                  const SizedBox(width: 6,),
+                ],
               ),
-              ListTile(
-                title: const Text("Present"),
-                leading: const Icon(Icons.event_available),
-                trailing: Text(snapshot.data!['present'].toString()),
-                onTap: () => state.showDatesWhereStatus(
-                    status: AttendanceStatus.Present),
-              ),
-              ListTile(
-                title: const Text("Absent"),
-                leading: const Icon(Icons.event_busy),
-                trailing: Text(snapshot.data!['absent'].toString()),
-                onTap: () =>
-                    state.showDatesWhereStatus(status: AttendanceStatus.Absent),
-              ),
-              ListTile(
-                title: const Text("Late"),
-                leading: const Icon(Icons.timer),
-                trailing: Text(snapshot.data!['late'].toString()),
-                onTap: () =>
-                    state.showDatesWhereStatus(status: AttendanceStatus.Late),
-              ),
-              ListTile(
-                title: const Text("Excused"),
-                leading: const Icon(Icons.assistant_photo),
-                trailing: Text(snapshot.data!['excused'].toString()),
-                onTap: () => state.showDatesWhereStatus(
-                    status: AttendanceStatus.Excused),
-              ),
+              const SizedBox(height: 20,),
             ],
           );
         } else {
