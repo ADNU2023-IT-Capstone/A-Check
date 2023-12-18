@@ -81,9 +81,12 @@ class LoginPageView extends WidgetView<LoginPage, LoginPageState> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Image(
-                image: AssetImage("assets/images/small_logo_blue.png"),
-                height: 100),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Image(
+                  image: AssetImage("assets/images/small_logo_blue.png"),
+                  height: 100),
+            ),
             const Text(
               "Log in to A-Check",
               style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24),

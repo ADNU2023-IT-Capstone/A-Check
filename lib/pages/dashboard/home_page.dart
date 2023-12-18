@@ -73,7 +73,7 @@ class HomeView extends WidgetView<HomePage, HomeState> {
       child: Row(
         children: [
           const Padding(
-            padding: EdgeInsets.only(right: 4.0),
+            padding: EdgeInsets.only(right: 12.0),
             child: Image(
                 image: AssetImage("assets/images/small_logo_blue.png"),
                 height: 56),
