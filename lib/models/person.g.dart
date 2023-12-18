@@ -14,7 +14,6 @@ Person _$PersonFromJson(Map<String, dynamic> json) => Person(
       phoneNumber: json['phoneNumber'] as String?,
     );
 
-// ignore: unused_element
 const _$PersonFieldMap = <String, String>{
   'firstName': 'firstName',
   'middleName': 'middleName',
